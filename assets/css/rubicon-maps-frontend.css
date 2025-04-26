@@ -1,0 +1,5 @@
+.rubicon-location-list-item {
+  cursor: pointer;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
