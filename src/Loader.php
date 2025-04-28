@@ -4,6 +4,7 @@ namespace RubiconMaps;
 
 use RubiconMaps\PostType\Location;
 use RubiconMaps\Taxonomy\LocationCategory;
+use RubiconMaps\Admin\SettingsPage; // 👈 Add this!
 
 class Loader {
     private static $instance = null;
@@ -19,5 +20,10 @@ class Loader {
     private function setup_hooks() {
         add_action('init', [Location::class, 'register']);
         add_action('init', [LocationCategory::class, 'register']);
+        
+        // ✅ Initialize Settings Page
+        if ( is_admin() ) {
+            new SettingsPage();
+        }
     }
 }
