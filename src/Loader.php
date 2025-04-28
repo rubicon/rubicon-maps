@@ -1,11 +1,14 @@
 <?php
-
 namespace RubiconMaps;
 
 use RubiconMaps\PostType\Location;
 use RubiconMaps\Taxonomy\LocationCategory;
 use RubiconMaps\Admin\SettingsPage;
 use RubiconMaps\Shortcodes\LocationList;
+
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
+}
 
 class Loader
 {
@@ -22,13 +25,13 @@ class Loader
 
     private function setup_hooks()
     {
-        add_action('init', [Location::class, 'register']);
-        add_action('init', [LocationCategory::class, 'register']);
+        \add_action('init', [Location::class, 'register']);
+        \add_action('init', [LocationCategory::class, 'register']);
 
-        if (is_admin()) {
+        if (\is_admin()) {
             new SettingsPage();
         } else {
-            new LocationList(); // 👈 Add this for frontend shortcodes
+            new LocationList();
         }
     }
 }
