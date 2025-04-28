@@ -25,8 +25,8 @@ class Loader
 
     private function setup_hooks()
     {
-        \add_action('init', [Location::class, 'register']);
-        \add_action('init', [LocationCategory::class, 'register']);
+        add_action('init', [Location::class, 'register']);
+        add_action('init', [LocationCategory::class, 'register']);
 
         if (\is_admin()) {
             new SettingsPage();

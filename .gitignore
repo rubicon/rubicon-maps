@@ -1,5 +1,13 @@
-# Created by https://www.toptal.com/developers/gitignore/api/wordpress,macos
-# Edit at https://www.toptal.com/developers/gitignore?templates=wordpress,macos
+# Created by https://www.toptal.com/developers/gitignore/api/composer,wordpress,macos,visualstudiocode
+# Edit at https://www.toptal.com/developers/gitignore?templates=composer,wordpress,macos,visualstudiocode
+
+### Composer ###
+composer.phar
+/vendor/
+
+# Commit your application's lock file https://getcomposer.org/doc/01-basic-usage.md#commit-your-composer-lock-file-to-version-control
+# You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
+# composer.lock
 
 ### macOS ###
 # General
@@ -33,6 +41,25 @@ Temporary Items
 ### macOS Patch ###
 # iCloud generated files
 *.icloud
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
 
 ### WordPress ###
 # Core
@@ -80,7 +107,4 @@ wp-config.php
 #/wp-content/themes
 
 
-# End of https://www.toptal.com/developers/gitignore/api/wordpress,macos
-Autofill
-
-;
+# End of https://www.toptal.com/developers/gitignore/api/composer,wordpress,macos,visualstudiocode

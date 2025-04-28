@@ -1,0 +1,5 @@
+{
+  "intelephense.environment.includePaths": ["/Users/daxdavis/Dropbox/Sites/wordpress/wp-includes", "/Users/daxdavis/Dropbox/Sites/wordpress/wp-admin", "/Users/daxdavis/Dropbox/Sites/GitHub/rubicon-maps/src"],
+  "intelephense.stubs": ["wordpress", "php", "curl", "json", "date", "mysqli", "pdo", "mbstring"],
+  "intelephense.diagnostics.undefinedFunctions": false
+}

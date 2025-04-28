@@ -1,0 +1,11 @@
+{
+  "name": "rubicon/rubicon-maps",
+  "description": "Rubicon Maps plugin for WordPress",
+  "type": "wordpress-plugin",
+  "autoload": {
+    "psr-4": {
+      "RubiconMaps\\": "src/"
+    }
+  },
+  "require": {}
+}
