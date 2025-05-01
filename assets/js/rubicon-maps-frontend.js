@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const lng = parseFloat(mapContainer.dataset.lng);
     const zoom = parseInt(mapContainer.dataset.zoom);
     const provider = mapContainer.dataset.provider;
+    const region = mapContainer.dataset.region;
 
     let map;
 
@@ -15,19 +16,21 @@ document.addEventListener("DOMContentLoaded", function () {
         zoom: zoom,
       });
 
-      loadMarkers("google", map);
+      loadMarkers("google", map, region);
     } else if (provider === "leaflet" && typeof L !== "undefined") {
       map = L.map("rubicon-maps-map").setView([lat, lng], zoom);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "&copy; OpenStreetMap contributors",
       }).addTo(map);
 
-      loadMarkers("leaflet", map);
+      loadMarkers("leaflet", map, region);
     }
   }
 
-  function loadMarkers(provider, map) {
-    fetch("/wp-json/rubicon-maps/v1/locations")
+  function loadMarkers(provider, map, region) {
+    const url = "/wp-json/rubicon-maps/v1/locations" + (region ? "?region=" + encodeURIComponent(region) : "");
+
+    fetch(url)
       .then((response) => response.json())
       .then((locations) => {
         locations.forEach((location) => {
