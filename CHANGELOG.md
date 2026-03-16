@@ -10,9 +10,11 @@ Rubicon Maps stopped pretending Divi 5 was just Divi 4 with better lighting.
 - Added an official-style `divi-5` module layer with dedicated server registration and Visual Builder assets.
 - Added native Divi 5 Rubicon Map and Rubicon Location List module definitions with instance-level filtering controls.
 - Added a buildable Divi 5 Visual Builder package and compiled builder bundle.
+- Added a dedicated `divi-4` bootstrap so legacy builder modules are no longer registered from core loader code.
 
 ### Changed
 - Split Divi support into a Divi 4 compatibility layer and a Divi 5-first module architecture.
+- Moved Divi generation decisions into a small tested support class instead of scattering the checks across core bootstrap code.
 - Updated repository ignore rules to keep Composer `vendor/` out of source control.
 
 ### Fixed

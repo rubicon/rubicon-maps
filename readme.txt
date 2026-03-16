@@ -12,10 +12,10 @@ Rubicon Maps is a Divi-first mapping plugin with linked map/list rendering, stru
 
 == Description ==
 
-Rubicon Maps allows you to create interactive, category-based maps with linked location lists and frontend filtering. Built for performance and extensibility with shortcode, REST, and Divi Builder integration, including a dedicated Divi 5 module layer.
+Rubicon Maps allows you to create interactive, category-based maps with linked location lists and frontend filtering. Built for performance and extensibility with shortcode, REST, and Divi Builder integration, including dedicated runtime layers for both Divi 4 and Divi 5.
 
 == Features ==
-* Divi 4 and Divi 5 modules plus shortcodes
+* Dedicated Divi 4 and Divi 5 module runtimes plus shortcodes
 * Classic Editor-based location entry
 * Leaflet maps with OpenStreetMap tiles
 * Structured location metadata

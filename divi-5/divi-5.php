@@ -1,6 +1,7 @@
 <?php
 
 use RubiconMaps\Support\Plugin;
+use RubiconMaps\Support\DiviBootstrapDecider;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -12,7 +13,7 @@ add_action(
     'divi_visual_builder_assets_before_enqueue_scripts',
     static function (): void {
         if (
-            !Plugin::isDivi5Enabled()
+            !DiviBootstrapDecider::shouldBootDivi5(Plugin::isDivi5Enabled())
             || !class_exists('\ET\Builder\VisualBuilder\Assets\PackageBuildManager')
         ) {
             return;

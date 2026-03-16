@@ -29,6 +29,7 @@ if (!defined('RUBICON_MAPS_VERSION')) {
 }
 
 require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/divi-4/divi-4.php';
 require_once __DIR__ . '/divi-5/divi-5.php';
 
 RubiconMaps\Loader::instance();
