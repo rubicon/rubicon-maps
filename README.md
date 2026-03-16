@@ -1,137 +1,65 @@
-# 🗺️ Rubicon Maps
+# Rubicon Maps
 
-Rubicon Maps is a powerful WordPress plugin for creating interactive, category-based maps using **Leaflet.js** or **Google Maps**. Perfect for Divi users and developers, it supports clustering, regions, CSV import/export, REST API, and more.
+Rubicon Maps is a Divi-first WordPress location mapping plugin with native location management, linked map/list output, and dual Divi support: a compatibility layer for Divi 4 and a dedicated Visual Builder module layer for Divi 5.
 
-> **Version:** 0.3.7  
-> **License:** GPLv2 or later  
-> **Status:** Pre-1.0 – Actively developing core features  
-> **Tested up to:** WordPress 6.8.1
+> Version: `0.5.0`  
+> License: `GPLv2 or later`  
+> Status: `Pre-1.0`  
+> Tested up to: `WordPress 6.8.1`
 
----
+## What ships today
 
-## ✨ Key Features
+- Custom post type: `rubicon_maps_location`
+- Taxonomies: `rubicon_maps_category`, `rubicon_maps_region`
+- Linked frontend map and location list rendering
+- Divi 4 modules: `Rubicon Map`, `Rubicon Location List`
+- Divi 5 modules: `Rubicon Map`, `Rubicon Location List`
+- Shortcodes: `[rubicon_maps]`, `[rubicon_maps_list]`
+- REST API: `/wp-json/rubicon-maps/v1/locations`
+- Structured address, contact, and coordinate metadata
+- Leaflet/OpenStreetMap-first frontend rendering
 
-- 📍 Custom Post Type: `rubicon_maps_location`
-- 🏷️ Taxonomies: `rubicon_maps_category`, `rubicon_maps_region`
-- 🗺️ Interactive maps with clustering & filtering
-- 🔧 Plugin settings for map provider, zoom, scroll, default center
-- 🧩 Divi module integration
-- 🌐 REST API: `/wp-json/rubicon-maps/v1/locations`
-- 📥 CSV import/export
-- 🌎 Multilingual and RTL support
-- 🧹 Uninstall hook: cleans up all data
-- 🚦 Settings page with tabbed interface (General, Display, APIs, Regions)
-- ⚙️ Uses PSR-4 namespaced autoloading via Composer
+## Divi support
 
----
+Rubicon Maps now uses two distinct integration paths:
 
-## 🚀 Shortcodes
+- `src/Divi/` contains the Divi 4 compatibility modules.
+- `divi-5/` contains the dedicated Divi 5 server registration and Visual Builder assets.
 
-```php
-[rubicon_maps id="storemap" category="retail,wholesale" provider="leaflet"]
-[rubicon_maps_list id="storemap" category="retail,wholesale"]
+This keeps the shared mapping/query logic in the plugin core while letting each Divi generation use the architecture Elegant Themes is currently documenting.
+
+## Shortcodes
+
+```text
+[rubicon_maps id="storemap" category="retail,wholesale" region="houston"]
+[rubicon_maps_list id="storemap" category="retail,wholesale" region="houston"]
 ```
 
-- Use the same id to link map and list components
-- Supports multiple categories and providers
+Use a shared `id` to keep the map and list synced.
 
-⸻
+## Development
 
-## 🧩 Divi Modules
-
-- Rubicon Map – displays interactive map
-- Rubicon Location List – clickable location list
-- Shared ID syncs map and list dynamically
-
-⸻
-
-## 🧪 Developer Info
-
-- 🔌 REST API endpoints and filters
-- 📦 PSR-4 Composer autoloading (RubiconMaps\\)
-- ⚙️ Hooks: create/update/delete actions
-- 🧠 Transient-based caching
-- 🧼 Uninstall hook cleanup
-- 🗃️ Custom MetaBoxes for location metadata
-
-⸻
-
-## ⚙️ Plugin Settings
-
-Accessible under Rubicon Maps → Settings in the WP Admin sidebar.
-
-- 🗺️ Default map provider, zoom, height/width
-- 🔍 Toggle scroll/zoom/double-click
-- 📍 Cluster toggle and tile provider URL
-- 🗂️ Region definitions (lat/lng/zoom)
-
-⸻
-
-## 📂 Folder Structure
-
-rubicon-maps/
-├── assets/
-├── src/
-│ ├── Admin/
-│ ├── PostType/
-│ ├── Rest/
-│ ├── Shortcodes/
-│ ├── Divi/
-│ └── Taxonomy/
-├── rubicon-maps.php
-├── composer.json
-├── README.md
-└── readme.txt
-
-⸻
-
-## 📦 Changelog
-
-### v0.3.7 - 2025-05-02
-
-- ✅ Added uninstall.php for clean deletion
-- 🎨 Restructured settings UI using Open User Map style
-- 🌍 Updated Google Maps / Leaflet initialization
-- 🐞 Fixed settings default fallback bugs
-
-### v0.3.5
-
-- 🔧 Fixed [rubicon_maps] and [rubicon_maps_list] output/rendering
-- ✅ Verified plugin structure and PSR-4 loading
-- 🚀 Improved frontend loader logic
-
-### v0.3.2 (2024-04-29)
-
-- 🧩 Introduced Divi modules
-- 🔗 ID-based map/list synchronization
-
-### v0.3.1
-
-- ✂️ Split into separate [rubicon_maps] and [rubicon_maps_list]
-- 🗂️ Multi-category support
-- 🔄 Frontend linking enhancements
-
-### v0.3.0
-
-- 🌐 REST API filtering by category
-- 🖼️ Category marker icon fallback
-- 📝 WYSIWYG popups
-
-⸻
-
-## 👨‍💻 Development
+Install PHP dependencies:
 
 ```bash
 composer install
 ```
 
-- Minimum PHP: 7.4
-- Recommended WP: 6.8.1+
+Build Divi 5 Visual Builder assets:
 
-⸻
+```bash
+cd divi-5/visual-builder
+npm install
+npm run build
+```
 
-👤 Author
+## Current v1 stance
 
-Rubicon
-GitHub: [https://github.com/rubicon](https://github.com/rubicon)  
-Website: [https://rubicontv.com](https://rubicontv.com)
+- Divi module support is a first-class requirement.
+- Leaflet/OpenStreetMap is the supported provider path for v1.
+- Google Maps parity is planned for a later version.
+- CSV import/export remains in scope for v1 but is not complete in this snapshot.
+
+## Release notes
+
+See [CHANGELOG.md](CHANGELOG.md) for the full version history.

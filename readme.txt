@@ -4,32 +4,24 @@ Tags: maps, leaflet, locations, directory, Divi, shortcodes
 Requires at least: 5.8
 Tested up to: 6.8.1
 Requires PHP: 7.4
-Stable tag: 0.3.7
+Stable tag: 0.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Rubicon Maps is a powerful Divi-compatible mapping plugin with Leaflet and Google Maps support, clustering, geolocation, categories, shortcode & Divi module.
+Rubicon Maps is a Divi-first mapping plugin with linked map/list rendering, structured location data, REST support, and Leaflet-based frontend maps.
 
 == Description ==
 
-Rubicon Maps allows you to create interactive, category-based maps with clustering, custom markers, and frontend filtering. Built for performance and extensibility with full shortcode, REST, and Divi Builder integration.
+Rubicon Maps allows you to create interactive, category-based maps with linked location lists and frontend filtering. Built for performance and extensibility with shortcode, REST, and Divi Builder integration, including a dedicated Divi 5 module layer.
 
 == Features ==
-* Divi Modules and Shortcodes
-* Classic Editor & WP Admin UI
-* Leaflet Maps with OpenStreetMap tiles
-* Google & OSM Autocomplete Provider
-* Marker Icons Per Location or Category
-* Popup WYSIWYG Editor (uses post content)
-* Clustering, zoom, and scroll toggles
-* Location submission
-* Custom categories and regions
-* Geolocation "locate me" button
-* Fully styled Divi modules
-* WP REST API and WPGraphQL integration
-* CSV import/export
-* Classic editor location entry
-* RTL, A11y, WCAG 2.1 AA compatible
+* Divi 4 and Divi 5 modules plus shortcodes
+* Classic Editor-based location entry
+* Leaflet maps with OpenStreetMap tiles
+* Structured location metadata
+* Map/list filtering by category, region, or explicit location IDs
+* WP REST API integration
+* Settings for provider defaults, center, zoom, map height, and tile URL
 * Uninstall cleanup
 
 == Installation ==
@@ -37,7 +29,8 @@ Rubicon Maps allows you to create interactive, category-based maps with clusteri
 1. Upload the plugin folder to `/wp-content/plugins/rubicon-maps/`
 2. Activate through the 'Plugins' menu
 3. Visit “Rubicon Maps → Settings” to configure default map options
-4. Add locations under “Rubicon Maps → All Locations”
+4. Add locations under “Rubicon Maps → Locations”
+5. For Divi 5 sites, build the Visual Builder bundle from `divi-5/visual-builder` before release packaging
 
 == Shortcodes ==
 
@@ -54,32 +47,37 @@ Example:
 == Frequently Asked Questions ==
 
 = Can I use both Leaflet and Google Maps? =  
-Yes — choose your default in Settings, or override per module/shortcode.
+Leaflet is the current primary path. Google support remains in the architecture but is not yet the recommended parity path for this pre-1.0 release.
 
 = Can I use map and list separately? =  
 Yes — use separate shortcodes or Divi modules and link them via a shared `id`.
 
 = Is it compatible with Multisite? =  
-Yes, full support for multisite and network activation.
+Needs verification before release.
 
 = Does it support custom fields? =  
-Yes — ACF integration is supported via hooks.
+It uses native WordPress title, excerpt, content, thumbnail, and custom metadata for structured location data.
 
 == Screenshots ==
 
 1. Location list and map module
-2. Settings page with API and clustering controls
+2. Settings page with provider and default map controls
 3. Custom post type editor for Locations
 4. Divi module example with Rubicon Maps
 
 == Changelog ==
 
-= 0.3.7 - 2025-05-02 =
-* Added full uninstall support via `uninstall.php`
-* Introduced tabbed settings page with default map configuration
-* Added options for Google API Key, Mapbox tiles, default zoom/center
-* Updated README formatting
-* Bug fixes and cleanup
+= 0.5.0 - 2026-03-16 =
+* Added dedicated Divi 5 Visual Builder modules for Rubicon Map and Rubicon Location List
+* Kept Divi 4 support as a compatibility layer instead of overloading one module path
+* Added a buildable `divi-5/visual-builder` package and compiled builder bundle
+* Updated source-control rules to keep Composer `vendor/` out of the repo
+
+= 0.4.0 - 2026-03-16 =
+* Canonicalized plugin settings, taxonomy slugs, and REST filters
+* Reconnected map/list rendering through shared frontend renderers
+* Fixed Divi module shortcode targets and linked map/list behavior
+* Added structured address formatting and multi-instance frontend JavaScript
 
 = 0.3.5 - 2025-05-01 =
 

@@ -1,6 +1,8 @@
 <?php
 namespace RubiconMaps\PostType;
 
+use RubiconMaps\Support\Plugin;
+
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -27,22 +29,22 @@ class Location {
         $args = [
             'labels'             => $labels,
             'public'             => true,
-            'show_in_menu'       => true,
+            'show_in_menu'       => Plugin::SETTINGS_PAGE_SLUG,
             'menu_icon'          => 'dashicons-location-alt',
-            'supports'           => ['title', 'editor', 'thumbnail'],
+            'supports'           => ['title', 'editor', 'excerpt', 'thumbnail', 'page-attributes'],
             'has_archive'        => false,
             'rewrite'            => ['slug' => 'locations'],
             'show_in_rest'       => true,
             'capability_type'    => 'post',
         ];
 
-        register_post_type('rubicon_maps_location', $args);
+        register_post_type(Plugin::POST_TYPE_LOCATION, $args);
     }
 }
 
 // Disable Gutenberg for this post type
 add_filter('use_block_editor_for_post_type', function ($use_block_editor, $post_type) {
-    if ($post_type === 'rubicon_maps_location') {
+    if ($post_type === Plugin::POST_TYPE_LOCATION) {
         return false;
     }
     return $use_block_editor;

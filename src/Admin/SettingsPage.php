@@ -1,97 +1,159 @@
 <?php
 namespace RubiconMaps\Admin;
 
-if (!defined('ABSPATH')) exit;
+use RubiconMaps\Helpers\SettingsHelper;
+use RubiconMaps\Support\Plugin;
 
 class SettingsPage {
-    private static $option_group = 'rubicon_maps_settings';
-    private static $option_name = 'rubicon_maps_options';
 
-    public static function init() {
-        add_action('admin_menu', [__CLASS__, 'add_menu']);
-        add_action('admin_init', [__CLASS__, 'register_settings']);
-    }
+	public static function init() {
+		add_action('admin_menu', [self::class, 'add_settings_page']);
+		add_action('admin_init', [self::class, 'register_settings']);
+	}
 
-    public static function add_menu() {
-        add_menu_page(
-            __('Rubicon Maps Settings', 'rubicon-maps'),
-            __('Rubicon Maps', 'rubicon-maps'),
+	public static function add_settings_page() {
+		add_menu_page(
+			__('Rubicon Maps', 'rubicon-maps'),
+			__('Rubicon Maps', 'rubicon-maps'),
+			'manage_options',
+			Plugin::SETTINGS_PAGE_SLUG,
+			[self::class, 'render_settings_page'],
+			'dashicons-location-alt',
+			60
+		);
+
+        add_submenu_page(
+            Plugin::SETTINGS_PAGE_SLUG,
+            __('Settings', 'rubicon-maps'),
+            __('Settings', 'rubicon-maps'),
             'manage_options',
-            'rubicon_maps_settings',
-            [__CLASS__, 'render_settings_page'],
-            'dashicons-location-alt',
-            56
+            Plugin::SETTINGS_PAGE_SLUG,
+            [self::class, 'render_settings_page']
         );
-    }
+	}
 
-    public static function register_settings() {
-        register_setting(self::$option_group, self::$option_name, [__CLASS__, 'sanitize']);
+	public static function register_settings() {
+		register_setting(
+            Plugin::OPTION_GROUP,
+            Plugin::OPTION_NAME,
+            [self::class, 'sanitize_settings']
+        );
 
-        add_settings_section('general', __('General Settings', 'rubicon-maps'), '__return_false', self::$option_name);
+		add_settings_section(
+			'rubicon_maps_main',
+			__('Map Settings', 'rubicon-maps'),
+			null,
+			Plugin::SETTINGS_PAGE_SLUG
+		);
 
-        add_settings_field('tile_url', __('Map Tile URL', 'rubicon-maps'), [__CLASS__, 'field_tile_url'], self::$option_name, 'general');
-        add_settings_field('default_lat', __('Default Latitude', 'rubicon-maps'), [__CLASS__, 'field_text'], self::$option_name, 'general', ['id' => 'default_lat']);
-        add_settings_field('default_lng', __('Default Longitude', 'rubicon-maps'), [__CLASS__, 'field_text'], self::$option_name, 'general', ['id' => 'default_lng']);
-        add_settings_field('default_zoom', __('Default Zoom', 'rubicon-maps'), [__CLASS__, 'field_number'], self::$option_name, 'general', ['id' => 'default_zoom']);
-        add_settings_field('autocomplete_provider', __('Autocomplete Provider', 'rubicon-maps'), [__CLASS__, 'field_autocomplete'], self::$option_name, 'general');
-    }
+		$fields = [
+			'default_provider' => ['label' => __('Default Provider', 'rubicon-maps'), 'type' => 'select'],
+			'default_latitude' => ['label' => __('Default Latitude', 'rubicon-maps'), 'type' => 'text'],
+			'default_longitude' => ['label' => __('Default Longitude', 'rubicon-maps'), 'type' => 'text'],
+			'default_zoom' => ['label' => __('Default Zoom Level', 'rubicon-maps'), 'type' => 'number'],
+			'default_map_height' => ['label' => __('Default Map Height', 'rubicon-maps'), 'type' => 'text'],
+			'tile_url' => ['label' => __('Leaflet Tile URL', 'rubicon-maps'), 'type' => 'text'],
+			'google_maps_api_key' => ['label' => __('Google Maps API Key', 'rubicon-maps'), 'type' => 'text'],
+			'enable_scroll_wheel' => ['label' => __('Enable Scroll Wheel Zoom', 'rubicon-maps'), 'type' => 'checkbox'],
+		];
 
-    public static function sanitize($input) {
+		foreach ($fields as $key => $field) {
+			add_settings_field(
+				$key,
+				$field['label'],
+				[self::class, 'render_field'],
+				Plugin::SETTINGS_PAGE_SLUG,
+				'rubicon_maps_main',
+				[
+					'label_for' => $key,
+					'name' => $key,
+                    'type' => $field['type'],
+				]
+			);
+		}
+	}
+
+    /**
+     * Sanitize the settings payload before persisting it.
+     *
+     * @param array<string, mixed> $input
+     * @return array<string, mixed>
+     */
+    public static function sanitize_settings(array $input): array
+    {
         return [
-            'tile_url'             => esc_url_raw($input['tile_url'] ?? ''),
-            'default_lat'          => sanitize_text_field($input['default_lat'] ?? ''),
-            'default_lng'          => sanitize_text_field($input['default_lng'] ?? ''),
-            'default_zoom'         => absint($input['default_zoom'] ?? 10),
-            'autocomplete_provider'=> in_array($input['autocomplete_provider'] ?? '', ['osm', 'google']) ? $input['autocomplete_provider'] : 'osm',
+            'default_provider' => in_array($input['default_provider'] ?? 'leaflet', ['leaflet', 'google'], true) ? $input['default_provider'] : 'leaflet',
+            'default_latitude' => sanitize_text_field($input['default_latitude'] ?? ''),
+            'default_longitude' => sanitize_text_field($input['default_longitude'] ?? ''),
+            'default_zoom' => max(1, (int) ($input['default_zoom'] ?? 9)),
+            'default_map_height' => sanitize_text_field($input['default_map_height'] ?? '480px'),
+            'tile_url' => esc_url_raw($input['tile_url'] ?? ''),
+            'google_maps_api_key' => sanitize_text_field($input['google_maps_api_key'] ?? ''),
+            'enable_scroll_wheel' => !empty($input['enable_scroll_wheel']),
         ];
     }
 
-    public static function render_settings_page() {
-        ?>
-        <div class="wrap">
-            <h1><?php esc_html_e('Rubicon Maps Settings', 'rubicon-maps'); ?></h1>
-            <form method="post" action="options.php">
-                <?php
-                settings_fields(self::$option_group);
-                do_settings_sections(self::$option_name);
-                submit_button();
-                ?>
-            </form>
-        </div>
-        <?php
-    }
+	public static function render_field($args) {
+		$value = SettingsHelper::get_option($args['name'], self::default_for($args['name']));
 
-    public static function field_tile_url() {
-        $options = get_option(self::$option_name);
-        ?>
-        <input type="text" name="<?php echo self::$option_name; ?>[tile_url]" value="<?php echo esc_attr($options['tile_url'] ?? ''); ?>" class="regular-text" />
-        <p class="description"><?php esc_html_e('Example: https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', 'rubicon-maps'); ?></p>
-        <?php
-    }
+        if ('checkbox' === $args['type']) {
+            printf(
+                '<label><input type="checkbox" id="%1$s" name="%2$s[%1$s]" value="1" %3$s /> %4$s</label>',
+                esc_attr($args['name']),
+                esc_attr(Plugin::OPTION_NAME),
+                checked((bool) $value, true, false),
+                esc_html__('Enabled', 'rubicon-maps')
+            );
 
-    public static function field_text($args) {
-        $options = get_option(self::$option_name);
-        $id = $args['id'];
-        ?>
-        <input type="text" name="<?php echo self::$option_name; ?>[<?php echo $id; ?>]" value="<?php echo esc_attr($options[$id] ?? ''); ?>" class="regular-text" />
-        <?php
-    }
+            return;
+        }
 
-    public static function field_number($args) {
-        $options = get_option(self::$option_name);
-        $id = $args['id'];
-        ?>
-        <input type="number" name="<?php echo self::$option_name; ?>[<?php echo $id; ?>]" value="<?php echo esc_attr($options[$id] ?? 10); ?>" class="small-text" />
-        <?php
-    }
+        if ('select' === $args['type']) {
+            ?>
+            <select id="<?php echo esc_attr($args['name']); ?>" name="<?php echo esc_attr(Plugin::OPTION_NAME); ?>[<?php echo esc_attr($args['name']); ?>]">
+                <option value="leaflet" <?php selected((string) $value, 'leaflet'); ?>><?php esc_html_e('Leaflet / OpenStreetMap', 'rubicon-maps'); ?></option>
+                <option value="google" <?php selected((string) $value, 'google'); ?>><?php esc_html_e('Google Maps', 'rubicon-maps'); ?></option>
+            </select>
+            <?php
+            return;
+        }
 
-    public static function field_autocomplete() {
-        $options = get_option(self::$option_name);
-        ?>
-        <select name="<?php echo self::$option_name; ?>[autocomplete_provider]">
-            <option value="osm" <?php selected($options['autocomplete_provider'] ?? '', 'osm'); ?>>OpenStreetMap (Nominatim)</option>
-            <option value="google" <?php selected($options['autocomplete_provider'] ?? '', 'google'); ?>>Google Maps</option>
-        </select>
-        <?php
+		printf(
+            '<input type="%1$s" id="%2$s" name="%3$s[%2$s]" value="%4$s" class="regular-text" />',
+            esc_attr('number' === $args['type'] ? 'number' : 'text'),
+            esc_attr($args['name']),
+            esc_attr(Plugin::OPTION_NAME),
+            esc_attr((string) $value)
+        );
+	}
+
+	public static function render_settings_page() {
+		?>
+		<div class="wrap">
+			<h1><?php _e('Rubicon Maps Settings', 'rubicon-maps'); ?></h1>
+            <p><?php esc_html_e('Configure the default behavior for Rubicon Maps and the Divi modules that render your map instances.', 'rubicon-maps'); ?></p>
+			<form method="post" action="options.php">
+				<?php
+				settings_fields(Plugin::OPTION_GROUP);
+				do_settings_sections(Plugin::SETTINGS_PAGE_SLUG);
+				submit_button();
+				?>
+			</form>
+		</div>
+		<?php
+	}
+
+    private static function default_for(string $settingKey): mixed
+    {
+        return match ($settingKey) {
+            'default_provider' => 'leaflet',
+            'default_latitude' => '29.7604',
+            'default_longitude' => '-95.3698',
+            'default_zoom' => 9,
+            'default_map_height' => '480px',
+            'tile_url' => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            'enable_scroll_wheel' => true,
+            default => '',
+        };
     }
 }

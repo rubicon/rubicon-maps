@@ -1,12 +1,17 @@
 <?php
 namespace RubiconMaps;
 
+use RubiconMaps\Divi\RubiconLocationListModule;
+use RubiconMaps\Divi\RubiconMapModule;
 use RubiconMaps\PostType\Location;
 use RubiconMaps\Taxonomy\LocationCategory;
 use RubiconMaps\Taxonomy\Region;
 use RubiconMaps\Admin\SettingsPage;
-use RubiconMaps\Shortcodes\LocationList;
+use RubiconMaps\Admin\MetaBox;
+use RubiconMaps\Admin\CategoryMeta;
 use RubiconMaps\Rest\LocationsEndpoint;
+use RubiconMaps\Shortcodes\ListShortcode;
+use RubiconMaps\Shortcodes\MapShortcode;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -31,11 +36,29 @@ class Loader
         add_action('init', [LocationCategory::class, 'register']);
         add_action('init', [Region::class, 'register']);
         add_action('rest_api_init', [LocationsEndpoint::class, 'register_routes']);
+        add_action('et_builder_ready', [self::class, 'register_divi_modules']);
 
         if (is_admin()) {
-            new SettingsPage();
+            SettingsPage::init();
+            MetaBox::init();
+            CategoryMeta::init();
         }
 
-        new LocationList(); // ensure shortcodes are registered on frontend
+        new ListShortcode();
+        new MapShortcode();
+    }
+
+    public static function register_divi_modules(): void
+    {
+        if (\RubiconMaps\Support\Plugin::isDivi5Enabled()) {
+            return;
+        }
+
+        if (!class_exists('\ET_Builder_Module')) {
+            return;
+        }
+
+        new RubiconMapModule();
+        new RubiconLocationListModule();
     }
 }

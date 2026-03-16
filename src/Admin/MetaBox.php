@@ -1,6 +1,8 @@
 <?php
 namespace RubiconMaps\Admin;
 
+use RubiconMaps\Support\Plugin;
+
 class MetaBox {
     const FIELDS = [
         'street'      => 'text',
@@ -27,7 +29,7 @@ class MetaBox {
             'rubicon_location_meta',
             __('Location Details', 'rubicon-maps'),
             [__CLASS__, 'render_meta_box'],
-            'rubicon_maps_location',
+            Plugin::POST_TYPE_LOCATION,
             'normal',
             'default'
         );
@@ -77,7 +79,7 @@ class MetaBox {
 
     public static function enqueue_admin_scripts() {
         wp_enqueue_media();
-        wp_enqueue_script('rubicon-admin-meta', plugins_url('../../assets/js/admin-meta.js', __FILE__), ['jquery'], null, true);
+        wp_enqueue_script('rubicon-admin-meta', plugins_url('../../assets/js/admin-meta.js', __FILE__), [], Plugin::version(), true);
     }
 
     public static function save_meta_box_data($post_id) {

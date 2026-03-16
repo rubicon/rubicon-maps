@@ -4,7 +4,8 @@
   "type": "wordpress-plugin",
   "autoload": {
     "psr-4": {
-      "RubiconMaps\\": "src/"
+      "RubiconMaps\\": "src/",
+      "RubiconMaps\\Divi5\\": "divi-5/server/"
     }
   },
   "require": {}

@@ -29,15 +29,29 @@ document.addEventListener("DOMContentLoaded", function () {
         if (data.length === 0) return;
 
         const place = data[0];
-        fields.latitude.value = place.lat;
-        fields.longitude.value = place.lon;
+        if (fields.latitude) {
+          fields.latitude.value = place.lat;
+        }
+        if (fields.longitude) {
+          fields.longitude.value = place.lon;
+        }
 
         const parts = (place.display_name || "").split(",");
-        fields.street.value = parts[0] || "";
-        fields.city.value = parts[1] || "";
-        fields.state.value = parts[2] || "";
-        fields.zip.value = place.postcode || "";
-        fields.country.value = parts[parts.length - 1] || "";
+        if (fields.street) {
+          fields.street.value = parts[0] || "";
+        }
+        if (fields.city) {
+          fields.city.value = parts[1] || "";
+        }
+        if (fields.state) {
+          fields.state.value = parts[2] || "";
+        }
+        if (fields.zip) {
+          fields.zip.value = place.postcode || "";
+        }
+        if (fields.country) {
+          fields.country.value = parts[parts.length - 1] || "";
+        }
       })
       .catch((err) => console.error("Nominatim error:", err));
   });

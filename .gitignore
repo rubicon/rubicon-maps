@@ -92,6 +92,9 @@ wp-config.php
 
 # Log files
 *.log
+node_modules/
+dist/
+coverage/
 
 # htaccess
 /.htaccess

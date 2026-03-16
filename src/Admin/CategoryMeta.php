@@ -1,20 +1,23 @@
 <?php
 namespace RubiconMaps\Admin;
 
+use RubiconMaps\Support\Plugin;
+
 if (!defined('ABSPATH')) {
     exit;
 }
 
 class CategoryMeta {
     public static function init() {
-        add_action('location_category_add_form_fields', [__CLASS__, 'add_category_fields']);
-        add_action('location_category_edit_form_fields', [__CLASS__, 'edit_category_fields']);
-        add_action('created_location_category', [__CLASS__, 'save_category_meta']);
-        add_action('edited_location_category', [__CLASS__, 'save_category_meta']);
+        add_action(Plugin::TAXONOMY_CATEGORY . '_add_form_fields', [__CLASS__, 'add_category_fields']);
+        add_action(Plugin::TAXONOMY_CATEGORY . '_edit_form_fields', [__CLASS__, 'edit_category_fields']);
+        add_action('created_' . Plugin::TAXONOMY_CATEGORY, [__CLASS__, 'save_category_meta']);
+        add_action('edited_' . Plugin::TAXONOMY_CATEGORY, [__CLASS__, 'save_category_meta']);
     }
 
     public static function add_category_fields() {
         ?>
+        <?php wp_nonce_field('rubicon_maps_save_category_meta', 'rubicon_maps_category_meta_nonce'); ?>
         <div class="form-field">
             <label for="cat_marker_icon"><?php _e('Marker Icon', 'rubicon-maps'); ?></label>
             <input type="text" name="cat_marker_icon" id="cat_marker_icon" value="" />
@@ -35,6 +38,7 @@ class CategoryMeta {
         $popup_name = get_term_meta($term->term_id, 'cat_popup_name', true);
         $popup_desc = get_term_meta($term->term_id, 'cat_popup_desc', true);
         ?>
+        <?php wp_nonce_field('rubicon_maps_save_category_meta', 'rubicon_maps_category_meta_nonce'); ?>
         <tr class="form-field">
             <th scope="row" valign="top"><label for="cat_marker_icon"><?php _e('Marker Icon', 'rubicon-maps'); ?></label></th>
             <td><input type="text" name="cat_marker_icon" id="cat_marker_icon" value="<?php echo esc_attr($marker_icon); ?>" /></td>
@@ -51,6 +55,14 @@ class CategoryMeta {
     }
 
     public static function save_category_meta($term_id) {
+        if (!isset($_POST['rubicon_maps_category_meta_nonce']) || !wp_verify_nonce($_POST['rubicon_maps_category_meta_nonce'], 'rubicon_maps_save_category_meta')) {
+            return;
+        }
+
+        if (!current_user_can('manage_categories')) {
+            return;
+        }
+
         if (isset($_POST['cat_marker_icon'])) {
             update_term_meta($term_id, 'cat_marker_icon', sanitize_text_field($_POST['cat_marker_icon']));
         }

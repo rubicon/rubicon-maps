@@ -1,6 +1,8 @@
 <?php
 namespace RubiconMaps\Taxonomy;
 
+use RubiconMaps\Support\Plugin;
+
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -19,7 +21,7 @@ class Region {
             'menu_name'         => __('Regions', 'rubicon-maps'),
         ];
 
-        register_taxonomy('rubicon_maps_region', ['rubicon_maps_location'], [
+        register_taxonomy(Plugin::TAXONOMY_REGION, [Plugin::POST_TYPE_LOCATION], [
             'hierarchical'      => false,
             'labels'            => $labels,
             'show_ui'           => true,

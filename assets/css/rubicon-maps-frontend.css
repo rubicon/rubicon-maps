@@ -1,5 +1,67 @@
-.rubicon-location-list-item {
+.rubicon-maps {
+  border: 1px solid #d9dce1;
+  border-radius: 18px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+}
+
+.rubicon-maps__canvas {
+  min-height: 320px;
+}
+
+.rubicon-location-list {
+  border: 1px solid #d9dce1;
+  border-radius: 18px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.rubicon-location-list__items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rubicon-location-list__item {
   cursor: pointer;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+  padding: 16px 18px;
+  border-bottom: 1px solid #e8ebef;
+  outline: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.rubicon-location-list__item:hover,
+.rubicon-location-list__item:focus,
+.rubicon-location-list__item.is-active {
+  background: #f4f8ff;
+}
+
+.rubicon-location-list__title {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.rubicon-location-list__meta,
+.rubicon-location-list__excerpt,
+.rubicon-location-list__empty {
+  color: #485468;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.rubicon-location-list__empty {
+  margin: 0;
+  padding: 18px;
+}
+
+.rubicon-maps__popup {
+  min-width: 180px;
+}
+
+.rubicon-maps__popup-address {
+  margin-top: 6px;
+}
+
+.rubicon-maps__popup-excerpt {
+  margin-top: 8px;
 }

@@ -1,6 +1,8 @@
 <?php
 namespace RubiconMaps\Admin;
 
+use RubiconMaps\Support\Plugin;
+
 if (!defined('ABSPATH')) exit;
 
 class UninstallHelper {
@@ -8,16 +10,16 @@ class UninstallHelper {
         global $wpdb;
 
         // Delete plugin options
-        delete_option('rubicon_maps_settings');
+        delete_option(Plugin::OPTION_NAME);
 
         // Delete custom post types
-        $posts = get_posts(['post_type' => 'rubicon_maps_location', 'numberposts' => -1]);
+        $posts = get_posts(['post_type' => Plugin::POST_TYPE_LOCATION, 'numberposts' => -1]);
         foreach ($posts as $post) {
             wp_delete_post($post->ID, true);
         }
 
         // Delete terms and meta from taxonomies
-        $taxonomies = ['rubicon_maps_category', 'rubicon_maps_region'];
+        $taxonomies = [Plugin::TAXONOMY_CATEGORY, Plugin::TAXONOMY_REGION];
         foreach ($taxonomies as $tax) {
             $terms = get_terms(['taxonomy' => $tax, 'hide_empty' => false]);
             foreach ($terms as $term) {
@@ -26,6 +28,6 @@ class UninstallHelper {
         }
 
         // Clean up post meta manually if necessary
-        $wpdb->query("DELETE FROM {$wpdb->postmeta} WHERE meta_key IN ('address', 'latitude', 'longitude', 'marker_icon', 'popup_copy')");
+        $wpdb->query("DELETE FROM {$wpdb->postmeta} WHERE meta_key IN ('address', 'street', 'city', 'state', 'zip', 'country', 'latitude', 'longitude', 'phone', 'email', 'website', 'marker_icon')");
     }
 }
