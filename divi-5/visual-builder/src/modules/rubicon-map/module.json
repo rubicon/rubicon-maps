@@ -1,13 +1,29 @@
 {
   "name": "rubicon-maps/rubicon-map",
   "d4Shortcode": "rubicon_map",
-  "title": "Rubicon Map",
+  "title": "Rubicon Maps Map",
   "titles": "Rubicon Maps",
   "category": "module",
   "attributes": {
     "module": {
       "type": "object",
-      "selector": "{{selector}}"
+      "selector": "{{selector}}",
+      "default": {
+        "meta": {
+          "adminLabel": {
+            "desktop": {
+              "value": "Rubicon Maps Map"
+            }
+          }
+        }
+      },
+      "settings": {
+        "meta": {
+          "adminLabel": {
+            "render": true
+          }
+        }
+      }
     },
     "instanceId": {
       "type": "object",
@@ -15,6 +31,16 @@
         "innerContent": {
           "desktop": {
             "value": ""
+          }
+        }
+      }
+    },
+    "provider": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "leaflet"
           }
         }
       }
