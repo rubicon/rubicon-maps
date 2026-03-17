@@ -10,8 +10,9 @@ final class Plugin
 {
     public const OPTION_GROUP = 'rubicon_maps_settings';
     public const OPTION_NAME = 'rubicon_maps_options';
-    public const SETTINGS_PAGE_SLUG = 'rubicon-maps';
-    public const POST_TYPE_LOCATION = 'rubicon_maps_location';
+    public const MENU_PAGE_SLUG = 'rubicon-maps';
+    public const SETTINGS_PAGE_SLUG = 'rubicon-maps-settings';
+    public const POST_TYPE_LOCATION = 'rubicon_location';
     public const TAXONOMY_CATEGORY = 'rubicon_maps_category';
     public const TAXONOMY_REGION = 'rubicon_maps_region';
     public const REST_NAMESPACE = 'rubicon-maps/v1';
@@ -53,5 +54,10 @@ final class Plugin
     public static function isDivi5Enabled(): bool
     {
         return function_exists('et_builder_d5_enabled') && et_builder_d5_enabled();
+    }
+
+    public static function locationMenuSlug(): string
+    {
+        return 'edit.php?post_type=' . self::POST_TYPE_LOCATION;
     }
 }

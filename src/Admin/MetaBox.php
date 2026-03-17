@@ -20,8 +20,7 @@ class MetaBox {
 
     public static function init() {
         add_action('add_meta_boxes', [__CLASS__, 'register_meta_box']);
-        add_action('save_post_rubicon_maps_location', [__CLASS__, 'save_meta_box_data']);
-        add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_admin_scripts']);
+        add_action('save_post_' . Plugin::POST_TYPE_LOCATION, [__CLASS__, 'save_meta_box_data']);
     }
 
     public static function register_meta_box() {
@@ -37,16 +36,23 @@ class MetaBox {
 
     public static function render_meta_box($post) {
         wp_nonce_field('rubicon_maps_save_meta', 'rubicon_maps_meta_nonce');
+        echo '<div class="rubicon-admin-panel">';
+        echo '<div class="rubicon-admin-panel__header">';
+        echo '<div><p class="rubicon-admin-panel__eyebrow">' . esc_html__('Location data', 'rubicon-maps') . '</p><h2 class="rubicon-admin-panel__title">' . esc_html__('Map-ready details', 'rubicon-maps') . '</h2></div>';
+        echo '<p class="rubicon-admin-panel__copy">' . esc_html__('Use the search helper to fill the structured address fields, then refine anything that needs to be location-specific.', 'rubicon-maps') . '</p>';
+        echo '</div>';
+        echo '<div class="rubicon-geocode-search"><label for="rubicon-geocode-query"><strong>' . esc_html__('Find address', 'rubicon-maps') . '</strong></label><div class="rubicon-geocode-search__controls"><input type="text" id="rubicon-geocode-query" class="regular-text" placeholder="' . esc_attr__('Search address…', 'rubicon-maps') . '" /><button type="button" class="button button-secondary" id="rubicon-geocode-button">' . esc_html__('Lookup', 'rubicon-maps') . '</button></div><p class="description" id="rubicon-geocode-status">' . esc_html__('Search for a location to populate the structured address and coordinates.', 'rubicon-maps') . '</p></div>';
+        echo '<div class="rubicon-admin-grid">';
 
         foreach (self::FIELDS as $key => $type) {
             $value = get_post_meta($post->ID, $key, true);
-            echo '<div class="rubicon-field-wrap" style="margin-bottom:16px;">';
+            echo '<div class="rubicon-field-wrap">';
 
             switch ($type) {
                 case 'text':
                 case 'url':
                     printf(
-                        '<label for="%1$s"><strong>%2$s</strong></label><br><input type="%3$s" id="%1$s" name="%1$s" value="%4$s" class="regular-text" />',
+                        '<label for="%1$s"><strong>%2$s</strong></label><input type="%3$s" id="%1$s" name="%1$s" value="%4$s" class="regular-text" />',
                         esc_attr($key),
                         esc_html(ucwords(str_replace('_', ' ', $key))),
                         esc_attr($type),
@@ -57,15 +63,16 @@ class MetaBox {
                 case 'media':
                     $image_url = $value ? wp_get_attachment_url($value) : '';
                     printf(
-                        '<label for="%1$s"><strong>%2$s</strong></label><br>
+                        '<label for="%1$s"><strong>%2$s</strong></label>
                         <input type="hidden" id="%1$s" name="%1$s" value="%3$s" />
-                        <img id="%1$s-preview" src="%4$s" style="max-width:100px;display:block;margin-top:8px;" />
+                        <img id="%1$s-preview" src="%4$s" class="rubicon-image-preview%6$s" />
                         <button type="button" class="button rubicon-upload" data-target="%1$s">%5$s</button>',
                         esc_attr($key),
                         esc_html__('Marker Icon', 'rubicon-maps'),
                         esc_attr($value),
                         esc_url($image_url),
-                        esc_html__('Choose Image', 'rubicon-maps')
+                        esc_html__('Choose Image', 'rubicon-maps'),
+                        $image_url ? '' : ' is-hidden'
                     );
                     break;
             }
@@ -73,13 +80,10 @@ class MetaBox {
             echo '</div>';
         }
 
+        echo '</div>';
         echo '<p><strong>' . esc_html__('Popup Content', 'rubicon-maps') . '</strong><br>' .
-             esc_html__('This is the main content of the post and will appear in the map popup.', 'rubicon-maps') . '</p>';
-    }
-
-    public static function enqueue_admin_scripts() {
-        wp_enqueue_media();
-        wp_enqueue_script('rubicon-admin-meta', plugins_url('../../assets/js/admin-meta.js', __FILE__), [], Plugin::version(), true);
+             esc_html__('Use the WordPress title, excerpt, featured image, and main content editor to control each location card, popup, and detail view.', 'rubicon-maps') . '</p>';
+        echo '</div>';
     }
 
     public static function save_meta_box_data($post_id) {

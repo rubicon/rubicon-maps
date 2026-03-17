@@ -12,7 +12,7 @@ class Location {
         $labels = [
             'name'               => __('Locations', 'rubicon-maps'),
             'singular_name'      => __('Location', 'rubicon-maps'),
-            'menu_name'          => __('Locations', 'rubicon-maps'),
+            'menu_name'          => __('Rubicon Maps', 'rubicon-maps'),
             'name_admin_bar'     => __('Location', 'rubicon-maps'),
             'add_new'            => __('Add Location', 'rubicon-maps'),
             'add_new_item'       => __('Add New Location', 'rubicon-maps'),
@@ -29,7 +29,7 @@ class Location {
         $args = [
             'labels'             => $labels,
             'public'             => true,
-            'show_in_menu'       => Plugin::SETTINGS_PAGE_SLUG,
+            'show_in_menu'       => false,
             'menu_icon'          => 'dashicons-location-alt',
             'supports'           => ['title', 'editor', 'excerpt', 'thumbnail', 'page-attributes'],
             'has_archive'        => false,
