@@ -32,6 +32,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const lng = Number.parseFloat(config.lng || 0);
     const zoom = Number.parseInt(config.zoom || 9, 10);
     const instanceId = config.instanceId;
+    const scrollWheelZoom = Boolean(config.scrollWheelZoom);
+    const tileUrl = config.tileUrl || "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 
     let map = null;
     let markerIndex = new Map();
@@ -40,10 +42,11 @@ document.addEventListener("DOMContentLoaded", function () {
       map = new google.maps.Map(canvas, {
         center: { lat, lng },
         zoom,
+        scrollwheel: scrollWheelZoom,
       });
     } else if (typeof L !== "undefined") {
-      map = L.map(canvas).setView([lat, lng], zoom);
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      map = L.map(canvas, { scrollWheelZoom }).setView([lat, lng], zoom);
+      L.tileLayer(tileUrl, {
         attribution: "&copy; OpenStreetMap contributors",
       }).addTo(map);
     }
@@ -55,6 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
     fetchLocations(config)
       .then((locations) => {
         markerIndex = renderMarkers(provider, map, locations);
+        fitMapToMarkers(provider, map, markerIndex);
         bindListInteractions(instanceId, provider, map, markerIndex);
       })
       .catch((error) => console.error("Rubicon Maps location load error", error));
@@ -97,6 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
           },
           map,
           title: location.title,
+          icon: location.marker_icon_url || undefined,
         });
 
         const infoWindow = new google.maps.InfoWindow({
@@ -110,7 +115,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
         markerIndex.set(String(location.id), { marker, infoWindow, location });
       } else {
-        const marker = L.marker([Number.parseFloat(location.latitude), Number.parseFloat(location.longitude)]).addTo(map);
+        const markerOptions = {};
+
+        if (location.marker_icon_url) {
+          markerOptions.icon = L.icon({
+            iconUrl: location.marker_icon_url,
+            iconSize: [36, 36],
+            iconAnchor: [18, 36],
+            popupAnchor: [0, -32],
+            shadowUrl: typeof rubiconMapsConfig !== "undefined" ? rubiconMapsConfig.leafletMarkerShadow : undefined,
+          });
+        }
+
+        const marker = L.marker([Number.parseFloat(location.latitude), Number.parseFloat(location.longitude)], markerOptions).addTo(map);
         marker.bindPopup(buildPopupHtml(location));
         marker.on("click", function () {
           dispatchLocationClick(location);
@@ -120,6 +137,46 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     return markerIndex;
+  }
+
+  function fitMapToMarkers(provider, map, markerIndex) {
+    const entries = Array.from(markerIndex.values());
+
+    if (entries.length < 1) {
+      return;
+    }
+
+    if (entries.length === 1) {
+      const { location } = entries[0];
+      const lat = Number.parseFloat(location.latitude);
+      const lng = Number.parseFloat(location.longitude);
+
+      if (provider === "google") {
+        map.panTo({ lat, lng });
+        return;
+      }
+
+      map.setView([lat, lng], map.getZoom());
+      return;
+    }
+
+    if (provider === "google") {
+      const bounds = new google.maps.LatLngBounds();
+      entries.forEach(({ location }) => {
+        bounds.extend({
+          lat: Number.parseFloat(location.latitude),
+          lng: Number.parseFloat(location.longitude),
+        });
+      });
+      map.fitBounds(bounds);
+      return;
+    }
+
+    const bounds = entries.map(({ location }) => [
+      Number.parseFloat(location.latitude),
+      Number.parseFloat(location.longitude),
+    ]);
+    map.fitBounds(bounds, { padding: [24, 24] });
   }
 
   function bindListInteractions(instanceId, provider, map, markerIndex) {
@@ -174,10 +231,10 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function buildPopupHtml(location) {
-    const address = location.formatted_address ? `<div class="rubicon-maps__popup-address">${location.formatted_address}</div>` : "";
-    const excerpt = location.excerpt ? `<div class="rubicon-maps__popup-excerpt">${location.excerpt}</div>` : "";
+    const address = location.formatted_address ? `<div class="rubicon-maps__popup-address">${escapeHtml(location.formatted_address)}</div>` : "";
+    const excerpt = location.excerpt ? `<div class="rubicon-maps__popup-excerpt">${escapeHtml(location.excerpt)}</div>` : "";
 
-    return `<div class="rubicon-maps__popup"><strong>${location.title}</strong>${address}${excerpt}</div>`;
+    return `<div class="rubicon-maps__popup"><strong>${escapeHtml(location.title)}</strong>${address}${excerpt}</div>`;
   }
 
   function dispatchLocationClick(location) {
@@ -186,5 +243,14 @@ document.addEventListener("DOMContentLoaded", function () {
         detail: location,
       })
     );
+  }
+
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 });
