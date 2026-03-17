@@ -17,6 +17,22 @@ final class LocationListRenderer
     }
 
     /**
+     * @param array<string, mixed> $atts
+     * @return array{instanceId: string, syncMode: string, isSynced: bool}
+     */
+    public static function resolveInstanceState(array $atts, string $generatedId = ''): array
+    {
+        $providedId = trim((string) ($atts['id'] ?? ''));
+        $instanceId = '' !== $providedId ? $providedId : $generatedId;
+
+        return [
+            'instanceId' => $instanceId,
+            'syncMode' => '' !== $providedId ? 'follow-map' : 'standalone',
+            'isSynced' => '' !== $providedId,
+        ];
+    }
+
+    /**
      * Render a linked location list for shortcodes or Divi modules.
      *
      * @param array<string, mixed> $atts List instance attributes.
@@ -25,23 +41,24 @@ final class LocationListRenderer
     {
         FrontendAssetManager::enqueueList();
 
-        $instanceId = trim((string) ($atts['id'] ?? ''));
-        if ('' === $instanceId) {
-            $instanceId = 'rubicon-map-' . wp_unique_id();
-        }
+        $instanceState = self::resolveInstanceState($atts, 'rubicon-map-' . wp_unique_id());
+        $instanceId = $instanceState['instanceId'];
+        $syncMode = $instanceState['syncMode'];
 
-        $locations = $this->getRepository()->getLocations([
-            'category' => $atts['category'] ?? '',
-            'region' => $atts['region'] ?? '',
-            'location_ids' => $atts['location_ids'] ?? '',
-            'posts_per_page' => $atts['posts_per_page'] ?? -1,
-        ]);
+        $locations = 'follow-map' === $syncMode
+            ? []
+            : $this->getRepository()->getLocations([
+                'category' => $atts['category'] ?? '',
+                'region' => $atts['region'] ?? '',
+                'location_ids' => $atts['location_ids'] ?? '',
+                'posts_per_page' => $atts['posts_per_page'] ?? -1,
+            ]);
 
         ob_start();
         ?>
-        <div class="rubicon-location-list" data-rubicon-location-list="1" data-instance-id="<?php echo esc_attr($instanceId); ?>">
+        <div class="rubicon-location-list" data-rubicon-location-list="1" data-instance-id="<?php echo esc_attr($instanceId); ?>" data-sync-mode="<?php echo esc_attr($syncMode); ?>">
             <?php if ([] === $locations) : ?>
-                <p class="rubicon-location-list__empty"><?php echo esc_html__('No locations matched this map instance.', 'rubicon-maps'); ?></p>
+                <p class="rubicon-location-list__empty"><?php echo 'follow-map' === $syncMode ? esc_html__('This synced listing loads from the paired map.', 'rubicon-maps') : esc_html__('No locations matched this map instance.', 'rubicon-maps'); ?></p>
             <?php else : ?>
                 <ul class="rubicon-location-list__items" role="list">
                     <?php foreach ($locations as $location) : ?>
