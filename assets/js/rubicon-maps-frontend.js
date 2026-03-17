@@ -59,6 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((locations) => {
         markerIndex = renderMarkers(provider, map, locations);
         fitMapToMarkers(provider, map, markerIndex);
+        syncLists(instanceId, locations);
         bindListInteractions(instanceId, provider, map, markerIndex);
       })
       .catch((error) => console.error("Rubicon Maps location load error", error));
@@ -180,47 +181,70 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function bindListInteractions(instanceId, provider, map, markerIndex) {
-    const listRoot = document.querySelector(`[data-rubicon-location-list='1'][data-instance-id='${instanceId}']`);
+    const listRoots = document.querySelectorAll(`[data-rubicon-location-list='1'][data-instance-id='${instanceId}']`);
 
-    if (!listRoot) {
+    if (!listRoots.length) {
       return;
     }
 
-    const items = listRoot.querySelectorAll("[data-location-id]");
+    listRoots.forEach((listRoot) => {
+      const items = listRoot.querySelectorAll("[data-location-id]");
 
-    items.forEach((item) => {
-      const activate = () => {
-        const markerEntry = markerIndex.get(item.getAttribute("data-location-id"));
+      items.forEach((item) => {
+        const activate = () => {
+          const markerEntry = markerIndex.get(item.getAttribute("data-location-id"));
 
-        if (!markerEntry) {
-          return;
-        }
+          if (!markerEntry) {
+            return;
+          }
 
-        const location = markerEntry.location;
+          const location = markerEntry.location;
 
-        if (provider === "google") {
-          map.panTo({
-            lat: Number.parseFloat(location.latitude),
-            lng: Number.parseFloat(location.longitude),
-          });
-          map.setZoom(Math.max(map.getZoom(), 12));
-          markerEntry.infoWindow.open(map, markerEntry.marker);
-        } else {
-          map.setView([Number.parseFloat(location.latitude), Number.parseFloat(location.longitude)], Math.max(map.getZoom(), 12));
-          markerEntry.marker.openPopup();
-        }
+          if (provider === "google") {
+            map.panTo({
+              lat: Number.parseFloat(location.latitude),
+              lng: Number.parseFloat(location.longitude),
+            });
+            map.setZoom(Math.max(map.getZoom(), 12));
+            markerEntry.infoWindow.open(map, markerEntry.marker);
+          } else {
+            map.setView([Number.parseFloat(location.latitude), Number.parseFloat(location.longitude)], Math.max(map.getZoom(), 12));
+            markerEntry.marker.openPopup();
+          }
 
-        highlightListItem(listRoot, item);
-        dispatchLocationClick(location);
-      };
+          highlightListItem(listRoot, item);
+          dispatchLocationClick(location);
+        };
 
-      item.addEventListener("click", activate);
-      item.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          activate();
-        }
+        item.addEventListener("click", activate);
+        item.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            activate();
+          }
+        });
       });
+    });
+  }
+
+  function syncLists(instanceId, locations) {
+    const syncedLists = document.querySelectorAll(
+      `[data-rubicon-location-list='1'][data-instance-id='${instanceId}'][data-sync-mode='follow-map']`
+    );
+
+    if (!syncedLists.length) {
+      return;
+    }
+
+    syncedLists.forEach((listRoot) => {
+      if (!locations.length) {
+        listRoot.innerHTML =
+          '<p class="rubicon-location-list__empty">No locations matched this map instance.</p>';
+        return;
+      }
+
+      const itemsMarkup = locations.map((location) => buildListItemHtml(location)).join("");
+      listRoot.innerHTML = `<ul class="rubicon-location-list__items" role="list">${itemsMarkup}</ul>`;
     });
   }
 
@@ -235,6 +259,31 @@ document.addEventListener("DOMContentLoaded", function () {
     const excerpt = location.excerpt ? `<div class="rubicon-maps__popup-excerpt">${escapeHtml(location.excerpt)}</div>` : "";
 
     return `<div class="rubicon-maps__popup"><strong>${escapeHtml(location.title)}</strong>${address}${excerpt}</div>`;
+  }
+
+  function buildListItemHtml(location) {
+    const address = location.formatted_address
+      ? `<div class="rubicon-location-list__meta">${escapeHtml(location.formatted_address)}</div>`
+      : "";
+    const excerpt = location.excerpt
+      ? `<div class="rubicon-location-list__excerpt">${escapeHtml(location.excerpt)}</div>`
+      : "";
+
+    return `
+      <li
+        class="rubicon-location-list__item"
+        data-location-id="${escapeHtml(location.id)}"
+        data-lat="${escapeHtml(location.latitude || "")}"
+        data-lng="${escapeHtml(location.longitude || "")}"
+        tabindex="0"
+        role="button"
+        aria-label="${escapeHtml(`Focus map on ${location.title}`)}"
+      >
+        <strong class="rubicon-location-list__title">${escapeHtml(location.title)}</strong>
+        ${address}
+        ${excerpt}
+      </li>
+    `;
   }
 
   function dispatchLocationClick(location) {

@@ -3,7 +3,7 @@ import React from 'react';
 import { __ } from '@wordpress/i18n';
 
 import { PreviewShell } from '../shared/preview';
-import { getProviderLabel, renderPills, usePreviewLabels } from '../shared/preview-data';
+import { getProviderLabel, publishPreviewCount, renderPills, usePreviewLocationData } from '../shared/preview-data';
 import { getSavedSyncId } from '../shared/sync-id';
 import { getTextValue } from '../shared/value';
 import { ModuleClassnames } from './module-classnames';
@@ -20,17 +20,25 @@ export const RubiconMapEdit = ({
 }) => {
   const syncId = getSavedSyncId(attrs?.instanceId);
   const provider = getProviderLabel(attrs?.provider);
-  const labels = usePreviewLabels({
+  const preview = usePreviewLocationData({
     categoryAttr: attrs?.category,
     regionAttr: attrs?.region,
     locationIdsAttr: attrs?.locationIds,
   });
+
+  React.useEffect(() => {
+    if (syncId) {
+      publishPreviewCount(syncId, preview.matchedLocationCount);
+    }
+  }, [syncId, preview.matchedLocationCount]);
+
   const items = [
     { label: __('Sync ID', 'rubicon-maps'), value: syncId || __('Standalone', 'rubicon-maps') },
     { label: __('Provider', 'rubicon-maps'), value: provider },
-    { label: __('Categories', 'rubicon-maps'), value: renderPills(labels.categories) },
-    { label: __('Regions', 'rubicon-maps'), value: renderPills(labels.regions) },
-    { label: __('Locations', 'rubicon-maps'), value: renderPills(labels.locations) },
+    { label: __('Categories', 'rubicon-maps'), value: renderPills(preview.categories) },
+    { label: __('Regions', 'rubicon-maps'), value: renderPills(preview.regions) },
+    { label: __('Locations', 'rubicon-maps'), value: renderPills(preview.locations) },
+    { label: __('# of Locations', 'rubicon-maps'), value: String(preview.matchedLocationCount) },
     { label: __('Center', 'rubicon-maps'), value: [getTextValue(attrs?.latitude), getTextValue(attrs?.longitude)].filter(Boolean).join(', ') },
     { label: __('Zoom / Height', 'rubicon-maps'), value: [getTextValue(attrs?.zoom), getTextValue(attrs?.height)].filter(Boolean).join(' / ') },
   ];
