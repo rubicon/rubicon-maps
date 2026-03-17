@@ -4,11 +4,11 @@ Tags: maps, leaflet, locations, directory, Divi, shortcodes
 Requires at least: 5.8
 Tested up to: 6.8.1
 Requires PHP: 8.1
-Stable tag: 1.0.0
+Stable tag: 1.0.0-rc.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Rubicon Maps is a Divi-first mapping plugin with linked map/list rendering, structured location data, CSV import/export, REST support, and Leaflet-based frontend maps.
+Rubicon Maps is a Divi-first mapping plugin that helps you manage real locations without turning setup into a second job, with linked map/list rendering, CSV import/export, REST support, and Leaflet-based frontend maps.
 
 == Description ==
 
@@ -69,7 +69,7 @@ It uses native WordPress title, excerpt, content, thumbnail, and custom metadata
 
 == Changelog ==
 
-= 1.0.0 - 2026-03-16 =
+= 1.0.0-rc.1 - 2026-03-17 =
 * Added CSV import/export for canonical location transfers
 * Added branded admin panels, category icon previews, and a server-side geocoding helper
 * Added release packaging scripts and repository process docs for maintained releases
@@ -149,7 +149,7 @@ It uses native WordPress title, excerpt, content, thumbnail, and custom metadata
 
 == Upgrade Notice ==
 
-= 1.0.0 =
+= 1.0.0-rc.1 =
 Adds CSV import/export, hardened admin UX, and release-ready packaging on top of the Divi-first core.
 
 == License ==

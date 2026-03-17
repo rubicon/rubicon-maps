@@ -1,10 +1,10 @@
 # Changelog
 
-## 1.0.0
+## 1.0.0-rc.1
 **Maps, Meet Manners**  
-2026-03-16
+2026-03-17
 
-Rubicon Maps finally behaves like a plugin you can hand to another human without an apology.
+Rubicon Maps is close enough to stop blushing, but not close enough to pretend runtime validation is finished.
 
 ### Added
 - Added CSV import/export with a canonical Rubicon Maps schema for locations, taxonomies, and structured metadata.

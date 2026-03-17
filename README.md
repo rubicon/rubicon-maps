@@ -1,13 +1,13 @@
 # Rubicon Maps
 
-Rubicon Maps is a Divi-first WordPress location mapping plugin with native location management, linked map/list output, CSV import/export, and dual Divi support: a dedicated `divi-4` compatibility layer for legacy builder modules and a dedicated `divi-5` Visual Builder runtime for Divi 5.
+Rubicon Maps is a Divi-first WordPress location mapping plugin built for people who want real location management without turning every map into a shortcode scavenger hunt. It ships with native location management, linked map/list output, CSV import/export, and dual Divi support: a dedicated `divi-4` compatibility layer for legacy builder modules and a dedicated `divi-5` Visual Builder runtime for Divi 5.
 
-> Version: `1.0.0`  
+> Version: `1.0.0-rc.1`  
 > License: `GPLv2 or later`  
 > Requires PHP: `8.1+`  
 > Tested up to: `WordPress 6.8.1`
 
-## What ships in v1.0.0
+## What ships in v1.0.0-rc.1
 
 - Custom post type: `rubicon_maps_location`
 - Taxonomies: `rubicon_maps_category`, `rubicon_maps_region`

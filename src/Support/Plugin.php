@@ -14,6 +14,9 @@ final class Plugin
     public const POST_TYPE_LOCATION = 'rubicon_maps_location';
     public const TAXONOMY_CATEGORY = 'rubicon_maps_category';
     public const TAXONOMY_REGION = 'rubicon_maps_region';
+    public const UPDATE_URI = 'https://git.daxdavis.com/rubicon/rubicon-maps';
+    public const UPDATE_HOSTNAME = 'git.daxdavis.com';
+    public const UPDATE_API_RELEASE_LATEST = 'https://git.daxdavis.com/api/v1/repos/rubicon/rubicon-maps/releases/latest';
     public const REST_NAMESPACE = 'rubicon-maps/v1';
     public const SHORTCODE_MAP = 'rubicon_maps';
     public const SHORTCODE_LIST = 'rubicon_maps_list';
@@ -25,7 +28,7 @@ final class Plugin
      */
     public static function version(): string
     {
-        return defined('RUBICON_MAPS_VERSION') ? RUBICON_MAPS_VERSION : '1.0.0';
+        return defined('RUBICON_MAPS_VERSION') ? RUBICON_MAPS_VERSION : '1.0.0-rc.1';
     }
 
     public static function path(string $relativePath = ''): string

@@ -241,8 +241,12 @@ Additional docs such as `CONTRIBUTING.md`, workflow docs, or release runbooks sh
 
 Apply all standard rules above, plus:
 
+- internal WordPress identifiers should use a short, stable vendor prefix, for example `rtv_`, rather than long product-name strings
+- use that prefix consistently for post type keys, taxonomy keys, option names, action/filter names, nonce actions, cache keys, and other machine-facing identifiers
 - release assets must include the installable plugin zip when releases are distributed as zips
 - plugin version headers, changelog, and release metadata must align
+- plugin entries on the WordPress Plugins screen should include an action link to the primary settings or onboarding page when the plugin exposes one
+- plugins distributed outside WordPress.org should declare a real `Update URI` and support native Plugins-screen auto-update controls when a valid update source exists
 - required built assets must be included in release packaging
 - development-only files and machine junk must not ship in the release zip
 - upgrade and uninstall behavior should be considered part of release verification
