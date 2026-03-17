@@ -15,6 +15,8 @@ use RubiconMaps\Admin\PluginActionLinks;
 use RubiconMaps\Rest\LocationsEndpoint;
 use RubiconMaps\Shortcodes\ListShortcode;
 use RubiconMaps\Shortcodes\MapShortcode;
+use RubiconMaps\Support\PluginLifecycle;
+use RubiconMaps\Support\PluginUpdater;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -38,7 +40,9 @@ class Loader
         add_action('init', [Location::class, 'register']);
         add_action('init', [LocationCategory::class, 'register']);
         add_action('init', [Region::class, 'register']);
+        add_action('init', [PluginLifecycle::class, 'maybeUpgrade'], 20);
         add_action('rest_api_init', [LocationsEndpoint::class, 'register_routes']);
+        PluginUpdater::init();
 
         if (is_admin()) {
             AdminAssets::init();
