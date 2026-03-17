@@ -1,8 +1,8 @@
 {
   "name": "rubicon-maps/rubicon-map",
   "d4Shortcode": "rubicon_map",
-  "title": "Rubicon Maps Map",
-  "titles": "Rubicon Maps Modules",
+  "title": "Rubicon Map",
+  "titles": "Rubicon Maps",
   "category": "module",
   "attributes": {
     "module": {
@@ -15,16 +15,6 @@
         "innerContent": {
           "desktop": {
             "value": ""
-          }
-        }
-      }
-    },
-    "provider": {
-      "type": "object",
-      "default": {
-        "innerContent": {
-          "desktop": {
-            "value": "leaflet"
           }
         }
       }

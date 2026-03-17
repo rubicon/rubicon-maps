@@ -3,8 +3,7 @@ import React from 'react';
 import { __ } from '@wordpress/i18n';
 
 import { PreviewShell } from '../shared/preview';
-import { renderPills, usePreviewLabels } from '../shared/preview-data';
-import { getSavedSyncId } from '../shared/sync-id';
+import { getTextValue } from '../shared/value';
 import { ModuleClassnames } from './module-classnames';
 import { ModuleScriptData } from './module-script-data';
 import { ModuleStyles } from './module-styles';
@@ -17,17 +16,11 @@ export const RubiconLocationListEdit = ({
   id,
   name,
 }) => {
-  const syncId = getSavedSyncId(attrs?.instanceId);
-  const labels = usePreviewLabels({
-    categoryAttr: attrs?.category,
-    regionAttr: attrs?.region,
-    locationIdsAttr: attrs?.locationIds,
-  });
   const items = [
-    { label: __('Sync ID', 'rubicon-maps'), value: syncId || __('Standalone', 'rubicon-maps') },
-    { label: __('Categories', 'rubicon-maps'), value: renderPills(labels.categories) },
-    { label: __('Regions', 'rubicon-maps'), value: renderPills(labels.regions) },
-    { label: __('Locations', 'rubicon-maps'), value: renderPills(labels.locations) },
+    { label: __('Map ID', 'rubicon-maps'), value: getTextValue(attrs?.instanceId) || __('Auto', 'rubicon-maps') },
+    { label: __('Categories', 'rubicon-maps'), value: getTextValue(attrs?.category) },
+    { label: __('Regions', 'rubicon-maps'), value: getTextValue(attrs?.region) },
+    { label: __('Locations', 'rubicon-maps'), value: getTextValue(attrs?.locationIds) },
   ];
 
   return (
