@@ -7,9 +7,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-require_once __DIR__ . '/modules/RubiconMapModule.php';
-require_once __DIR__ . '/modules/RubiconLocationListModule.php';
-
 add_action(
     'et_builder_ready',
     static function (): void {
@@ -21,6 +18,9 @@ add_action(
         ) {
             return;
         }
+
+        require_once __DIR__ . '/modules/RubiconMapModule.php';
+        require_once __DIR__ . '/modules/RubiconLocationListModule.php';
 
         new \RubiconMaps\Divi4\Modules\RubiconMapModule();
         new \RubiconMaps\Divi4\Modules\RubiconLocationListModule();
