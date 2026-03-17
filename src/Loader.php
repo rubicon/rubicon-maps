@@ -4,9 +4,14 @@ namespace RubiconMaps;
 use RubiconMaps\PostType\Location;
 use RubiconMaps\Taxonomy\LocationCategory;
 use RubiconMaps\Taxonomy\Region;
+use RubiconMaps\Admin\AdminAssets;
+use RubiconMaps\Admin\AdminMenuState;
 use RubiconMaps\Admin\SettingsPage;
 use RubiconMaps\Admin\MetaBox;
 use RubiconMaps\Admin\CategoryMeta;
+use RubiconMaps\Admin\GeocodeController;
+use RubiconMaps\Admin\ImportExportPage;
+use RubiconMaps\Admin\PluginActionLinks;
 use RubiconMaps\Rest\LocationsEndpoint;
 use RubiconMaps\Shortcodes\ListShortcode;
 use RubiconMaps\Shortcodes\MapShortcode;
@@ -36,9 +41,14 @@ class Loader
         add_action('rest_api_init', [LocationsEndpoint::class, 'register_routes']);
 
         if (is_admin()) {
+            AdminAssets::init();
+            AdminMenuState::init();
+            GeocodeController::init();
             SettingsPage::init();
             MetaBox::init();
             CategoryMeta::init();
+            ImportExportPage::init();
+            PluginActionLinks::init();
         }
 
         new ListShortcode();
