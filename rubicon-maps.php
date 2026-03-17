@@ -3,7 +3,7 @@
  * Plugin Name: Rubicon Maps
  * Plugin URI: https://rubicontv.com/rubicon-maps
  * Description: Divi-first location mapping plugin for WordPress with linked map/list modules, REST support, and location management.
- * Version: 0.5.0
+ * Version: 1.0.0
  * Author: Rubicon
  * Author URI: https://rubicontv.com
  * Text Domain: rubicon-maps
@@ -25,7 +25,7 @@ if (!defined('RUBICON_MAPS_PLUGIN_URL')) {
 }
 
 if (!defined('RUBICON_MAPS_VERSION')) {
-    define('RUBICON_MAPS_VERSION', '0.5.0');
+    define('RUBICON_MAPS_VERSION', '1.0.0');
 }
 
 require_once __DIR__ . '/vendor/autoload.php';

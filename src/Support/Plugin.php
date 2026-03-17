@@ -25,7 +25,7 @@ final class Plugin
      */
     public static function version(): string
     {
-        return defined('RUBICON_MAPS_VERSION') ? RUBICON_MAPS_VERSION : '0.5.0';
+        return defined('RUBICON_MAPS_VERSION') ? RUBICON_MAPS_VERSION : '1.0.0';
     }
 
     public static function path(string $relativePath = ''): string
