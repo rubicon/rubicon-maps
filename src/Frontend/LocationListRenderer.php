@@ -23,6 +23,8 @@ final class LocationListRenderer
      */
     public function render(array $atts = []): string
     {
+        FrontendAssetManager::enqueueList();
+
         $instanceId = trim((string) ($atts['id'] ?? ''));
         if ('' === $instanceId) {
             $instanceId = 'rubicon-map-' . wp_unique_id();

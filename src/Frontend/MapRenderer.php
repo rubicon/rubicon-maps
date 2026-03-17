@@ -15,6 +15,10 @@ if (!defined('ABSPATH')) {
 
 final class MapRenderer
 {
+    public function __construct(private readonly ?MapInstanceConfigBuilder $configBuilder = null)
+    {
+    }
+
     /**
      * Render a frontend map shell for shortcodes or Divi modules.
      *
@@ -22,27 +26,25 @@ final class MapRenderer
      */
     public function render(array $atts = []): string
     {
-        $provider = (string) ($atts['provider'] ?? SettingsHelper::get_option('default_provider', 'leaflet'));
-        if ('google' === $provider && '' === SettingsHelper::get_option('google_maps_api_key', '')) {
-            $provider = 'leaflet';
-        }
-
-        FrontendAssetManager::enqueue($provider);
-
-        $instanceId = $this->resolveInstanceId($atts['id'] ?? null);
-        $payload = [
-            'instanceId' => $instanceId,
-            'provider' => $provider,
-            'lat' => (string) ($atts['lat'] ?? SettingsHelper::get_option('default_latitude', '29.7604')),
-            'lng' => (string) ($atts['lng'] ?? SettingsHelper::get_option('default_longitude', '-95.3698')),
-            'zoom' => (int) ($atts['zoom'] ?? SettingsHelper::get_option('default_zoom', 9)),
-            'height' => (string) ($atts['height'] ?? SettingsHelper::get_option('default_map_height', '480px')),
-            'category' => (string) ($atts['category'] ?? ''),
-            'region' => (string) ($atts['region'] ?? ''),
-            'locationIds' => (string) ($atts['location_ids'] ?? ''),
-            'endpoint' => esc_url(rest_url('rubicon-maps/v1/locations')),
-            'scrollWheelZoom' => !empty($atts['scrollwheel']) ? '1' : (SettingsHelper::get_option('enable_scroll_wheel', true) ? '1' : '0'),
+        $settings = [
+            'default_provider' => SettingsHelper::get_option('default_provider', 'leaflet'),
+            'default_latitude' => SettingsHelper::get_option('default_latitude', '29.7604'),
+            'default_longitude' => SettingsHelper::get_option('default_longitude', '-95.3698'),
+            'default_zoom' => SettingsHelper::get_option('default_zoom', 9),
+            'default_map_height' => SettingsHelper::get_option('default_map_height', '480px'),
+            'tile_url' => SettingsHelper::get_option('tile_url', 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'),
+            'google_maps_api_key' => SettingsHelper::get_option('google_maps_api_key', ''),
+            'enable_scroll_wheel' => SettingsHelper::get_option('enable_scroll_wheel', true),
         ];
+        $instanceId = $this->resolveInstanceId($atts['id'] ?? null);
+        $payload = $this->getConfigBuilder()->build(
+            $atts,
+            $settings,
+            esc_url(rest_url('rubicon-maps/v1/locations')),
+            $instanceId
+        );
+
+        FrontendAssetManager::enqueueMap((string) $payload['provider']);
 
         ob_start();
         ?>
@@ -68,5 +70,10 @@ final class MapRenderer
         }
 
         return 'rubicon-map-' . wp_unique_id();
+    }
+
+    private function getConfigBuilder(): MapInstanceConfigBuilder
+    {
+        return $this->configBuilder ?? new MapInstanceConfigBuilder();
     }
 }

@@ -23,10 +23,19 @@ final class FrontendAssetManager
     private static bool $leafletAssetsEnqueued = false;
     private static bool $googleAssetsEnqueued = false;
 
-    public static function enqueue(string $provider = 'leaflet'): void
+    public static function enqueueMap(string $provider = 'leaflet'): void
     {
+        self::enqueueSharedFrontendAssets();
         self::enqueueProviderAssets($provider);
+    }
 
+    public static function enqueueList(): void
+    {
+        self::enqueueSharedFrontendAssets();
+    }
+
+    private static function enqueueSharedFrontendAssets(): void
+    {
         if (self::$frontendAssetsEnqueued) {
             return;
         }
@@ -52,6 +61,7 @@ final class FrontendAssetManager
             [
                 'restBase' => rest_url(Plugin::REST_NAMESPACE . '/locations'),
                 'defaultProvider' => SettingsHelper::get_option('default_provider', 'leaflet'),
+                'leafletMarkerShadow' => plugins_url('/assets/leaflet/marker-shadow.png', RUBICON_MAPS_PLUGIN_FILE),
             ]
         );
 
