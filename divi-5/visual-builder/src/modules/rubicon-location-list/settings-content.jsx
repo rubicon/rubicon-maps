@@ -46,10 +46,9 @@ export const SettingsContent = ({ defaultSettingsAttrs, attrs, id }) => (
       attrs={attrs}
       id={id}
       title={__('Map Sync', 'rubicon-maps')}
-      helperText={__('This module is currently standalone. Enable sync if you want to pair it with a Rubicon Maps Map.', 'rubicon-maps')}
-      enableLabel={__('Enable Sync with Map', 'rubicon-maps')}
-      regenerateLabel={__('Regenerate Sync ID', 'rubicon-maps')}
-      fieldDescription={__('Shared ID used to sync this module with a paired Rubicon Maps Map. Use the same value in the map module.', 'rubicon-maps')}
+      helperText={__('Paste the Sync ID from the Rubicon Maps Map module you want this listing to follow.', 'rubicon-maps')}
+      fieldDescription={__('Shared ID used to sync this module with a paired Rubicon Maps Map. Paste the value from the map module here.', 'rubicon-maps')}
+      mode="manual"
     />
     <AdminLabelGroup
       defaultGroupAttr={defaultSettingsAttrs?.module?.meta?.adminLabel ?? {}}
