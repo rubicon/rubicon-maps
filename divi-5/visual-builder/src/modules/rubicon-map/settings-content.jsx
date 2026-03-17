@@ -2,27 +2,20 @@ import React from 'react';
 
 import { __ } from '@wordpress/i18n';
 
+import { AdminLabelSettingsGroup } from '../shared/admin-label-settings-group';
+import { SyncSettingsGroup } from '../shared/sync-settings-group';
+
 const { TextContainer } = window?.divi?.fieldLibrary ?? {};
 const { GroupContainer } = window?.divi?.modal ?? {};
-const {
-  AdminLabelGroup,
-  FieldContainer,
-} = window?.divi?.module ?? {};
+const { FieldContainer } = window?.divi?.module ?? {};
 
-export const SettingsContent = ({ defaultSettingsAttrs }) => (
-  <React.Fragment>
+export const SettingsContent = ({ defaultSettingsAttrs, attrs, id }) => {
+  return (
+    <React.Fragment>
     <GroupContainer
       id="mapFilters"
       title={__('Location Filters', 'rubicon-maps')}
     >
-      <FieldContainer
-        attrName="instanceId.innerContent"
-        label={__('Map ID', 'rubicon-maps')}
-        description={__('Optional shared ID used to sync this map with a Rubicon Location List module.', 'rubicon-maps')}
-        features={{ sticky: false }}
-      >
-        <TextContainer />
-      </FieldContainer>
       <FieldContainer
         attrName="category.innerContent"
         label={__('Categories', 'rubicon-maps')}
@@ -85,8 +78,16 @@ export const SettingsContent = ({ defaultSettingsAttrs }) => (
         <TextContainer />
       </FieldContainer>
     </GroupContainer>
-    <AdminLabelGroup
-      defaultGroupAttr={defaultSettingsAttrs?.module?.meta?.adminLabel ?? {}}
+    <SyncSettingsGroup
+      attrs={attrs}
+      id={id}
+      title={__('Map Sync', 'rubicon-maps')}
+      helperText={__('This module is currently standalone. Enable sync if you want to pair it with a Rubicon Maps Listing.', 'rubicon-maps')}
+      enableLabel={__('Enable Sync with Listing', 'rubicon-maps')}
+      regenerateLabel={__('Regenerate Sync ID', 'rubicon-maps')}
+      fieldDescription={__('Shared ID used to sync this module with a paired Rubicon Maps Listing. Use the same value in the listing module.', 'rubicon-maps')}
     />
+    <AdminLabelSettingsGroup defaultLabel={__('Rubicon Maps Map', 'rubicon-maps')} />
   </React.Fragment>
-);
+  );
+};

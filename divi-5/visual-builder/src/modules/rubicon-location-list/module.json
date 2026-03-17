@@ -1,8 +1,8 @@
 {
   "name": "rubicon-maps/rubicon-location-list",
   "d4Shortcode": "rubicon_location_list",
-  "title": "Rubicon Location List",
-  "titles": "Rubicon Location Lists",
+  "title": "Rubicon Maps Listing",
+  "titles": "Rubicon Maps Modules",
   "category": "module",
   "attributes": {
     "module": {

@@ -37,7 +37,8 @@ final class RubiconMapModule implements DependencyInterface
     {
         $markup = (new MapRenderer())->render(
             [
-                'id' => self::textAttr($attrs, 'instanceId'),
+                'id' => self::textAttr($attrs, 'instanceId', self::generatedSyncId($block)),
+                'provider' => self::providerAttr($attrs),
                 'category' => self::textAttr($attrs, 'category'),
                 'region' => self::textAttr($attrs, 'region'),
                 'location_ids' => self::textAttr($attrs, 'locationIds'),
@@ -138,5 +139,28 @@ final class RubiconMapModule implements DependencyInterface
             ?? $fallback;
 
         return is_scalar($value) ? trim((string) $value) : $fallback;
+    }
+
+    private static function generatedSyncId(object $block): string
+    {
+        $rawId = (string) ($block->parsed_block['id'] ?? '');
+        $normalized = substr(md5($rawId), 0, 6);
+
+        return 'rtv_map_' . $normalized;
+    }
+
+    private static function providerAttr(array $attrs): string
+    {
+        $value = strtolower(self::textAttr($attrs, 'provider'));
+
+        if ('' === $value || '1' === $value || 'leaflet' === $value || 'default' === $value) {
+            return 'leaflet';
+        }
+
+        if ('2' === $value || 'google' === $value || 'google maps' === $value) {
+            return 'google';
+        }
+
+        return $value;
     }
 }
