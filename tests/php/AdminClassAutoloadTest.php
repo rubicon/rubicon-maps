@@ -10,6 +10,7 @@ $classes = [
     \RubiconMaps\Admin\CategoryMeta::class,
     \RubiconMaps\Admin\GeocodeController::class,
     \RubiconMaps\Admin\ImportExportPage::class,
+    \RubiconMaps\Admin\LocationListFilters::class,
     \RubiconMaps\Admin\MetaBox::class,
     \RubiconMaps\Admin\PluginActionLinks::class,
     \RubiconMaps\Admin\SettingsPage::class,
