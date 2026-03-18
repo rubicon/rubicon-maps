@@ -11,6 +11,7 @@ use RubiconMaps\Admin\MetaBox;
 use RubiconMaps\Admin\CategoryMeta;
 use RubiconMaps\Admin\GeocodeController;
 use RubiconMaps\Admin\ImportExportPage;
+use RubiconMaps\Admin\LocationListFilters;
 use RubiconMaps\Admin\PluginActionLinks;
 use RubiconMaps\Rest\LocationsEndpoint;
 use RubiconMaps\Shortcodes\ListShortcode;
@@ -52,6 +53,7 @@ class Loader
             MetaBox::init();
             CategoryMeta::init();
             ImportExportPage::init();
+            LocationListFilters::init();
             PluginActionLinks::init();
         }
 
