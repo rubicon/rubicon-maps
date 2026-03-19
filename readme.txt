@@ -4,7 +4,7 @@ Tags: maps, leaflet, locations, directory, Divi, shortcodes
 Requires at least: 5.8
 Tested up to: 6.8.1
 Requires PHP: 8.1
-Stable tag: 1.0.0-rc.1
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,13 +49,13 @@ Example:
 == Frequently Asked Questions ==
 
 = Can I use both Leaflet and Google Maps? =  
-Leaflet is the current primary path for v1. Google support remains in the architecture, but full parity is intentionally a later release concern.
+Leaflet/OpenStreetMap is the supported provider path for v1.0.0. Additional provider work is future scope and not part of the v1.0.0 support promise.
 
 = Can I use map and list separately? =  
 Yes — use separate shortcodes or Divi modules and link them via a shared `id`.
 
 = Is it compatible with Multisite? =  
-Needs verification before release.
+Multisite has not been verified as part of the v1.0.0 release scope.
 
 = Does it support custom fields? =  
 It uses native WordPress title, excerpt, content, thumbnail, and custom metadata for structured location data.
@@ -69,12 +69,13 @@ It uses native WordPress title, excerpt, content, thumbnail, and custom metadata
 
 == Changelog ==
 
-= 1.0.0-rc.1 - 2026-03-17 =
+= 1.0.0 - 2026-03-18 =
 * Added CSV import/export for canonical location transfers
 * Added branded admin panels, category icon previews, and a server-side geocoding helper
 * Added release packaging scripts and repository process docs for maintained releases
 * Added a canonical frontend map config builder with test coverage
-* Improved frontend map behavior for tile URLs, scroll-wheel settings, custom marker icons, safer popup output, and map bounds fitting
+* Improved frontend map behavior for tile URLs, popup behavior, marker clustering, safer popup output, and map bounds fitting
+* Added fixed-height synced list behavior, cleaner default list presentation, and admin address autocomplete
 * Maintained dedicated Divi 4 and Divi 5 runtimes with linked map/list modules
 
 = 0.5.0 - 2026-03-16 =
@@ -149,8 +150,8 @@ It uses native WordPress title, excerpt, content, thumbnail, and custom metadata
 
 == Upgrade Notice ==
 
-= 1.0.0-rc.1 =
-Adds CSV import/export, hardened admin UX, and release-ready packaging on top of the Divi-first core.
+= 1.0.0 =
+Delivers the first stable Rubicon Maps release with Leaflet-first map/list behavior, CSV workflows, Divi 4 and Divi 5 support, admin geocoding, clustering, and release-ready packaging.
 
 == License ==
 
