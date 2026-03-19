@@ -19,6 +19,16 @@
         }
       }
     },
+    "provider": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "leaflet"
+          }
+        }
+      }
+    },
     "category": {
       "type": "object",
       "default": {
@@ -84,7 +94,137 @@
       "default": {
         "innerContent": {
           "desktop": {
-            "value": "480px"
+            "value": ""
+          }
+        }
+      }
+    },
+    "viewportMode": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "default"
+          }
+        }
+      }
+    },
+    "autoFitPadding": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": ""
+          }
+        }
+      }
+    },
+    "tilePreset": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "default"
+          }
+        }
+      }
+    },
+    "zoomControl": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "default"
+          }
+        }
+      }
+    },
+    "scrollWheelZoom": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "default"
+          }
+        }
+      }
+    },
+    "doubleClickZoom": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "default"
+          }
+        }
+      }
+    },
+    "popupTrigger": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "default"
+          }
+        }
+      }
+    },
+    "popupMaxWidth": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": ""
+          }
+        }
+      }
+    },
+    "closeOnMapClick": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "default"
+          }
+        }
+      }
+    },
+    "autoClosePopup": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "default"
+          }
+        }
+      }
+    },
+    "openAllPopups": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "default"
+          }
+        }
+      }
+    },
+    "enableClustering": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "default"
+          }
+        }
+      }
+    },
+    "clusterRadius": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": ""
           }
         }
       }

@@ -3,24 +3,26 @@ Contributors: rubicon
 Tags: maps, leaflet, locations, directory, Divi, shortcodes
 Requires at least: 5.8
 Tested up to: 6.8.1
-Requires PHP: 7.4
-Stable tag: 0.5.0
+Requires PHP: 8.1
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Rubicon Maps is a Divi-first mapping plugin with linked map/list rendering, structured location data, REST support, and Leaflet-based frontend maps.
+Rubicon Maps is a Divi-first mapping plugin that helps you manage real locations without turning setup into a second job, with linked map/list rendering, CSV import/export, REST support, and Leaflet-based frontend maps.
 
 == Description ==
 
-Rubicon Maps allows you to create interactive, category-based maps with linked location lists and frontend filtering. Built for performance and extensibility with shortcode, REST, and Divi Builder integration, including dedicated runtime layers for both Divi 4 and Divi 5.
+Rubicon Maps allows you to create interactive, category-based maps with linked location lists, admin-friendly location management, and frontend filtering. It ships with shortcode, REST, CSV, and Divi Builder integration, including dedicated runtime layers for both Divi 4 and Divi 5.
 
 == Features ==
 * Dedicated Divi 4 and Divi 5 module runtimes plus shortcodes
-* Classic Editor-based location entry
+* WordPress-native location entry using title, excerpt, content, featured image, and structured metadata
 * Leaflet maps with OpenStreetMap tiles
 * Structured location metadata
 * Map/list filtering by category, region, or explicit location IDs
 * WP REST API integration
+* CSV import/export for locations
+* Server-side geocoding helper for admin location entry
 * Settings for provider defaults, center, zoom, map height, and tile URL
 * Uninstall cleanup
 
@@ -30,7 +32,7 @@ Rubicon Maps allows you to create interactive, category-based maps with linked l
 2. Activate through the 'Plugins' menu
 3. Visit “Rubicon Maps → Settings” to configure default map options
 4. Add locations under “Rubicon Maps → Locations”
-5. For Divi 5 sites, build the Visual Builder bundle from `divi-5/visual-builder` before release packaging
+5. Use “Rubicon Maps → Import / Export” for bulk CSV workflows when needed
 
 == Shortcodes ==
 
@@ -47,13 +49,13 @@ Example:
 == Frequently Asked Questions ==
 
 = Can I use both Leaflet and Google Maps? =  
-Leaflet is the current primary path. Google support remains in the architecture but is not yet the recommended parity path for this pre-1.0 release.
+Leaflet/OpenStreetMap is the supported provider path for v1.0.0. Additional provider work is future scope and not part of the v1.0.0 support promise.
 
 = Can I use map and list separately? =  
 Yes — use separate shortcodes or Divi modules and link them via a shared `id`.
 
 = Is it compatible with Multisite? =  
-Needs verification before release.
+Multisite has not been verified as part of the v1.0.0 release scope.
 
 = Does it support custom fields? =  
 It uses native WordPress title, excerpt, content, thumbnail, and custom metadata for structured location data.
@@ -66,6 +68,15 @@ It uses native WordPress title, excerpt, content, thumbnail, and custom metadata
 4. Divi module example with Rubicon Maps
 
 == Changelog ==
+
+= 1.0.0 - 2026-03-18 =
+* Added CSV import/export for canonical location transfers
+* Added branded admin panels, category icon previews, and a server-side geocoding helper
+* Added release packaging scripts and repository process docs for maintained releases
+* Added a canonical frontend map config builder with test coverage
+* Improved frontend map behavior for tile URLs, popup behavior, marker clustering, safer popup output, and map bounds fitting
+* Added fixed-height synced list behavior, cleaner default list presentation, and admin address autocomplete
+* Maintained dedicated Divi 4 and Divi 5 runtimes with linked map/list modules
 
 = 0.5.0 - 2026-03-16 =
 * Added dedicated Divi 5 Visual Builder modules for Rubicon Map and Rubicon Location List
@@ -139,8 +150,8 @@ It uses native WordPress title, excerpt, content, thumbnail, and custom metadata
 
 == Upgrade Notice ==
 
-= 0.3.2 =
-Add Divi module support for both Rubicon Map and Location List
+= 1.0.0 =
+Delivers the first stable Rubicon Maps release with Leaflet-first map/list behavior, CSV workflows, Divi 4 and Divi 5 support, admin geocoding, clustering, and release-ready packaging.
 
 == License ==
 

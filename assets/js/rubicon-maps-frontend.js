@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   const maps = document.querySelectorAll("[data-rubicon-map='1']");
+  const lists = document.querySelectorAll("[data-rubicon-location-list='1']");
 
   maps.forEach((mapRoot) => {
     const configJson = mapRoot.getAttribute("data-rubicon-config");
@@ -26,26 +27,50 @@ document.addEventListener("DOMContentLoaded", function () {
     initializeMap(mapRoot, canvas, config);
   });
 
+  lists.forEach((listRoot) => {
+    if (listRoot.getAttribute("data-use-fixed-height") === "1" && !listRoot.style.height) {
+      applyListHeight(listRoot, listRoot.getAttribute("data-default-height") || "480px");
+    }
+  });
+
   function initializeMap(mapRoot, canvas, config) {
     const provider = config.provider === "google" && typeof google !== "undefined" ? "google" : "leaflet";
     const lat = Number.parseFloat(config.lat || 0);
     const lng = Number.parseFloat(config.lng || 0);
     const zoom = Number.parseInt(config.zoom || 9, 10);
-    const instanceId = config.instanceId;
+    const syncKey = mapRoot.getAttribute("data-sync-id") || config.syncId || config.instanceId;
+    const scrollWheelZoom = Boolean(config.scrollWheelZoom);
+    const zoomControl = config.zoomControl !== false;
+    const doubleClickZoom = config.doubleClickZoom !== false;
+    const tileUrl = config.tileUrl || "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+    const viewportMode = config.viewportMode || "auto_fit";
 
     let map = null;
-    let markerIndex = new Map();
+    let markerBundle = { markerIndex: new Map(), clusterGroup: null };
 
     if (provider === "google") {
       map = new google.maps.Map(canvas, {
         center: { lat, lng },
         zoom,
+        scrollwheel: scrollWheelZoom,
+        zoomControl,
+        disableDoubleClickZoom: !doubleClickZoom,
       });
     } else if (typeof L !== "undefined") {
-      map = L.map(canvas).setView([lat, lng], zoom);
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      map = L.map(canvas, {
+        scrollWheelZoom,
+        zoomControl,
+        doubleClickZoom,
+      }).setView([lat, lng], zoom);
+      L.tileLayer(tileUrl, {
         attribution: "&copy; OpenStreetMap contributors",
       }).addTo(map);
+
+      if (config.closeOnMapClick) {
+        map.on("click", function () {
+          map.closePopup();
+        });
+      }
     }
 
     if (!map) {
@@ -54,8 +79,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     fetchLocations(config)
       .then((locations) => {
-        markerIndex = renderMarkers(provider, map, locations);
-        bindListInteractions(instanceId, provider, map, markerIndex);
+        markerBundle = renderMarkers(provider, map, locations, config);
+        if (viewportMode === "auto_fit") {
+          fitMapToMarkers(provider, map, markerBundle.markerIndex, config);
+        }
+        syncLocationLists(syncKey, locations, config.height);
+        bindListInteractions(syncKey, provider, map, markerBundle);
       })
       .catch((error) => console.error("Rubicon Maps location load error", error));
   }
@@ -81,8 +110,14 @@ document.addEventListener("DOMContentLoaded", function () {
     return fetch(url).then((response) => response.json());
   }
 
-  function renderMarkers(provider, map, locations) {
+  function renderMarkers(provider, map, locations, config) {
     const markerIndex = new Map();
+    const enableClustering = provider === "leaflet" && Boolean(config.enableClustering) && typeof L.markerClusterGroup === "function";
+    const clusterGroup = enableClustering
+      ? L.markerClusterGroup({
+          maxClusterRadius: Number.parseInt(config.clusterRadius || 100, 10),
+        })
+      : null;
 
     locations.forEach((location) => {
       if (!location.latitude || !location.longitude) {
@@ -97,73 +132,180 @@ document.addEventListener("DOMContentLoaded", function () {
           },
           map,
           title: location.title,
+          icon: location.marker_icon_url || undefined,
         });
 
         const infoWindow = new google.maps.InfoWindow({
           content: buildPopupHtml(location),
+          maxWidth: Number.parseInt(config.popupMaxWidth || 320, 10),
         });
 
-        marker.addListener("click", function () {
-          infoWindow.open(map, marker);
-          dispatchLocationClick(location);
-        });
+        bindGooglePopupEvents(marker, infoWindow, map, location, config);
 
         markerIndex.set(String(location.id), { marker, infoWindow, location });
       } else {
-        const marker = L.marker([Number.parseFloat(location.latitude), Number.parseFloat(location.longitude)]).addTo(map);
-        marker.bindPopup(buildPopupHtml(location));
-        marker.on("click", function () {
-          dispatchLocationClick(location);
+        const markerOptions = {};
+
+        if (location.marker_icon_url) {
+          markerOptions.icon = L.icon({
+            iconUrl: location.marker_icon_url,
+            iconSize: [36, 36],
+            iconAnchor: [18, 36],
+            popupAnchor: [0, -32],
+            shadowUrl: typeof rubiconMapsConfig !== "undefined" ? rubiconMapsConfig.leafletMarkerShadow : undefined,
+          });
+        }
+
+        const marker = L.marker([Number.parseFloat(location.latitude), Number.parseFloat(location.longitude)], markerOptions);
+        marker.bindPopup(buildPopupHtml(location), {
+          maxWidth: Number.parseInt(config.popupMaxWidth || 320, 10),
+          closeOnClick: Boolean(config.closeOnMapClick),
+          autoClose: Boolean(config.autoClosePopup) && !Boolean(config.openAllPopups),
         });
+        bindLeafletPopupEvents(marker, location, config);
         markerIndex.set(String(location.id), { marker, location });
+
+        if (clusterGroup) {
+          clusterGroup.addLayer(marker);
+        } else {
+          marker.addTo(map);
+        }
       }
     });
 
-    return markerIndex;
+    if (clusterGroup) {
+      map.addLayer(clusterGroup);
+    }
+
+    if (config.openAllPopups) {
+      openAllMarkerPopups(provider, markerIndex, clusterGroup);
+    }
+
+    return { markerIndex, clusterGroup };
   }
 
-  function bindListInteractions(instanceId, provider, map, markerIndex) {
-    const listRoot = document.querySelector(`[data-rubicon-location-list='1'][data-instance-id='${instanceId}']`);
+  function fitMapToMarkers(provider, map, markerIndex, config) {
+    const entries = Array.from(markerIndex.values());
+    const padding = Number.parseInt(config.autoFitPadding || 24, 10);
 
-    if (!listRoot) {
+    if (entries.length < 1) {
       return;
     }
 
-    const items = listRoot.querySelectorAll("[data-location-id]");
+    if (entries.length === 1) {
+      const { location } = entries[0];
+      const lat = Number.parseFloat(location.latitude);
+      const lng = Number.parseFloat(location.longitude);
 
-    items.forEach((item) => {
-      const activate = () => {
-        const markerEntry = markerIndex.get(item.getAttribute("data-location-id"));
+      if (provider === "google") {
+        map.panTo({ lat, lng });
+        map.setZoom(Number.parseInt(config.zoom || map.getZoom(), 10));
+        return;
+      }
 
-        if (!markerEntry) {
-          return;
-        }
+      map.setView([lat, lng], Number.parseInt(config.zoom || map.getZoom(), 10));
+      return;
+    }
 
-        const location = markerEntry.location;
-
-        if (provider === "google") {
-          map.panTo({
-            lat: Number.parseFloat(location.latitude),
-            lng: Number.parseFloat(location.longitude),
-          });
-          map.setZoom(Math.max(map.getZoom(), 12));
-          markerEntry.infoWindow.open(map, markerEntry.marker);
-        } else {
-          map.setView([Number.parseFloat(location.latitude), Number.parseFloat(location.longitude)], Math.max(map.getZoom(), 12));
-          markerEntry.marker.openPopup();
-        }
-
-        highlightListItem(listRoot, item);
-        dispatchLocationClick(location);
-      };
-
-      item.addEventListener("click", activate);
-      item.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          activate();
-        }
+    if (provider === "google") {
+      const bounds = new google.maps.LatLngBounds();
+      entries.forEach(({ location }) => {
+        bounds.extend({
+          lat: Number.parseFloat(location.latitude),
+          lng: Number.parseFloat(location.longitude),
+        });
       });
+      map.fitBounds(bounds);
+      return;
+    }
+
+    const bounds = entries.map(({ location }) => [
+      Number.parseFloat(location.latitude),
+      Number.parseFloat(location.longitude),
+    ]);
+    map.fitBounds(bounds, { padding: [padding, padding] });
+  }
+
+  function bindListInteractions(syncKey, provider, map, markerBundle) {
+    const markerIndex = markerBundle.markerIndex;
+    const clusterGroup = markerBundle.clusterGroup;
+    const listRoots = document.querySelectorAll(
+      `[data-rubicon-location-list='1'][data-sync-id='${escapeSelector(syncKey)}']`
+    );
+
+    if (!listRoots.length) {
+      return;
+    }
+
+    listRoots.forEach((listRoot) => {
+      const items = listRoot.querySelectorAll("[data-location-id]");
+
+      items.forEach((item) => {
+        const activate = () => {
+          const markerEntry = markerIndex.get(item.getAttribute("data-location-id"));
+
+          if (!markerEntry) {
+            return;
+          }
+
+          const location = markerEntry.location;
+
+          if (provider === "google") {
+            map.panTo({
+              lat: Number.parseFloat(location.latitude),
+              lng: Number.parseFloat(location.longitude),
+            });
+            map.setZoom(Math.max(map.getZoom(), 12));
+            markerEntry.infoWindow.open(map, markerEntry.marker);
+          } else {
+            focusLeafletMarker(map, markerEntry.marker, clusterGroup);
+          }
+
+          highlightListItem(listRoot, item);
+          dispatchLocationClick(location);
+        };
+
+        item.addEventListener("click", activate);
+        item.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            activate();
+          }
+        });
+      });
+    });
+  }
+
+  function syncLocationLists(syncKey, locations, mapHeight) {
+    if (!syncKey) {
+      return;
+    }
+
+    const listRoots = document.querySelectorAll(
+      `[data-rubicon-location-list='1'][data-sync-id='${escapeSelector(syncKey)}'][data-sync-mode='follow-map']`
+    );
+
+    listRoots.forEach((listRoot) => {
+      const itemsContainer = ensureListItemsContainer(listRoot);
+      const emptyState = listRoot.querySelector(".rubicon-location-list__empty");
+
+      if (emptyState) {
+        emptyState.remove();
+      }
+
+      if (!locations.length) {
+        itemsContainer.innerHTML = "";
+        const empty = document.createElement("p");
+        empty.className = "rubicon-location-list__empty";
+        empty.textContent = "No locations matched this synced map.";
+        listRoot.appendChild(empty);
+      } else {
+        itemsContainer.innerHTML = locations.map(buildListItemHtml).join("");
+      }
+
+      if (listRoot.getAttribute("data-use-fixed-height") === "1" && !listRoot.getAttribute("data-height")) {
+        applyListHeight(listRoot, mapHeight || listRoot.getAttribute("data-default-height") || "480px");
+      }
     });
   }
 
@@ -173,11 +315,20 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  function buildPopupHtml(location) {
-    const address = location.formatted_address ? `<div class="rubicon-maps__popup-address">${location.formatted_address}</div>` : "";
-    const excerpt = location.excerpt ? `<div class="rubicon-maps__popup-excerpt">${location.excerpt}</div>` : "";
+  function applyListHeight(listRoot, height) {
+    if (!height) {
+      return;
+    }
 
-    return `<div class="rubicon-maps__popup"><strong>${location.title}</strong>${address}${excerpt}</div>`;
+    listRoot.style.height = height;
+    listRoot.classList.add("rubicon-location-list--scrollable");
+  }
+
+  function buildPopupHtml(location) {
+    const address = location.formatted_address ? `<div class="rubicon-maps__popup-address">${escapeHtml(location.formatted_address)}</div>` : "";
+    const excerpt = location.excerpt ? `<div class="rubicon-maps__popup-excerpt">${escapeHtml(location.excerpt)}</div>` : "";
+
+    return `<div class="rubicon-maps__popup"><strong>${escapeHtml(location.title)}</strong>${address}${excerpt}</div>`;
   }
 
   function dispatchLocationClick(location) {
@@ -186,5 +337,126 @@ document.addEventListener("DOMContentLoaded", function () {
         detail: location,
       })
     );
+  }
+
+  function bindLeafletPopupEvents(marker, location, config) {
+    if (config.popupTrigger === "hover") {
+      marker.on("mouseover", function () {
+        marker.openPopup();
+        dispatchLocationClick(location);
+      });
+      marker.on("mouseout", function () {
+        if (!config.openAllPopups) {
+          marker.closePopup();
+        }
+      });
+      return;
+    }
+
+    marker.on("click", function () {
+      dispatchLocationClick(location);
+    });
+  }
+
+  function bindGooglePopupEvents(marker, infoWindow, map, location, config) {
+    const open = () => {
+      infoWindow.open(map, marker);
+      dispatchLocationClick(location);
+    };
+
+    if (config.popupTrigger === "hover") {
+      marker.addListener("mouseover", open);
+      return;
+    }
+
+    marker.addListener("click", open);
+  }
+
+  function focusLeafletMarker(map, marker, clusterGroup) {
+    const openMarker = () => {
+      map.panTo(marker.getLatLng());
+      marker.openPopup();
+    };
+
+    if (clusterGroup && typeof clusterGroup.zoomToShowLayer === "function") {
+      clusterGroup.zoomToShowLayer(marker, openMarker);
+      return;
+    }
+
+    map.setView(marker.getLatLng(), Math.max(map.getZoom(), 12));
+    openMarker();
+  }
+
+  function openAllMarkerPopups(provider, markerIndex, clusterGroup) {
+    markerIndex.forEach((entry) => {
+      if (provider === "google") {
+        entry.infoWindow.open(entry.marker.getMap(), entry.marker);
+        return;
+      }
+
+      if (clusterGroup && typeof clusterGroup.zoomToShowLayer === "function") {
+        clusterGroup.zoomToShowLayer(entry.marker, () => {
+          entry.marker.openPopup();
+        });
+        return;
+      }
+
+      entry.marker.openPopup();
+    });
+  }
+
+  function ensureListItemsContainer(listRoot) {
+    let itemsContainer = listRoot.querySelector(".rubicon-location-list__items");
+
+    if (!itemsContainer) {
+      itemsContainer = document.createElement("ul");
+      itemsContainer.className = "rubicon-location-list__items";
+      itemsContainer.setAttribute("role", "list");
+      listRoot.appendChild(itemsContainer);
+    }
+
+    return itemsContainer;
+  }
+
+  function buildListItemHtml(location) {
+    const address = location.formatted_address
+      ? `<div class="rubicon-location-list__meta">${escapeHtml(location.formatted_address)}</div>`
+      : "";
+    const excerpt = location.excerpt
+      ? `<div class="rubicon-location-list__excerpt">${escapeHtml(location.excerpt)}</div>`
+      : "";
+
+    return `
+      <li
+        class="rubicon-location-list__item"
+        data-location-id="${escapeHtml(location.id)}"
+        data-lat="${escapeHtml(location.latitude || "")}"
+        data-lng="${escapeHtml(location.longitude || "")}"
+        tabindex="0"
+        role="button"
+        aria-label="Focus map on ${escapeHtml(location.title)}"
+      >
+        <strong class="rubicon-location-list__title">${escapeHtml(location.title)}</strong>
+        ${address}
+        ${excerpt}
+      </li>
+    `;
+  }
+
+  function escapeSelector(value) {
+    if (typeof CSS !== "undefined" && typeof CSS.escape === "function") {
+      return CSS.escape(String(value));
+    }
+
+    return String(value).replace(/"/g, '\\"');
+  }
+
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 });

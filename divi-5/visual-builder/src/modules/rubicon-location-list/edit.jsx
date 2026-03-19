@@ -3,6 +3,7 @@ import React from 'react';
 import { __ } from '@wordpress/i18n';
 
 import { PreviewShell } from '../shared/preview';
+import { getSavedSyncId } from '../shared/sync-id';
 import { getTextValue } from '../shared/value';
 import { ModuleClassnames } from './module-classnames';
 import { ModuleScriptData } from './module-script-data';
@@ -16,11 +17,17 @@ export const RubiconLocationListEdit = ({
   id,
   name,
 }) => {
+  const syncId = getSavedSyncId(attrs?.instanceId);
+  const savedHeight = getTextValue(attrs?.height);
+  const fixedHeight = getTextValue(attrs?.useFixedHeight) === 'on'
+    ? savedHeight || (syncId ? __('Synced map height', 'rubicon-maps') : __('Plugin default', 'rubicon-maps'))
+    : __('Off', 'rubicon-maps');
   const items = [
-    { label: __('Map ID', 'rubicon-maps'), value: getTextValue(attrs?.instanceId) || __('Auto', 'rubicon-maps') },
+    { label: __('Sync ID', 'rubicon-maps'), value: syncId || __('Standalone', 'rubicon-maps') },
     { label: __('Categories', 'rubicon-maps'), value: getTextValue(attrs?.category) },
     { label: __('Regions', 'rubicon-maps'), value: getTextValue(attrs?.region) },
     { label: __('Locations', 'rubicon-maps'), value: getTextValue(attrs?.locationIds) },
+    { label: __('Fixed Height', 'rubicon-maps'), value: fixedHeight },
   ];
 
   return (

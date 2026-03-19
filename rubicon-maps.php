@@ -2,8 +2,9 @@
 /**
  * Plugin Name: Rubicon Maps
  * Plugin URI: https://rubicontv.com/rubicon-maps
- * Description: Divi-first location mapping plugin for WordPress with linked map/list modules, REST support, and location management.
- * Version: 0.5.0
+ * Update URI: https://git.daxdavis.com/rubicon/rubicon-maps
+ * Description: Divi-first maps for WordPress that let you manage real locations, not wrestle shortcode spaghetti, with linked maps, lists, imports, and builder-ready controls.
+ * Version: 1.0.0
  * Author: Rubicon
  * Author URI: https://rubicontv.com
  * Text Domain: rubicon-maps
@@ -25,11 +26,14 @@ if (!defined('RUBICON_MAPS_PLUGIN_URL')) {
 }
 
 if (!defined('RUBICON_MAPS_VERSION')) {
-    define('RUBICON_MAPS_VERSION', '0.5.0');
+    define('RUBICON_MAPS_VERSION', '1.0.0');
 }
 
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/divi-4/divi-4.php';
 require_once __DIR__ . '/divi-5/divi-5.php';
+
+register_activation_hook(__FILE__, [RubiconMaps\Support\PluginLifecycle::class, 'activate']);
+register_deactivation_hook(__FILE__, [RubiconMaps\Support\PluginLifecycle::class, 'deactivate']);
 
 RubiconMaps\Loader::instance();

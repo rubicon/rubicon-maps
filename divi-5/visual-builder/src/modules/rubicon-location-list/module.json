@@ -48,6 +48,26 @@
           }
         }
       }
+    },
+    "useFixedHeight": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "off"
+          }
+        }
+      }
+    },
+    "height": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": ""
+          }
+        }
+      }
     }
   }
 }

@@ -14,6 +14,8 @@ class Region {
             'singular_name'     => __('Region', 'rubicon-maps'),
             'search_items'      => __('Search Regions', 'rubicon-maps'),
             'all_items'         => __('All Regions', 'rubicon-maps'),
+            'parent_item'       => __('Parent Region', 'rubicon-maps'),
+            'parent_item_colon' => __('Parent Region:', 'rubicon-maps'),
             'edit_item'         => __('Edit Region', 'rubicon-maps'),
             'update_item'       => __('Update Region', 'rubicon-maps'),
             'add_new_item'      => __('Add New Region', 'rubicon-maps'),
@@ -22,7 +24,7 @@ class Region {
         ];
 
         register_taxonomy(Plugin::TAXONOMY_REGION, [Plugin::POST_TYPE_LOCATION], [
-            'hierarchical'      => false,
+            'hierarchical'      => true,
             'labels'            => $labels,
             'show_ui'           => true,
             'show_admin_column' => true,

@@ -1,5 +1,35 @@
 # Changelog
 
+## 1.0.0
+**Maps, Meet Manners**  
+2026-03-18
+
+Rubicon Maps now ships as a stable v1 release with Leaflet-first maps, linked lists, hardened admin flows, and release packaging that matches the actual product.
+
+### Added
+- Added CSV import/export with a canonical Rubicon Maps schema for locations, taxonomies, and structured metadata.
+- Added an Import / Export admin page with secure upload/download handlers.
+- Added branded admin styling, richer location-edit panels, and category marker-icon previews.
+- Added a server-side geocoding helper for admin address lookup instead of a direct browser-side Nominatim call.
+- Added `AGENTS.md`, `CLAUDE.md`, and release packaging/verification scripts.
+- Added a canonical frontend map config builder with standalone PHP test coverage.
+- Added marker clustering, popup behavior controls, and fixed-height synced list behavior for the v1 runtime.
+
+### Changed
+- Promoted the plugin metadata and docs from `1.0.0-rc.1` to the stable `1.0.0` release state.
+- Updated the settings page and release docs to reflect the Leaflet-first v1 support boundary.
+- Added explicit submenu entries for Categories and Regions under Rubicon Maps.
+- Improved frontend map behavior to respect tile URLs, popup behavior, multi-marker bounds fitting, custom marker icons, and cluster-aware list syncing.
+
+### Fixed
+- Fixed media picker behavior so marker-icon selection works consistently in location and category admin screens.
+- Fixed popup output escaping in the frontend JS layer.
+- Fixed release packaging rules so Divi 5 runtime source metadata stays in the distributable zip.
+- Fixed default listing presentation so location items no longer inherit browser bullet styling.
+
+### Security
+- Routed admin geocoding through authenticated WordPress AJAX with nonce protection.
+
 ## 0.5.0
 **Two Builders, One Plugin**  
 2026-03-16

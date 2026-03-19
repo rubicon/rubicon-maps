@@ -3,6 +3,7 @@ import React from 'react';
 import { __ } from '@wordpress/i18n';
 
 import { PreviewShell } from '../shared/preview';
+import { getSavedSyncId } from '../shared/sync-id';
 import { getTextValue } from '../shared/value';
 import { ModuleClassnames } from './module-classnames';
 import { ModuleScriptData } from './module-script-data';
@@ -16,13 +17,33 @@ export const RubiconMapEdit = ({
   id,
   name,
 }) => {
+  const syncId = getSavedSyncId(attrs?.instanceId);
+  const providerValue = getTextValue(attrs?.provider);
+  const viewportValue = getTextValue(attrs?.viewportMode);
+  const clusteringValue = getTextValue(attrs?.enableClustering);
+  const provider = providerValue || __('Leaflet', 'rubicon-maps');
+  const viewportMode = viewportValue === 'manual'
+    ? __('Manual', 'rubicon-maps')
+    : viewportValue === 'default' || !viewportValue
+      ? __('Plugin default', 'rubicon-maps')
+      : __('Auto-fit', 'rubicon-maps');
+  const clustering = clusteringValue === 'off'
+    ? __('Off', 'rubicon-maps')
+    : clusteringValue === 'default' || !clusteringValue
+      ? __('Plugin default', 'rubicon-maps')
+      : __('On', 'rubicon-maps');
+  const zoomHeight = [getTextValue(attrs?.zoom), getTextValue(attrs?.height)].filter(Boolean).join(' / ')
+    || __('Plugin defaults', 'rubicon-maps');
   const items = [
-    { label: __('Instance ID', 'rubicon-maps'), value: getTextValue(attrs?.instanceId) || __('Auto', 'rubicon-maps') },
+    { label: __('Sync ID', 'rubicon-maps'), value: syncId || __('Standalone', 'rubicon-maps') },
+    { label: __('Provider', 'rubicon-maps'), value: provider },
+    { label: __('Viewport', 'rubicon-maps'), value: viewportMode },
     { label: __('Categories', 'rubicon-maps'), value: getTextValue(attrs?.category) },
     { label: __('Regions', 'rubicon-maps'), value: getTextValue(attrs?.region) },
     { label: __('Locations', 'rubicon-maps'), value: getTextValue(attrs?.locationIds) },
-    { label: __('Center', 'rubicon-maps'), value: [getTextValue(attrs?.latitude), getTextValue(attrs?.longitude)].filter(Boolean).join(', ') },
-    { label: __('Zoom / Height', 'rubicon-maps'), value: [getTextValue(attrs?.zoom), getTextValue(attrs?.height)].filter(Boolean).join(' / ') },
+    { label: __('Center', 'rubicon-maps'), value: [getTextValue(attrs?.latitude), getTextValue(attrs?.longitude)].filter(Boolean).join(', ') || __('Displayed locations', 'rubicon-maps') },
+    { label: __('Zoom / Height', 'rubicon-maps'), value: zoomHeight },
+    { label: __('Clustering', 'rubicon-maps'), value: clustering },
   ];
 
   return (
@@ -59,10 +80,10 @@ export const RubiconMapEdit = ({
         >
           <div>
             <div style={{ color: '#0f172a', fontSize: '18px', fontWeight: 700, marginBottom: '8px' }}>
-              {__('Leaflet-first Divi 5 map module', 'rubicon-maps')}
+              {__('Rubicon Maps map module', 'rubicon-maps')}
             </div>
             <div style={{ color: '#334155', fontSize: '14px', maxWidth: '28rem', lineHeight: 1.6 }}>
-              {__('This preview reflects the module filters and map defaults. The saved page renders the live Rubicon map with the linked frontend runtime.', 'rubicon-maps')}
+              {__('This preview reflects the module filters, provider choice, and map defaults. The saved page renders the live Rubicon Maps frontend runtime.', 'rubicon-maps')}
             </div>
           </div>
           <div
@@ -79,7 +100,7 @@ export const RubiconMapEdit = ({
               {__('Provider', 'rubicon-maps')}
             </div>
             <div style={{ fontSize: '16px', color: '#0f766e', fontWeight: 700, marginTop: '6px' }}>
-              Leaflet
+              {provider}
             </div>
           </div>
         </div>

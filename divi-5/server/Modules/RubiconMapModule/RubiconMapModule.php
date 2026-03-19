@@ -37,14 +37,29 @@ final class RubiconMapModule implements DependencyInterface
     {
         $markup = (new MapRenderer())->render(
             [
-                'id' => self::textAttr($attrs, 'instanceId'),
+                'id' => self::textAttr($attrs, 'instanceId', self::generatedRuntimeId($block)),
+                'sync_id' => self::textAttr($attrs, 'instanceId'),
+                'provider' => self::textAttr($attrs, 'provider'),
                 'category' => self::textAttr($attrs, 'category'),
                 'region' => self::textAttr($attrs, 'region'),
                 'location_ids' => self::textAttr($attrs, 'locationIds'),
+                'viewport_mode' => self::textAttr($attrs, 'viewportMode'),
                 'lat' => self::textAttr($attrs, 'latitude'),
                 'lng' => self::textAttr($attrs, 'longitude'),
                 'zoom' => self::textAttr($attrs, 'zoom'),
                 'height' => self::textAttr($attrs, 'height'),
+                'auto_fit_padding' => self::textAttr($attrs, 'autoFitPadding'),
+                'tile_preset' => self::textAttr($attrs, 'tilePreset'),
+                'zoom_control' => self::textAttr($attrs, 'zoomControl'),
+                'scrollwheel' => self::textAttr($attrs, 'scrollWheelZoom'),
+                'double_click_zoom' => self::textAttr($attrs, 'doubleClickZoom'),
+                'popup_trigger' => self::textAttr($attrs, 'popupTrigger'),
+                'popup_max_width' => self::textAttr($attrs, 'popupMaxWidth'),
+                'close_on_map_click' => self::textAttr($attrs, 'closeOnMapClick'),
+                'auto_close_popup' => self::textAttr($attrs, 'autoClosePopup'),
+                'open_all_popups' => self::textAttr($attrs, 'openAllPopups'),
+                'enable_clustering' => self::textAttr($attrs, 'enableClustering'),
+                'cluster_radius' => self::textAttr($attrs, 'clusterRadius'),
             ]
         );
 
@@ -138,5 +153,13 @@ final class RubiconMapModule implements DependencyInterface
             ?? $fallback;
 
         return is_scalar($value) ? trim((string) $value) : $fallback;
+    }
+
+    private static function generatedRuntimeId(object $block): string
+    {
+        $rawId = (string) ($block->parsed_block['id'] ?? '');
+        $normalized = substr(md5($rawId), 0, 6);
+
+        return 'rtv_map_' . $normalized;
     }
 }

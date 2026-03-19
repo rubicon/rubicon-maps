@@ -10,10 +10,14 @@ final class Plugin
 {
     public const OPTION_GROUP = 'rubicon_maps_settings';
     public const OPTION_NAME = 'rubicon_maps_options';
-    public const SETTINGS_PAGE_SLUG = 'rubicon-maps';
-    public const POST_TYPE_LOCATION = 'rubicon_maps_location';
+    public const MENU_PAGE_SLUG = 'rubicon-maps';
+    public const SETTINGS_PAGE_SLUG = 'rubicon-maps-settings';
+    public const POST_TYPE_LOCATION = 'rubicon_location';
     public const TAXONOMY_CATEGORY = 'rubicon_maps_category';
     public const TAXONOMY_REGION = 'rubicon_maps_region';
+    public const UPDATE_URI = 'https://git.daxdavis.com/rubicon/rubicon-maps';
+    public const UPDATE_HOSTNAME = 'git.daxdavis.com';
+    public const UPDATE_API_RELEASE_LATEST = 'https://git.daxdavis.com/api/v1/repos/rubicon/rubicon-maps/releases/latest';
     public const REST_NAMESPACE = 'rubicon-maps/v1';
     public const SHORTCODE_MAP = 'rubicon_maps';
     public const SHORTCODE_LIST = 'rubicon_maps_list';
@@ -25,7 +29,7 @@ final class Plugin
      */
     public static function version(): string
     {
-        return defined('RUBICON_MAPS_VERSION') ? RUBICON_MAPS_VERSION : '0.5.0';
+        return defined('RUBICON_MAPS_VERSION') ? RUBICON_MAPS_VERSION : '1.0.0';
     }
 
     public static function path(string $relativePath = ''): string
@@ -53,5 +57,10 @@ final class Plugin
     public static function isDivi5Enabled(): bool
     {
         return function_exists('et_builder_d5_enabled') && et_builder_d5_enabled();
+    }
+
+    public static function locationMenuSlug(): string
+    {
+        return 'edit.php?post_type=' . self::POST_TYPE_LOCATION;
     }
 }

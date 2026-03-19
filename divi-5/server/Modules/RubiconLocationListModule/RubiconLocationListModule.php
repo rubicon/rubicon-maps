@@ -37,10 +37,13 @@ final class RubiconLocationListModule implements DependencyInterface
     {
         $markup = (new LocationListRenderer())->render(
             [
-                'id' => self::textAttr($attrs, 'instanceId'),
+                'id' => self::textAttr($attrs, 'instanceId', self::generatedRuntimeId($block)),
+                'sync_id' => self::textAttr($attrs, 'instanceId'),
                 'category' => self::textAttr($attrs, 'category'),
                 'region' => self::textAttr($attrs, 'region'),
                 'location_ids' => self::textAttr($attrs, 'locationIds'),
+                'use_fixed_height' => self::textAttr($attrs, 'useFixedHeight'),
+                'height' => self::textAttr($attrs, 'height'),
             ]
         );
 
@@ -134,5 +137,13 @@ final class RubiconLocationListModule implements DependencyInterface
             ?? $fallback;
 
         return is_scalar($value) ? trim((string) $value) : $fallback;
+    }
+
+    private static function generatedRuntimeId(object $block): string
+    {
+        $rawId = (string) ($block->parsed_block['id'] ?? '');
+        $normalized = substr(md5($rawId), 0, 6);
+
+        return 'rtv_map_' . $normalized;
     }
 }

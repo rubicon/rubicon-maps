@@ -1,28 +1,24 @@
-.rubicon-maps {
-  border: 1px solid #d9dce1;
-  border-radius: 18px;
-  overflow: hidden;
-  background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
-}
-
 .rubicon-maps__canvas {
   min-height: 320px;
 }
 
 .rubicon-location-list {
-  border: 1px solid #d9dce1;
-  border-radius: 18px;
-  background: #fff;
-  overflow: hidden;
+  min-width: 0;
+}
+
+.rubicon-location-list--scrollable {
+  overflow-y: auto;
 }
 
 .rubicon-location-list__items {
   list-style: none;
+  list-style-type: none;
   margin: 0;
   padding: 0;
 }
 
 .rubicon-location-list__item {
+  list-style: none;
   cursor: pointer;
   padding: 16px 18px;
   border-bottom: 1px solid #e8ebef;

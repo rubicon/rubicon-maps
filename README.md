@@ -1,15 +1,15 @@
 # Rubicon Maps
 
-Rubicon Maps is a Divi-first WordPress location mapping plugin with native location management, linked map/list output, and dual Divi support: a dedicated `divi-4` compatibility layer for legacy builder modules and a dedicated `divi-5` Visual Builder runtime for Divi 5.
+Rubicon Maps is a Divi-first WordPress location mapping plugin built for people who want real location management without turning every map into a shortcode scavenger hunt. It ships with native location management, linked map/list output, CSV import/export, and dual Divi support: a dedicated `divi-4` compatibility layer for legacy builder modules and a dedicated `divi-5` Visual Builder runtime for Divi 5.
 
-> Version: `0.5.0`  
+> Version: `1.0.0`  
 > License: `GPLv2 or later`  
-> Status: `Pre-1.0`  
+> Requires PHP: `8.1+`  
 > Tested up to: `WordPress 6.8.1`
 
-## What ships today
+## What ships in v1.0.0
 
-- Custom post type: `rubicon_maps_location`
+- Custom post type: `rubicon_location`
 - Taxonomies: `rubicon_maps_category`, `rubicon_maps_region`
 - Linked frontend map and location list rendering
 - Divi 4 modules: `Rubicon Map`, `Rubicon Location List`
@@ -18,6 +18,9 @@ Rubicon Maps is a Divi-first WordPress location mapping plugin with native locat
 - REST API: `/wp-json/rubicon-maps/v1/locations`
 - Structured address, contact, and coordinate metadata
 - Leaflet/OpenStreetMap-first frontend rendering
+- CSV import/export for locations
+- Server-side admin geocoding helper and consistent media picker flows
+- Release packaging scripts for distributable plugin zips
 
 ## Divi support
 
@@ -38,6 +41,20 @@ This keeps the shared mapping/query logic in the plugin core while letting each 
 
 Use a shared `id` to keep the map and list synced.
 
+## Admin UX
+
+- `Rubicon Maps → Locations` manages the location CPT.
+- `Rubicon Maps → Categories` and `Rubicon Maps → Regions` manage taxonomy-driven filtering.
+- `Rubicon Maps → Import / Export` handles canonical CSV transfers.
+- `Rubicon Maps → Settings` manages provider defaults, map defaults, and runtime behavior.
+
+Location content remains WordPress-native:
+
+- `title` = location name
+- `excerpt` = short summary
+- `content` = detailed description or popup body
+- custom meta = structured address, coordinates, contact data, and marker icon
+
 ## Development
 
 Install PHP dependencies:
@@ -54,13 +71,17 @@ npm install
 npm run build
 ```
 
-## Current v1 stance
+Create a distributable plugin zip:
 
-- Divi module support is a first-class requirement.
-- Leaflet/OpenStreetMap is the supported provider path for v1.
-- Google Maps parity is planned for a later version.
-- CSV import/export remains in scope for v1 but is not complete in this snapshot.
+```bash
+./scripts/package-release.sh 1.0.0
+```
+
+## Provider stance
+
+- Leaflet/OpenStreetMap is the supported provider path for v1.0.0.
+- Additional provider work is future scope, not part of the v1.0.0 support promise.
 
 ## Release notes
 
-See [CHANGELOG.md](CHANGELOG.md) for the full version history.
+See [CHANGELOG.md](CHANGELOG.md) for version history and [docs/releases/1.0.0.md](docs/releases/1.0.0.md) for the release notes body.

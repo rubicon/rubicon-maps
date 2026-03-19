@@ -17,9 +17,9 @@ class RubiconLocationListModule extends ET_Builder_Module
     public function init(): void
     {
         $this->name = esc_html__('Rubicon Location List', 'rubicon-maps');
-        $this->whitelisted_fields = ['map_id', 'category', 'region', 'location_ids'];
+        $this->whitelisted_fields = ['map_id', 'category', 'region', 'location_ids', 'use_fixed_height', 'height'];
         $this->options_toggles = [
-            'general' => ['toggles' => ['filters' => esc_html__('Filters', 'rubicon-maps')]],
+            'general' => ['toggles' => ['filters' => esc_html__('Filters', 'rubicon-maps'), 'display' => esc_html__('List Display', 'rubicon-maps')]],
         ];
         $this->main_css_element = '%%order_class%%';
         $this->advanced_fields = [];
@@ -51,18 +51,34 @@ class RubiconLocationListModule extends ET_Builder_Module
                 'description' => esc_html__('Optional comma-separated IDs to limit this list instance to explicit locations.', 'rubicon-maps'),
                 'toggle_slug' => 'filters',
             ],
+            'use_fixed_height' => [
+                'label' => esc_html__('Use Fixed List Height', 'rubicon-maps'),
+                'type' => 'yes_no_button',
+                'options' => ['off' => 'No', 'on' => 'Yes'],
+                'default' => 'off',
+                'toggle_slug' => 'display',
+            ],
+            'height' => [
+                'label' => esc_html__('List Height', 'rubicon-maps'),
+                'type' => 'text',
+                'default' => '',
+                'toggle_slug' => 'display',
+            ],
         ];
     }
 
     public function render($attrs, $content, $render_slug): string
     {
         return do_shortcode(sprintf(
-            '[%s id="%s" category="%s" region="%s" location_ids="%s"]',
+            '[%s id="%s" sync_id="%s" category="%s" region="%s" location_ids="%s" use_fixed_height="%s" height="%s"]',
             Plugin::SHORTCODE_LIST,
+            esc_attr($this->props['map_id']),
             esc_attr($this->props['map_id']),
             esc_attr($this->props['category']),
             esc_attr($this->props['region']),
-            esc_attr($this->props['location_ids'])
+            esc_attr($this->props['location_ids']),
+            esc_attr($this->props['use_fixed_height']),
+            esc_attr($this->props['height'])
         ));
     }
 }
