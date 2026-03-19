@@ -4,20 +4,19 @@ namespace RubiconMaps;
 use RubiconMaps\PostType\Location;
 use RubiconMaps\Taxonomy\LocationCategory;
 use RubiconMaps\Taxonomy\Region;
-use RubiconMaps\Admin\AdminAssets;
-use RubiconMaps\Admin\AdminMenuState;
 use RubiconMaps\Admin\SettingsPage;
 use RubiconMaps\Admin\MetaBox;
 use RubiconMaps\Admin\CategoryMeta;
+use RubiconMaps\Admin\AdminAssets;
+use RubiconMaps\Admin\AdminMenuState;
 use RubiconMaps\Admin\GeocodeController;
 use RubiconMaps\Admin\ImportExportPage;
-use RubiconMaps\Admin\LocationListFilters;
 use RubiconMaps\Admin\PluginActionLinks;
+use RubiconMaps\Support\PluginLifecycle;
+use RubiconMaps\Support\PluginUpdater;
 use RubiconMaps\Rest\LocationsEndpoint;
 use RubiconMaps\Shortcodes\ListShortcode;
 use RubiconMaps\Shortcodes\MapShortcode;
-use RubiconMaps\Support\PluginLifecycle;
-use RubiconMaps\Support\PluginUpdater;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -53,7 +52,6 @@ class Loader
             MetaBox::init();
             CategoryMeta::init();
             ImportExportPage::init();
-            LocationListFilters::init();
             PluginActionLinks::init();
         }
 

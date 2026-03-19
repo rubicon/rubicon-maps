@@ -16,7 +16,9 @@ class MapShortcode {
     public function render($atts) {
         return $this->getRenderer()->render(shortcode_atts([
             'id' => '',
+            'sync_id' => '',
             'provider' => '',
+            'viewport_mode' => '',
             'lat' => '',
             'lng' => '',
             'zoom' => '',
@@ -24,7 +26,18 @@ class MapShortcode {
             'region' => '',
             'location_ids' => '',
             'height' => '',
+            'auto_fit_padding' => '',
+            'tile_preset' => '',
+            'zoom_control' => '',
             'scrollwheel' => '',
+            'double_click_zoom' => '',
+            'popup_trigger' => '',
+            'popup_max_width' => '',
+            'close_on_map_click' => '',
+            'auto_close_popup' => '',
+            'open_all_popups' => '',
+            'enable_clustering' => '',
+            'cluster_radius' => '',
         ], $atts, Plugin::SHORTCODE_MAP));
     }
 

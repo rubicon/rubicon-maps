@@ -22,6 +22,7 @@ final class FrontendAssetManager
     private static bool $frontendAssetsEnqueued = false;
     private static bool $leafletAssetsEnqueued = false;
     private static bool $googleAssetsEnqueued = false;
+    private static bool $leafletClusterAssetsEnqueued = false;
 
     public static function enqueueMap(string $provider = 'leaflet'): void
     {
@@ -94,6 +95,13 @@ final class FrontendAssetManager
             wp_enqueue_style('leaflet-css', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', [], '1.9.4');
             wp_enqueue_script('leaflet-js', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', [], '1.9.4', true);
             self::$leafletAssetsEnqueued = true;
+        }
+
+        if (!self::$leafletClusterAssetsEnqueued) {
+            wp_enqueue_style('leaflet-markercluster-css', 'https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css', ['leaflet-css'], '1.5.3');
+            wp_enqueue_style('leaflet-markercluster-default-css', 'https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css', ['leaflet-markercluster-css'], '1.5.3');
+            wp_enqueue_script('leaflet-markercluster-js', 'https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js', ['leaflet-js'], '1.5.3', true);
+            self::$leafletClusterAssetsEnqueued = true;
         }
     }
 }

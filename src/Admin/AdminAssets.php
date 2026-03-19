@@ -68,6 +68,8 @@ final class AdminAssets
                 'strings' => [
                     'searching' => __('Looking up this address…', 'rubicon-maps'),
                     'searchError' => __('Unable to find a matching address right now.', 'rubicon-maps'),
+                    'searchPrompt' => __('Start typing to search for a matching address.', 'rubicon-maps'),
+                    'searchEmpty' => __('No matching addresses were found.', 'rubicon-maps'),
                     'selectImage' => __('Select Icon', 'rubicon-maps'),
                     'useImage' => __('Use this image', 'rubicon-maps'),
                 ],

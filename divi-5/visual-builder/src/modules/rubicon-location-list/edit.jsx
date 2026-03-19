@@ -3,8 +3,8 @@ import React from 'react';
 import { __ } from '@wordpress/i18n';
 
 import { PreviewShell } from '../shared/preview';
-import { renderPills, usePreviewLocationData, usePublishedPreviewCount } from '../shared/preview-data';
 import { getSavedSyncId } from '../shared/sync-id';
+import { getTextValue } from '../shared/value';
 import { ModuleClassnames } from './module-classnames';
 import { ModuleScriptData } from './module-script-data';
 import { ModuleStyles } from './module-styles';
@@ -18,29 +18,17 @@ export const RubiconLocationListEdit = ({
   name,
 }) => {
   const syncId = getSavedSyncId(attrs?.instanceId);
-  const preview = usePreviewLocationData({
-    categoryAttr: attrs?.category,
-    regionAttr: attrs?.region,
-    locationIdsAttr: attrs?.locationIds,
-  });
-  const syncedMapCount = usePublishedPreviewCount(syncId);
-  const hasSyncId = Boolean(syncId);
-  const items = hasSyncId
-    ? [
-        { label: __('Sync ID', 'rubicon-maps'), value: syncId },
-        { label: __('Source', 'rubicon-maps'), value: __('Synced map', 'rubicon-maps') },
-        {
-          label: __('# of Locations', 'rubicon-maps'),
-          value: null === syncedMapCount ? __('Waiting for synced map', 'rubicon-maps') : String(syncedMapCount),
-        },
-      ]
-    : [
-        { label: __('Sync ID', 'rubicon-maps'), value: __('Standalone', 'rubicon-maps') },
-        { label: __('Categories', 'rubicon-maps'), value: renderPills(preview.categories) },
-        { label: __('Regions', 'rubicon-maps'), value: renderPills(preview.regions) },
-        { label: __('Locations', 'rubicon-maps'), value: renderPills(preview.locations) },
-        { label: __('# of Locations', 'rubicon-maps'), value: String(preview.matchedLocationCount) },
-      ];
+  const savedHeight = getTextValue(attrs?.height);
+  const fixedHeight = getTextValue(attrs?.useFixedHeight) === 'on'
+    ? savedHeight || (syncId ? __('Synced map height', 'rubicon-maps') : __('Plugin default', 'rubicon-maps'))
+    : __('Off', 'rubicon-maps');
+  const items = [
+    { label: __('Sync ID', 'rubicon-maps'), value: syncId || __('Standalone', 'rubicon-maps') },
+    { label: __('Categories', 'rubicon-maps'), value: getTextValue(attrs?.category) },
+    { label: __('Regions', 'rubicon-maps'), value: getTextValue(attrs?.region) },
+    { label: __('Locations', 'rubicon-maps'), value: getTextValue(attrs?.locationIds) },
+    { label: __('Fixed Height', 'rubicon-maps'), value: fixedHeight },
+  ];
 
   return (
     <ModuleContainer
@@ -81,9 +69,7 @@ export const RubiconLocationListEdit = ({
             >
               <div style={{ fontSize: '15px', fontWeight: 700, color: '#0f172a' }}>{label}</div>
               <div style={{ fontSize: '13px', color: '#334155' }}>
-                {hasSyncId
-                  ? __('This listing follows the matched locations from the synced Rubicon Maps Map module.', 'rubicon-maps')
-                  : __('The frontend runtime loads real locations matching this module instance and keeps them synced with the paired Rubicon map.', 'rubicon-maps')}
+                {__('The frontend runtime loads real locations matching this module instance and keeps them synced with the paired Rubicon map.', 'rubicon-maps')}
               </div>
             </div>
           ))}

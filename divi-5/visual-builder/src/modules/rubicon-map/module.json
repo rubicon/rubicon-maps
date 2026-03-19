@@ -1,29 +1,13 @@
 {
   "name": "rubicon-maps/rubicon-map",
   "d4Shortcode": "rubicon_map",
-  "title": "Rubicon Maps Map",
+  "title": "Rubicon Map",
   "titles": "Rubicon Maps",
   "category": "module",
   "attributes": {
     "module": {
       "type": "object",
-      "selector": "{{selector}}",
-      "default": {
-        "meta": {
-          "adminLabel": {
-            "desktop": {
-              "value": "Rubicon Maps Map"
-            }
-          }
-        }
-      },
-      "settings": {
-        "meta": {
-          "adminLabel": {
-            "render": true
-          }
-        }
-      }
+      "selector": "{{selector}}"
     },
     "instanceId": {
       "type": "object",
@@ -110,7 +94,137 @@
       "default": {
         "innerContent": {
           "desktop": {
-            "value": "480px"
+            "value": ""
+          }
+        }
+      }
+    },
+    "viewportMode": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "default"
+          }
+        }
+      }
+    },
+    "autoFitPadding": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": ""
+          }
+        }
+      }
+    },
+    "tilePreset": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "default"
+          }
+        }
+      }
+    },
+    "zoomControl": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "default"
+          }
+        }
+      }
+    },
+    "scrollWheelZoom": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "default"
+          }
+        }
+      }
+    },
+    "doubleClickZoom": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "default"
+          }
+        }
+      }
+    },
+    "popupTrigger": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "default"
+          }
+        }
+      }
+    },
+    "popupMaxWidth": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": ""
+          }
+        }
+      }
+    },
+    "closeOnMapClick": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "default"
+          }
+        }
+      }
+    },
+    "autoClosePopup": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "default"
+          }
+        }
+      }
+    },
+    "openAllPopups": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "default"
+          }
+        }
+      }
+    },
+    "enableClustering": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "default"
+          }
+        }
+      }
+    },
+    "clusterRadius": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": ""
           }
         }
       }

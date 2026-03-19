@@ -9,7 +9,7 @@ Rubicon Maps is a Divi-first WordPress location mapping plugin built for people 
 
 ## What ships in v1.0.0-rc.1
 
-- Custom post type: `rubicon_maps_location`
+- Custom post type: `rubicon_location`
 - Taxonomies: `rubicon_maps_category`, `rubicon_maps_region`
 - Linked frontend map and location list rendering
 - Divi 4 modules: `Rubicon Map`, `Rubicon Location List`

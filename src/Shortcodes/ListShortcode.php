@@ -16,9 +16,12 @@ class ListShortcode {
     public function render($atts) {
         return $this->getRenderer()->render(shortcode_atts([
             'id' => '',
+            'sync_id' => '',
             'category' => '',
             'region' => '',
             'location_ids' => '',
+            'use_fixed_height' => '',
+            'height' => '',
             'posts_per_page' => -1,
         ], $atts, Plugin::SHORTCODE_LIST));
     }

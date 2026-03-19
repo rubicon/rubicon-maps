@@ -2,13 +2,15 @@
 
 namespace RubiconMaps\Admin;
 
+use WP_Error;
+
 use function add_action;
 use function current_user_can;
+use function esc_url_raw;
 use function get_bloginfo;
 use function is_wp_error;
 use function sanitize_text_field;
 use function wp_remote_get;
-use function wp_remote_retrieve_body;
 use function wp_send_json_error;
 use function wp_send_json_success;
 use function wp_verify_nonce;
@@ -47,7 +49,7 @@ final class GeocodeController
                 [
                     'format' => 'jsonv2',
                     'addressdetails' => 1,
-                    'limit' => 1,
+                    'limit' => 5,
                     'q' => $query,
                 ]
             ),
@@ -71,20 +73,39 @@ final class GeocodeController
             wp_send_json_error(['message' => __('No matching address was found.', 'rubicon-maps')], 404);
         }
 
-        $match = $results[0];
-        $address = is_array($match['address'] ?? null) ? $match['address'] : [];
-
         wp_send_json_success(
             [
-                'latitude' => sanitize_text_field((string) ($match['lat'] ?? '')),
-                'longitude' => sanitize_text_field((string) ($match['lon'] ?? '')),
+                'results' => self::buildResultsPayload($results),
+            ]
+        );
+    }
+
+    /**
+     * @param array<int, mixed> $results
+     * @return array<int, array<string, string>>
+     */
+    public static function buildResultsPayload(array $results): array
+    {
+        $payload = [];
+
+        foreach ($results as $result) {
+            if (!is_array($result)) {
+                continue;
+            }
+
+            $address = is_array($result['address'] ?? null) ? $result['address'] : [];
+            $payload[] = [
+                'latitude' => sanitize_text_field((string) ($result['lat'] ?? '')),
+                'longitude' => sanitize_text_field((string) ($result['lon'] ?? '')),
                 'street' => sanitize_text_field(trim((string) (($address['house_number'] ?? '') . ' ' . ($address['road'] ?? '')))),
                 'city' => sanitize_text_field((string) ($address['city'] ?? $address['town'] ?? $address['village'] ?? '')),
                 'state' => sanitize_text_field((string) ($address['state'] ?? '')),
                 'zip' => sanitize_text_field((string) ($address['postcode'] ?? '')),
                 'country' => sanitize_text_field((string) ($address['country'] ?? '')),
-                'display_name' => sanitize_text_field((string) ($match['display_name'] ?? '')),
-            ]
-        );
+                'display_name' => sanitize_text_field((string) ($result['display_name'] ?? '')),
+            ];
+        }
+
+        return $payload;
     }
 }

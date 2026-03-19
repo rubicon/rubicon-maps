@@ -1,29 +1,13 @@
 {
   "name": "rubicon-maps/rubicon-location-list",
   "d4Shortcode": "rubicon_location_list",
-  "title": "Rubicon Maps Listing",
-  "titles": "Rubicon Maps",
+  "title": "Rubicon Location List",
+  "titles": "Rubicon Location Lists",
   "category": "module",
   "attributes": {
     "module": {
       "type": "object",
-      "selector": "{{selector}}",
-      "default": {
-        "meta": {
-          "adminLabel": {
-            "desktop": {
-              "value": "Rubicon Maps Listing"
-            }
-          }
-        }
-      },
-      "settings": {
-        "meta": {
-          "adminLabel": {
-            "render": true
-          }
-        }
-      }
+      "selector": "{{selector}}"
     },
     "instanceId": {
       "type": "object",
@@ -56,6 +40,26 @@
       }
     },
     "locationIds": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": ""
+          }
+        }
+      }
+    },
+    "useFixedHeight": {
+      "type": "object",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "off"
+          }
+        }
+      }
+    },
+    "height": {
       "type": "object",
       "default": {
         "innerContent": {
