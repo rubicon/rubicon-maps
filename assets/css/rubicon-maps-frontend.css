@@ -61,3 +61,26 @@
 .rubicon-maps__popup-excerpt {
   margin-top: 8px;
 }
+
+.marker-cluster,
+.marker-cluster div {
+  border-radius: 999px;
+}
+
+.marker-cluster div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+}
+
+.marker-cluster span {
+  display: block;
+  color: inherit;
+  font: inherit;
+  line-height: 1;
+}
