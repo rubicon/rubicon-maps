@@ -30,6 +30,24 @@ Rubicon Maps now ships as a stable v1 release with Leaflet-first maps, linked li
 ### Security
 - Routed admin geocoding through authenticated WordPress AJAX with nonce protection.
 
+## 1.0.0-rc.1
+**The Candidate Stops Wandering**  
+2026-03-17
+
+Rubicon Maps reached its first tagged v1 release candidate with the Leaflet-first product shape, release packaging flow, and the split Divi 4/Divi 5 architecture that the stable release was finalized from.
+
+### Added
+- Added release packaging and verification scripts for installable plugin artifacts.
+- Added updater and lifecycle support for Forgejo-hosted release metadata.
+- Added a canonical release-candidate metadata pass across plugin headers, readmes, and changelog content.
+
+### Changed
+- Promoted the plugin metadata to the `1.0.0-rc.1` release-candidate state.
+- Clarified the Leaflet-first support boundary for the initial v1 release line.
+
+### Fixed
+- Fixed release metadata alignment so the candidate package and repository docs referenced the same pre-release version.
+
 ## 0.5.0
 **Two Builders, One Plugin**  
 2026-03-16
