@@ -35,7 +35,7 @@ const ControlStyle = {
   background: '#ffffff',
   padding: '10px',
   display: 'grid',
-  gap: '10px',
+  gap: '8px',
 };
 
 const PillRowStyle = {
@@ -72,10 +72,6 @@ const PillButtonStyle = {
 
 const SearchWrapStyle = {
   position: 'relative',
-  display: 'grid',
-  gridTemplateColumns: '1fr auto',
-  gap: '8px',
-  alignItems: 'start',
 };
 
 const SearchInputStyle = {
@@ -89,19 +85,6 @@ const SearchInputStyle = {
   lineHeight: 1.5,
   padding: '8px 12px',
   outline: 'none',
-};
-
-const ToggleButtonStyle = {
-  appearance: 'none',
-  minWidth: '38px',
-  minHeight: '38px',
-  borderRadius: '10px',
-  border: '1px solid rgba(15, 23, 42, 0.12)',
-  background: '#f8fafc',
-  color: '#0f172a',
-  cursor: 'pointer',
-  fontSize: '14px',
-  lineHeight: 1,
 };
 
 const ResultsStyle = {
@@ -123,17 +106,17 @@ const ResultsHeaderStyle = {
   alignItems: 'center',
   justifyContent: 'space-between',
   gap: '8px',
-  padding: '10px 12px',
+  padding: '10px 12px 8px',
   borderBottom: '1px solid rgba(15, 23, 42, 0.08)',
   background: '#f8fafc',
+  flexWrap: 'wrap',
 };
 
 const ResultsHeaderLabelStyle = {
   color: '#475569',
-  fontSize: '11px',
-  fontWeight: 700,
-  letterSpacing: '0.08em',
-  textTransform: 'uppercase',
+  fontSize: '12px',
+  fontWeight: 600,
+  lineHeight: 1.4,
 };
 
 const ActionsStyle = {
@@ -149,10 +132,10 @@ const ActionButtonStyle = {
   background: '#ffffff',
   color: '#0f172a',
   borderRadius: '999px',
-  minHeight: '26px',
+  minHeight: '28px',
   padding: '0 10px',
   cursor: 'pointer',
-  fontSize: '11px',
+  fontSize: '12px',
   fontWeight: 600,
   lineHeight: 1.2,
 };
@@ -187,6 +170,13 @@ const HelpStyle = {
   color: '#64748b',
   fontSize: '12px',
   lineHeight: 1.5,
+};
+
+const OverflowPillStyle = {
+  ...PillStyle,
+  background: '#f8fafc',
+  border: '1px solid rgba(15, 23, 42, 0.12)',
+  color: '#475569',
 };
 
 const LOCATION_POST_TYPE = 'rubicon_location';
@@ -454,6 +444,8 @@ export const SearchableFilterField = ({
   const visibleResultsLabel = query.trim()
     ? __('Filtered results', 'rubicon-maps')
     : __('Available options', 'rubicon-maps');
+  const visibleSelectedOptions = selectedOptions.slice(0, 2);
+  const hiddenSelectedCount = Math.max(0, selectedOptions.length - visibleSelectedOptions.length);
 
   return (
     <div style={WrapperStyle}>
@@ -478,7 +470,7 @@ export const SearchableFilterField = ({
         <div style={LabelStyle}>{label}</div>
         {selectedOptions.length ? (
           <div style={PillRowStyle}>
-            {selectedOptions.map((option) => (
+            {visibleSelectedOptions.map((option) => (
               <span
                 key={`${attrName}-${option.value}`}
                 style={PillStyle}
@@ -494,6 +486,11 @@ export const SearchableFilterField = ({
                 </button>
               </span>
             ))}
+            {hiddenSelectedCount ? (
+              <span style={OverflowPillStyle}>
+                {`+${hiddenSelectedCount} ${__('more', 'rubicon-maps')}`}
+              </span>
+            ) : null}
           </div>
         ) : null}
         <div
@@ -524,17 +521,6 @@ export const SearchableFilterField = ({
               }
             }}
           />
-          <button
-            type="button"
-            style={ToggleButtonStyle}
-            onMouseDown={(event) => {
-              event.preventDefault();
-              setIsOpen((current) => !current);
-            }}
-            aria-label={isOpen ? __('Close options', 'rubicon-maps') : __('Open options', 'rubicon-maps')}
-          >
-            {isOpen ? '▲' : '▼'}
-          </button>
           {isOpen ? (
             <div style={ResultsStyle}>
               <div style={ResultsHeaderStyle}>
