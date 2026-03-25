@@ -1,6 +1,6 @@
 {
   "name": "rubicon-maps-divi5",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Divi 5 Visual Builder modules for Rubicon Maps",
   "main": "src/index.js",
   "private": true,

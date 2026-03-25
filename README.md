@@ -2,7 +2,7 @@
 
 Rubicon Maps is a Divi-first WordPress location mapping plugin built for people who want real location management without turning every map into a shortcode scavenger hunt. It ships with native location management, linked map/list output, CSV import/export, and dual Divi support: a dedicated `divi-4` compatibility layer for legacy builder modules and a dedicated `divi-5` Visual Builder runtime for Divi 5.
 
-> Version: `1.0.0`  
+> Version: `1.0.1`  
 > License: `GPLv2 or later`  
 > Requires WordPress: `5.8+`  
 > Requires PHP: `8.1+`  
@@ -10,7 +10,7 @@ Rubicon Maps is a Divi-first WordPress location mapping plugin built for people 
 > Lowest supported Divi: `4.0+`  
 > Tested with Divi: `5.1.0`
 
-## What ships in v1.0.0
+## What ships in v1.0.1
 
 - Custom post type: `rubicon_location`
 - Taxonomies: `rubicon_maps_category`, `rubicon_maps_region`
@@ -23,6 +23,7 @@ Rubicon Maps is a Divi-first WordPress location mapping plugin built for people 
 - Leaflet/OpenStreetMap-first frontend rendering
 - CSV import/export for locations
 - Server-side admin geocoding helper and consistent media picker flows
+- Searchable multi-select filter pickers with pill tokens in Divi modules
 - Release packaging scripts for distributable plugin zips
 
 ## Divi support
@@ -84,14 +85,14 @@ npm run build
 Create a distributable plugin zip:
 
 ```bash
-./scripts/package-release.sh 1.0.0
+./scripts/package-release.sh 1.0.1
 ```
 
 ## Provider stance
 
-- Leaflet/OpenStreetMap is the supported provider path for v1.0.0.
-- Additional provider work is future scope, not part of the v1.0.0 support promise.
+- Leaflet/OpenStreetMap is the supported provider path for the `1.0.x` line.
+- Additional provider work is future scope, not part of the current `1.0.x` support promise.
 
 ## Release notes
 
-See [CHANGELOG.md](CHANGELOG.md) for version history and [docs/releases/1.0.0.md](docs/releases/1.0.0.md) for the release notes body.
+See [CHANGELOG.md](CHANGELOG.md) for version history and [docs/releases/1.0.1.md](docs/releases/1.0.1.md) for the current release notes body.
