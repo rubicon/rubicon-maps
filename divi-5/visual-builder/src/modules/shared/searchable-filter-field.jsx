@@ -97,19 +97,16 @@ const ResultsStyle = {
   border: '1px solid rgba(15, 23, 42, 0.12)',
   background: '#ffffff',
   boxShadow: '0 18px 40px rgba(15, 23, 42, 0.14)',
-  maxHeight: '220px',
-  overflowY: 'auto',
+  overflow: 'hidden',
 };
 
 const ResultsHeaderStyle = {
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'space-between',
   gap: '8px',
-  padding: '10px 12px 8px',
+  padding: '10px 12px',
   borderBottom: '1px solid rgba(15, 23, 42, 0.08)',
   background: '#f8fafc',
-  flexWrap: 'wrap',
 };
 
 const ResultsHeaderLabelStyle = {
@@ -119,36 +116,35 @@ const ResultsHeaderLabelStyle = {
   lineHeight: 1.4,
 };
 
-const ActionsStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '6px',
-  flexWrap: 'wrap',
+const ResultsListStyle = {
+  maxHeight: '180px',
+  overflowY: 'auto',
 };
 
-const ActionButtonStyle = {
-  appearance: 'none',
-  border: '1px solid rgba(15, 23, 42, 0.12)',
-  background: '#ffffff',
-  color: '#0f172a',
-  borderRadius: '999px',
-  minHeight: '28px',
-  padding: '0 10px',
-  cursor: 'pointer',
-  fontSize: '12px',
-  fontWeight: 600,
-  lineHeight: 1.2,
-};
-
-const ActionButtonDisabledStyle = {
-  ...ActionButtonStyle,
-  opacity: 0.45,
-  cursor: 'default',
-};
-
-const ResultButtonStyle = {
+const SelectAllRowStyle = {
   appearance: 'none',
   width: '100%',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '10px',
+  textAlign: 'left',
+  border: 'none',
+  borderBottom: '1px solid rgba(15, 23, 42, 0.08)',
+  background: '#ffffff',
+  padding: '10px 12px',
+  cursor: 'pointer',
+  color: '#0f172a',
+  fontSize: '13px',
+  fontWeight: 600,
+  lineHeight: 1.4,
+};
+
+const OptionRowStyle = {
+  appearance: 'none',
+  width: '100%',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '10px',
   textAlign: 'left',
   border: 'none',
   borderBottom: '1px solid rgba(15, 23, 42, 0.06)',
@@ -157,7 +153,57 @@ const ResultButtonStyle = {
   cursor: 'pointer',
   color: '#0f172a',
   fontSize: '13px',
-  lineHeight: 1.5,
+  lineHeight: 1.4,
+};
+
+const CheckboxStyle = {
+  width: '16px',
+  minWidth: '16px',
+  height: '16px',
+  borderRadius: '4px',
+  border: '1px solid rgba(15, 23, 42, 0.12)',
+  background: '#ffffff',
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '11px',
+  color: '#ffffff',
+  lineHeight: 1,
+};
+
+const CheckboxCheckedStyle = {
+  ...CheckboxStyle,
+  background: '#2563eb',
+  border: '1px solid #2563eb',
+};
+
+const FooterStyle = {
+  display: 'flex',
+  gap: '8px',
+  flexWrap: 'wrap',
+  padding: '10px 12px 12px',
+  borderTop: '1px solid rgba(15, 23, 42, 0.08)',
+  background: '#f8fafc',
+};
+
+const FooterButtonStyle = {
+  appearance: 'none',
+  border: '1px solid rgba(15, 23, 42, 0.12)',
+  background: '#ffffff',
+  color: '#0f172a',
+  borderRadius: '999px',
+  minHeight: '30px',
+  padding: '0 12px',
+  cursor: 'pointer',
+  fontSize: '12px',
+  fontWeight: 600,
+  lineHeight: 1.2,
+};
+
+const FooterButtonDisabledStyle = {
+  ...FooterButtonStyle,
+  opacity: 0.45,
+  cursor: 'default',
 };
 
 const EmptyStateStyle = {
@@ -311,6 +357,10 @@ export const SearchableFilterField = ({
 
   const config = React.useMemo(() => buildSearchConfig(kind), [kind]);
   const selectedValues = React.useMemo(() => config.parseValue(valueAttr), [config, valueAttr]);
+  const selectedValueSet = React.useMemo(
+    () => new Set(selectedOptions.map((option) => String(option.value))),
+    [selectedOptions],
+  );
 
   React.useEffect(() => {
     let cancelled = false;
@@ -390,9 +440,7 @@ export const SearchableFilterField = ({
           return;
         }
 
-        const selectedKeys = new Set(selectedOptions.map((option) => String(option.value)));
-
-        setSearchResults(results.filter((result) => !selectedKeys.has(String(result.value))));
+        setSearchResults(results);
       } catch (error) {
         if (!cancelled) {
           setSearchResults([]);
@@ -410,10 +458,10 @@ export const SearchableFilterField = ({
     };
   }, [config, isOpen, query, selectedOptions]);
 
-  const addOption = (option) => {
+  const toggleOption = (option) => {
     setSelectedOptions((current) => {
       if (current.some((item) => String(item.value) === String(option.value))) {
-        return current;
+        return current.filter((item) => String(item.value) !== String(option.value));
       }
 
       return [...current, option];
@@ -431,8 +479,14 @@ export const SearchableFilterField = ({
 
     setSelectedOptions((current) => {
       const seen = new Set(current.map((option) => String(option.value)));
-      const additions = searchResults.filter((option) => !seen.has(String(option.value)));
+      const visibleValues = searchResults.map((option) => String(option.value));
+      const allVisibleSelected = visibleValues.every((value) => seen.has(value));
 
+      if (allVisibleSelected) {
+        return current.filter((option) => !visibleValues.includes(String(option.value)));
+      }
+
+      const additions = searchResults.filter((option) => !seen.has(String(option.value)));
       return additions.length ? [...current, ...additions] : current;
     });
   };
@@ -446,6 +500,9 @@ export const SearchableFilterField = ({
     : __('Available options', 'rubicon-maps');
   const visibleSelectedOptions = selectedOptions.slice(0, 2);
   const hiddenSelectedCount = Math.max(0, selectedOptions.length - visibleSelectedOptions.length);
+  const allVisibleSelected = searchResults.length
+    ? searchResults.every((option) => selectedValueSet.has(String(option.value)))
+    : false;
 
   return (
     <div style={WrapperStyle}>
@@ -525,48 +582,60 @@ export const SearchableFilterField = ({
             <div style={ResultsStyle}>
               <div style={ResultsHeaderStyle}>
                 <div style={ResultsHeaderLabelStyle}>{visibleResultsLabel}</div>
-                <div style={ActionsStyle}>
-                  <button
-                    type="button"
-                    style={searchResults.length ? ActionButtonStyle : ActionButtonDisabledStyle}
-                    onClick={selectAllVisible}
-                    disabled={!searchResults.length}
-                  >
-                    {__('Select all', 'rubicon-maps')}
-                  </button>
-                  <button
-                    type="button"
-                    style={selectedOptions.length ? ActionButtonStyle : ActionButtonDisabledStyle}
-                    onClick={clearAll}
-                    disabled={!selectedOptions.length}
-                  >
-                    {__('Clear', 'rubicon-maps')}
-                  </button>
-                  <button
-                    type="button"
-                    style={ActionButtonStyle}
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {__('Close', 'rubicon-maps')}
-                  </button>
-                </div>
               </div>
-              {isSearching ? (
-                <div style={EmptyStateStyle}>{__('Searching…', 'rubicon-maps')}</div>
-              ) : searchResults.length ? (
-                searchResults.map((option) => (
-                  <button
-                    key={`${attrName}-result-${option.value}`}
-                    type="button"
-                    style={ResultButtonStyle}
-                    onClick={() => addOption(option)}
-                  >
-                    {option.label}
-                  </button>
-                ))
-              ) : (
-                <div style={EmptyStateStyle}>{__('No matches found.', 'rubicon-maps')}</div>
-              )}
+              <div style={ResultsListStyle}>
+                <button
+                  type="button"
+                  style={SelectAllRowStyle}
+                  onClick={selectAllVisible}
+                  disabled={!searchResults.length}
+                >
+                  <span style={allVisibleSelected ? CheckboxCheckedStyle : CheckboxStyle}>
+                    {allVisibleSelected ? '✓' : ''}
+                  </span>
+                  {__('Select all', 'rubicon-maps')}
+                </button>
+                {isSearching ? (
+                  <div style={EmptyStateStyle}>{__('Searching…', 'rubicon-maps')}</div>
+                ) : searchResults.length ? (
+                  searchResults.map((option) => {
+                    const isSelected = selectedValueSet.has(String(option.value));
+
+                    return (
+                      <button
+                        key={`${attrName}-result-${option.value}`}
+                        type="button"
+                        style={OptionRowStyle}
+                        onClick={() => toggleOption(option)}
+                      >
+                        <span style={isSelected ? CheckboxCheckedStyle : CheckboxStyle}>
+                          {isSelected ? '✓' : ''}
+                        </span>
+                        {option.label}
+                      </button>
+                    );
+                  })
+                ) : (
+                  <div style={EmptyStateStyle}>{__('No matches found.', 'rubicon-maps')}</div>
+                )}
+              </div>
+              <div style={FooterStyle}>
+                <button
+                  type="button"
+                  style={selectedOptions.length ? FooterButtonStyle : FooterButtonDisabledStyle}
+                  onClick={clearAll}
+                  disabled={!selectedOptions.length}
+                >
+                  {__('Clear', 'rubicon-maps')}
+                </button>
+                <button
+                  type="button"
+                  style={FooterButtonStyle}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {__('Close', 'rubicon-maps')}
+                </button>
+              </div>
             </div>
           ) : null}
         </div>
