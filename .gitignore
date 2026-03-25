@@ -95,6 +95,7 @@ wp-config.php
 node_modules/
 dist/
 coverage/
+*.code-workspace
 
 # htaccess
 /.htaccess
