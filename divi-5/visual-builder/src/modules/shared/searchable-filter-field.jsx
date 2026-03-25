@@ -72,6 +72,10 @@ const PillButtonStyle = {
 
 const SearchWrapStyle = {
   position: 'relative',
+  display: 'grid',
+  gridTemplateColumns: '1fr auto',
+  gap: '8px',
+  alignItems: 'start',
 };
 
 const SearchInputStyle = {
@@ -87,6 +91,19 @@ const SearchInputStyle = {
   outline: 'none',
 };
 
+const ToggleButtonStyle = {
+  appearance: 'none',
+  minWidth: '38px',
+  minHeight: '38px',
+  borderRadius: '10px',
+  border: '1px solid rgba(15, 23, 42, 0.12)',
+  background: '#f8fafc',
+  color: '#0f172a',
+  cursor: 'pointer',
+  fontSize: '14px',
+  lineHeight: 1,
+};
+
 const ResultsStyle = {
   position: 'absolute',
   top: 'calc(100% + 6px)',
@@ -99,6 +116,51 @@ const ResultsStyle = {
   boxShadow: '0 18px 40px rgba(15, 23, 42, 0.14)',
   maxHeight: '220px',
   overflowY: 'auto',
+};
+
+const ResultsHeaderStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: '8px',
+  padding: '10px 12px',
+  borderBottom: '1px solid rgba(15, 23, 42, 0.08)',
+  background: '#f8fafc',
+};
+
+const ResultsHeaderLabelStyle = {
+  color: '#475569',
+  fontSize: '11px',
+  fontWeight: 700,
+  letterSpacing: '0.08em',
+  textTransform: 'uppercase',
+};
+
+const ActionsStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '6px',
+  flexWrap: 'wrap',
+};
+
+const ActionButtonStyle = {
+  appearance: 'none',
+  border: '1px solid rgba(15, 23, 42, 0.12)',
+  background: '#ffffff',
+  color: '#0f172a',
+  borderRadius: '999px',
+  minHeight: '26px',
+  padding: '0 10px',
+  cursor: 'pointer',
+  fontSize: '11px',
+  fontWeight: 600,
+  lineHeight: 1.2,
+};
+
+const ActionButtonDisabledStyle = {
+  ...ActionButtonStyle,
+  opacity: 0.45,
+  cursor: 'default',
 };
 
 const ResultButtonStyle = {
@@ -179,7 +241,8 @@ const buildSearchConfig = (kind) => {
         return values.map((value) => ({ value, label: termMap.get(value) || value }));
       },
       search: async (query) => {
-        const terms = await fetchJson(`/wp/v2/${CATEGORY_REST_BASE}?search=${encodeURIComponent(query)}&per_page=20&_fields=id,name,slug`);
+        const searchParam = query ? `search=${encodeURIComponent(query)}&` : '';
+        const terms = await fetchJson(`/wp/v2/${CATEGORY_REST_BASE}?${searchParam}per_page=20&_fields=id,name,slug`);
 
         return terms.map((term) => ({
           value: term.slug,
@@ -204,7 +267,8 @@ const buildSearchConfig = (kind) => {
         return values.map((value) => ({ value, label: termMap.get(value) || value }));
       },
       search: async (query) => {
-        const terms = await fetchJson(`/wp/v2/${REGION_REST_BASE}?search=${encodeURIComponent(query)}&per_page=20&_fields=id,name,slug`);
+        const searchParam = query ? `search=${encodeURIComponent(query)}&` : '';
+        const terms = await fetchJson(`/wp/v2/${REGION_REST_BASE}?${searchParam}per_page=20&_fields=id,name,slug`);
 
         return terms.map((term) => ({
           value: term.slug,
@@ -228,7 +292,8 @@ const buildSearchConfig = (kind) => {
       return values.map((value) => ({ value, label: locationMap.get(value) || `#${value}` }));
     },
     search: async (query) => {
-      const locations = await fetchJson(`/wp/v2/${LOCATION_POST_TYPE}?search=${encodeURIComponent(query)}&per_page=20&_fields=id,title`);
+      const searchParam = query ? `search=${encodeURIComponent(query)}&` : '';
+      const locations = await fetchJson(`/wp/v2/${LOCATION_POST_TYPE}?${searchParam}per_page=20&_fields=id,title`);
 
       return locations.map((location) => ({
         value: Number(location.id),
@@ -321,9 +386,7 @@ export const SearchableFilterField = ({
   React.useEffect(() => {
     let cancelled = false;
 
-    if (!query.trim()) {
-      setSearchResults([]);
-      setIsSearching(false);
+    if (!isOpen) {
       return undefined;
     }
 
@@ -355,7 +418,7 @@ export const SearchableFilterField = ({
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [config, query, selectedOptions]);
+  }, [config, isOpen, query, selectedOptions]);
 
   const addOption = (option) => {
     setSelectedOptions((current) => {
@@ -365,14 +428,32 @@ export const SearchableFilterField = ({
 
       return [...current, option];
     });
-    setQuery('');
-    setSearchResults([]);
-    setIsOpen(false);
   };
 
   const removeOption = (value) => {
     setSelectedOptions((current) => current.filter((option) => String(option.value) !== String(value)));
   };
+
+  const selectAllVisible = () => {
+    if (!searchResults.length) {
+      return;
+    }
+
+    setSelectedOptions((current) => {
+      const seen = new Set(current.map((option) => String(option.value)));
+      const additions = searchResults.filter((option) => !seen.has(String(option.value)));
+
+      return additions.length ? [...current, ...additions] : current;
+    });
+  };
+
+  const clearAll = () => {
+    setSelectedOptions([]);
+  };
+
+  const visibleResultsLabel = query.trim()
+    ? __('Filtered results', 'rubicon-maps')
+    : __('Available options', 'rubicon-maps');
 
   return (
     <div style={WrapperStyle}>
@@ -415,13 +496,20 @@ export const SearchableFilterField = ({
             ))}
           </div>
         ) : null}
-        <div style={SearchWrapStyle}>
+        <div
+          style={SearchWrapStyle}
+          onMouseDownCapture={() => setIsOpen(true)}
+          onFocusCapture={() => setIsOpen(true)}
+        >
           <input
             type="text"
             value={query}
             placeholder={placeholder}
             style={SearchInputStyle}
+            onPointerDown={() => setIsOpen(true)}
+            onMouseDown={() => setIsOpen(true)}
             onFocus={() => setIsOpen(true)}
+            onClick={() => setIsOpen(true)}
             onChange={(event) => {
               setQuery(event.target.value);
               setIsOpen(true);
@@ -436,8 +524,47 @@ export const SearchableFilterField = ({
               }
             }}
           />
-          {isOpen && (query.trim() || isSearching || searchResults.length) ? (
+          <button
+            type="button"
+            style={ToggleButtonStyle}
+            onMouseDown={(event) => {
+              event.preventDefault();
+              setIsOpen((current) => !current);
+            }}
+            aria-label={isOpen ? __('Close options', 'rubicon-maps') : __('Open options', 'rubicon-maps')}
+          >
+            {isOpen ? '▲' : '▼'}
+          </button>
+          {isOpen ? (
             <div style={ResultsStyle}>
+              <div style={ResultsHeaderStyle}>
+                <div style={ResultsHeaderLabelStyle}>{visibleResultsLabel}</div>
+                <div style={ActionsStyle}>
+                  <button
+                    type="button"
+                    style={searchResults.length ? ActionButtonStyle : ActionButtonDisabledStyle}
+                    onClick={selectAllVisible}
+                    disabled={!searchResults.length}
+                  >
+                    {__('Select all', 'rubicon-maps')}
+                  </button>
+                  <button
+                    type="button"
+                    style={selectedOptions.length ? ActionButtonStyle : ActionButtonDisabledStyle}
+                    onClick={clearAll}
+                    disabled={!selectedOptions.length}
+                  >
+                    {__('Clear', 'rubicon-maps')}
+                  </button>
+                  <button
+                    type="button"
+                    style={ActionButtonStyle}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {__('Close', 'rubicon-maps')}
+                  </button>
+                </div>
+              </div>
               {isSearching ? (
                 <div style={EmptyStateStyle}>{__('Searching…', 'rubicon-maps')}</div>
               ) : searchResults.length ? (
