@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.0.1
+**Filters Learn Some Manners**  
+2026-03-25
+
+Rubicon Maps 1.0.1 turns the post-v1 filter picker work into a real release instead of leaving it stranded between merged PRs and stale release metadata.
+
+### Added
+- Added searchable multi-select filter pickers with pill tokens for Divi 5 map and listing modules.
+- Added structured filter value helpers and normalization so modern saved module values and legacy comma-separated values both continue to work.
+- Added a Divi 4 builder-side filter enhancement path for categories, regions, and explicit locations.
+- Added a dedicated `1.0.1` release notes document for the post-v1 maintenance line.
+
+### Changed
+- Promoted plugin metadata, readmes, and release references from `1.0.0` to `1.0.1`.
+- Improved the Divi 5 picker interaction model with open-on-click behavior, fixed-height scrolling, checkbox rows, and footer actions.
+
+### Fixed
+- Fixed the release discipline gap where merged post-v1 changes were not yet reflected in the changelog and release metadata.
+
 ## 1.0.0
 **Maps, Meet Manners**  
 2026-03-18
