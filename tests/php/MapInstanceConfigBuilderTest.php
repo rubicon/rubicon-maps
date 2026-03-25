@@ -207,4 +207,39 @@ assertSameMapConfig(true, $config['openAllPopups'], 'Default open-all sentinel v
 assertSameMapConfig(false, $config['enableClustering'], 'Default clustering sentinel values should use the plugin default toggle.');
 assertSameMapConfig(160, $config['clusterRadius'], 'Blank cluster radius values should fall back to the plugin default radius.');
 
+$config = $builder->build(
+    [
+        'category' => '["retail","wholesale","retail"]',
+        'region' => '["texas","houston","texas"]',
+        'location_ids' => '[4,9,4]',
+    ],
+    [
+        'default_provider' => 'leaflet',
+        'default_viewport_mode' => 'auto_fit',
+        'default_latitude' => '29.7604',
+        'default_longitude' => '-95.3698',
+        'default_zoom' => 9,
+        'default_map_height' => '480px',
+        'default_auto_fit_padding' => 24,
+        'default_tile_preset' => 'openstreetmap',
+        'tile_url' => 'https://tiles.example.com/{z}/{x}/{y}.png',
+        'google_maps_api_key' => '',
+        'default_enable_zoom_control' => true,
+        'enable_scroll_wheel' => false,
+        'default_enable_double_click_zoom' => true,
+        'default_popup_trigger' => 'click',
+        'default_popup_max_width' => 320,
+        'default_close_on_map_click' => true,
+        'default_auto_close_popup' => true,
+        'default_open_all_popups' => false,
+        'default_enable_clustering' => true,
+        'default_cluster_radius' => 100,
+    ],
+    'https://example.com/wp-json/rubicon-maps/v1/locations'
+);
+
+assertSameMapConfig('retail,wholesale', $config['category'], 'Structured category selections should be normalized for the frontend runtime.');
+assertSameMapConfig('texas,houston', $config['region'], 'Structured region selections should be normalized for the frontend runtime.');
+assertSameMapConfig('4,9', $config['locationIds'], 'Structured location selections should be normalized for the frontend runtime.');
+
 echo 'MapInstanceConfigBuilderTest passed.' . PHP_EOL;

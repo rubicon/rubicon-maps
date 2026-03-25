@@ -2,6 +2,7 @@ import React from 'react';
 
 import { __ } from '@wordpress/i18n';
 
+import { SearchableFilterField } from '../shared/searchable-filter-field';
 import { SyncSettingsGroup } from '../shared/sync-settings-group';
 import { getSavedSyncId } from '../shared/sync-id';
 
@@ -39,30 +40,30 @@ export const SettingsContent = ({ defaultSettingsAttrs, attrs, id }) => {
         </div>
       ) : (
         <React.Fragment>
-          <FieldContainer
+          <SearchableFilterField
             attrName="category.innerContent"
             label={__('Categories', 'rubicon-maps')}
-            description={__('Comma-separated category slugs to include in the list.', 'rubicon-maps')}
-            features={{ sticky: false }}
-          >
-            <TextContainer />
-          </FieldContainer>
-          <FieldContainer
+            description={__('Search and select category terms to include in this listing.', 'rubicon-maps')}
+            valueAttr={attrs?.category}
+            kind="categories"
+            placeholder={__('Search categories…', 'rubicon-maps')}
+          />
+          <SearchableFilterField
             attrName="region.innerContent"
             label={__('Regions', 'rubicon-maps')}
-            description={__('Comma-separated region slugs to include in the list.', 'rubicon-maps')}
-            features={{ sticky: false }}
-          >
-            <TextContainer />
-          </FieldContainer>
-          <FieldContainer
+            description={__('Search and select region terms to include in this listing.', 'rubicon-maps')}
+            valueAttr={attrs?.region}
+            kind="regions"
+            placeholder={__('Search regions…', 'rubicon-maps')}
+          />
+          <SearchableFilterField
             attrName="locationIds.innerContent"
-            label={__('Specific Location IDs', 'rubicon-maps')}
-            description={__('Optional comma-separated post IDs to limit this list to explicit locations.', 'rubicon-maps')}
-            features={{ sticky: false }}
-          >
-            <TextContainer />
-          </FieldContainer>
+            label={__('Specific Locations', 'rubicon-maps')}
+            description={__('Optionally limit this listing to an explicit set of locations.', 'rubicon-maps')}
+            valueAttr={attrs?.locationIds}
+            kind="locations"
+            placeholder={__('Search locations…', 'rubicon-maps')}
+          />
         </React.Fragment>
       )}
     </GroupContainer>

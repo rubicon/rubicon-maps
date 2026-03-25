@@ -53,4 +53,22 @@ assertSameValue(
     'Region filter should use the canonical region taxonomy.'
 );
 
+$args = $builder->build([
+    'category' => '["retail","wholesale","retail"]',
+    'region' => '["texas","houston","texas"]',
+    'location_ids' => '[5,7,11,7]',
+]);
+
+assertSameValue(
+    ['retail', 'wholesale'],
+    $args['tax_query'][0]['terms'],
+    'JSON category filters should normalize into unique slugs.'
+);
+assertSameValue(
+    ['texas', 'houston'],
+    $args['tax_query'][1]['terms'],
+    'JSON region filters should normalize into unique slugs.'
+);
+assertSameValue([5, 7, 11], $args['post__in'], 'JSON location filters should normalize into unique integer IDs.');
+
 echo 'LocationQueryArgsBuilderTest passed.' . PHP_EOL;

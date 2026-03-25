@@ -50,9 +50,9 @@ final class MapInstanceConfigBuilder
             'autoFitPadding' => $this->intOrFallback($atts['auto_fit_padding'] ?? null, (int) ($settings['default_auto_fit_padding'] ?? 24)),
             'tilePreset' => $tilePreset,
             'tileUrl' => $this->resolvedTileUrl($tilePreset, (string) ($settings['tile_url'] ?? '')),
-            'category' => (string) ($atts['category'] ?? ''),
-            'region' => (string) ($atts['region'] ?? ''),
-            'locationIds' => (string) ($atts['location_ids'] ?? ''),
+            'category' => $this->normalizeCsvList($atts['category'] ?? ''),
+            'region' => $this->normalizeCsvList($atts['region'] ?? ''),
+            'locationIds' => $this->normalizeCsvIdList($atts['location_ids'] ?? ''),
             'endpoint' => $endpoint,
             'zoomControl' => $this->resolveBooleanSetting($atts['zoom_control'] ?? '', (bool) ($settings['default_enable_zoom_control'] ?? true)),
             'scrollWheelZoom' => $this->resolveBooleanSetting($atts['scrollwheel'] ?? '', (bool) ($settings['enable_scroll_wheel'] ?? true)),
@@ -189,6 +189,92 @@ final class MapInstanceConfigBuilder
         }
 
         return $this->normalizedTileUrl($tileUrl);
+    }
+
+    private function normalizeCsvList(mixed $value): string
+    {
+        if (is_array($value)) {
+            $items = $value;
+        } else {
+            $normalized = trim((string) $value);
+
+            if ('' === $normalized) {
+                return '';
+            }
+
+            if (str_starts_with($normalized, '[')) {
+                $decoded = json_decode($normalized, true);
+
+                if (JSON_ERROR_NONE === json_last_error() && is_array($decoded)) {
+                    $items = $decoded;
+                } else {
+                    $items = explode(',', $normalized);
+                }
+            } else {
+                $items = explode(',', $normalized);
+            }
+        }
+
+        $values = [];
+
+        foreach ($items as $item) {
+            if (is_array($item)) {
+                $item = $item['slug'] ?? $item['value'] ?? $item['id'] ?? '';
+            }
+
+            $item = trim((string) $item);
+
+            if ('' === $item || in_array($item, $values, true)) {
+                continue;
+            }
+
+            $values[] = $item;
+        }
+
+        return implode(',', $values);
+    }
+
+    private function normalizeCsvIdList(mixed $value): string
+    {
+        if (is_array($value)) {
+            $items = $value;
+        } else {
+            $normalized = trim((string) $value);
+
+            if ('' === $normalized) {
+                return '';
+            }
+
+            if (str_starts_with($normalized, '[')) {
+                $decoded = json_decode($normalized, true);
+
+                if (JSON_ERROR_NONE === json_last_error() && is_array($decoded)) {
+                    $items = $decoded;
+                } else {
+                    $items = explode(',', $normalized);
+                }
+            } else {
+                $items = explode(',', $normalized);
+            }
+        }
+
+        $values = [];
+
+        foreach ($items as $item) {
+            if (is_array($item)) {
+                $item = $item['id'] ?? $item['value'] ?? '';
+            }
+
+            $item = (int) trim((string) $item);
+
+            if ($item <= 0 || in_array($item, $values, true)) {
+                continue;
+            }
+
+            $values[] = $item;
+        }
+
+        return implode(',', $values);
     }
 
     private function normalizedTileUrl(string $tileUrl): string

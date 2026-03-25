@@ -36,19 +36,24 @@ class RubiconLocationListModule extends ET_Builder_Module
                 'toggle_slug' => 'filters',
             ],
             'category' => [
-                'label' => esc_html__('Categories (slugs, comma-separated)', 'rubicon-maps'),
+                'label' => esc_html__('Categories', 'rubicon-maps'),
                 'type' => 'text',
+                'description' => esc_html__('Search and select category terms to include in this listing.', 'rubicon-maps'),
+                'id' => 'rubicon-list-category-filter',
                 'toggle_slug' => 'filters',
             ],
             'region' => [
-                'label' => esc_html__('Regions (slugs, comma-separated)', 'rubicon-maps'),
+                'label' => esc_html__('Regions', 'rubicon-maps'),
                 'type' => 'text',
+                'description' => esc_html__('Search and select region terms to include in this listing.', 'rubicon-maps'),
+                'id' => 'rubicon-list-region-filter',
                 'toggle_slug' => 'filters',
             ],
             'location_ids' => [
-                'label' => esc_html__('Specific Location IDs', 'rubicon-maps'),
+                'label' => esc_html__('Specific Locations', 'rubicon-maps'),
                 'type' => 'text',
-                'description' => esc_html__('Optional comma-separated IDs to limit this list instance to explicit locations.', 'rubicon-maps'),
+                'description' => esc_html__('Search and select explicit locations to include in this listing.', 'rubicon-maps'),
+                'id' => 'rubicon-list-location-filter',
                 'toggle_slug' => 'filters',
             ],
             'use_fixed_height' => [
