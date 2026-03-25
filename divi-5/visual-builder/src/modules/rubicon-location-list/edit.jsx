@@ -3,6 +3,7 @@ import React from 'react';
 import { __ } from '@wordpress/i18n';
 
 import { PreviewShell } from '../shared/preview';
+import { renderPills, usePreviewLocationData, usePublishedPreviewCount } from '../shared/preview-data';
 import { getSavedSyncId } from '../shared/sync-id';
 import { getTextValue } from '../shared/value';
 import { ModuleClassnames } from './module-classnames';
@@ -18,15 +19,25 @@ export const RubiconLocationListEdit = ({
   name,
 }) => {
   const syncId = getSavedSyncId(attrs?.instanceId);
+  const previewData = usePreviewLocationData({
+    categoryAttr: attrs?.category,
+    regionAttr: attrs?.region,
+    locationIdsAttr: attrs?.locationIds,
+  });
+  const syncedPreviewCount = usePublishedPreviewCount(syncId);
   const savedHeight = getTextValue(attrs?.height);
   const fixedHeight = getTextValue(attrs?.useFixedHeight) === 'on'
     ? savedHeight || (syncId ? __('Synced map height', 'rubicon-maps') : __('Plugin default', 'rubicon-maps'))
     : __('Off', 'rubicon-maps');
+  const locationCount = syncId && null !== syncedPreviewCount
+    ? syncedPreviewCount
+    : previewData.matchedLocationCount;
   const items = [
     { label: __('Sync ID', 'rubicon-maps'), value: syncId || __('Standalone', 'rubicon-maps') },
-    { label: __('Categories', 'rubicon-maps'), value: getTextValue(attrs?.category) },
-    { label: __('Regions', 'rubicon-maps'), value: getTextValue(attrs?.region) },
-    { label: __('Locations', 'rubicon-maps'), value: getTextValue(attrs?.locationIds) },
+    { label: __('# of Locations', 'rubicon-maps'), value: String(locationCount) },
+    { label: __('Categories', 'rubicon-maps'), value: renderPills(previewData.categories) },
+    { label: __('Regions', 'rubicon-maps'), value: renderPills(previewData.regions) },
+    { label: __('Locations', 'rubicon-maps'), value: renderPills(previewData.locations) },
     { label: __('Fixed Height', 'rubicon-maps'), value: fixedHeight },
   ];
 

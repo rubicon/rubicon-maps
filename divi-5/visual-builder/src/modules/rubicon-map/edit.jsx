@@ -3,6 +3,7 @@ import React from 'react';
 import { __ } from '@wordpress/i18n';
 
 import { PreviewShell } from '../shared/preview';
+import { getProviderLabel, publishPreviewCount, renderPills, usePreviewLocationData } from '../shared/preview-data';
 import { getSavedSyncId } from '../shared/sync-id';
 import { getTextValue } from '../shared/value';
 import { ModuleClassnames } from './module-classnames';
@@ -19,9 +20,14 @@ export const RubiconMapEdit = ({
 }) => {
   const syncId = getSavedSyncId(attrs?.instanceId);
   const providerValue = getTextValue(attrs?.provider);
+  const previewData = usePreviewLocationData({
+    categoryAttr: attrs?.category,
+    regionAttr: attrs?.region,
+    locationIdsAttr: attrs?.locationIds,
+  });
   const viewportValue = getTextValue(attrs?.viewportMode);
   const clusteringValue = getTextValue(attrs?.enableClustering);
-  const provider = providerValue || __('Leaflet', 'rubicon-maps');
+  const provider = getProviderLabel(attrs?.provider) || providerValue || __('Leaflet', 'rubicon-maps');
   const viewportMode = viewportValue === 'manual'
     ? __('Manual', 'rubicon-maps')
     : viewportValue === 'default' || !viewportValue
@@ -34,13 +40,19 @@ export const RubiconMapEdit = ({
       : __('On', 'rubicon-maps');
   const zoomHeight = [getTextValue(attrs?.zoom), getTextValue(attrs?.height)].filter(Boolean).join(' / ')
     || __('Plugin defaults', 'rubicon-maps');
+
+  React.useEffect(() => {
+    publishPreviewCount(syncId, previewData.matchedLocationCount);
+  }, [previewData.matchedLocationCount, syncId]);
+
   const items = [
     { label: __('Sync ID', 'rubicon-maps'), value: syncId || __('Standalone', 'rubicon-maps') },
     { label: __('Provider', 'rubicon-maps'), value: provider },
     { label: __('Viewport', 'rubicon-maps'), value: viewportMode },
-    { label: __('Categories', 'rubicon-maps'), value: getTextValue(attrs?.category) },
-    { label: __('Regions', 'rubicon-maps'), value: getTextValue(attrs?.region) },
-    { label: __('Locations', 'rubicon-maps'), value: getTextValue(attrs?.locationIds) },
+    { label: __('# of Locations', 'rubicon-maps'), value: String(previewData.matchedLocationCount) },
+    { label: __('Categories', 'rubicon-maps'), value: renderPills(previewData.categories) },
+    { label: __('Regions', 'rubicon-maps'), value: renderPills(previewData.regions) },
+    { label: __('Locations', 'rubicon-maps'), value: renderPills(previewData.locations) },
     { label: __('Center', 'rubicon-maps'), value: [getTextValue(attrs?.latitude), getTextValue(attrs?.longitude)].filter(Boolean).join(', ') || __('Displayed locations', 'rubicon-maps') },
     { label: __('Zoom / Height', 'rubicon-maps'), value: zoomHeight },
     { label: __('Clustering', 'rubicon-maps'), value: clustering },

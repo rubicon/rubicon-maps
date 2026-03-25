@@ -2,6 +2,7 @@ import React from 'react';
 
 import { __ } from '@wordpress/i18n';
 
+import { parseStoredIntegerList, parseStoredStringList } from './filter-values';
 import { getTextValue } from './value';
 
 const CATEGORY_REST_BASE = 'rubicon_maps_category';
@@ -26,12 +27,6 @@ const PillStyle = {
   fontWeight: 600,
   lineHeight: 1.2,
 };
-
-const parseList = (value) =>
-  getTextValue(value)
-    .split(',')
-    .map((item) => item.trim())
-    .filter(Boolean);
 
 const buildLocationPath = ({ categories, regions, locationIds }) => {
   const params = new URLSearchParams();
@@ -102,9 +97,9 @@ export const getProviderLabel = (attr) => {
 };
 
 export const usePreviewLocationData = ({ categoryAttr, regionAttr, locationIdsAttr }) => {
-  const categories = React.useMemo(() => parseList(categoryAttr), [categoryAttr]);
-  const regions = React.useMemo(() => parseList(regionAttr), [regionAttr]);
-  const locationIds = React.useMemo(() => parseList(locationIdsAttr), [locationIdsAttr]);
+  const categories = React.useMemo(() => parseStoredStringList(categoryAttr), [categoryAttr]);
+  const regions = React.useMemo(() => parseStoredStringList(regionAttr), [regionAttr]);
+  const locationIds = React.useMemo(() => parseStoredIntegerList(locationIdsAttr).map(String), [locationIdsAttr]);
 
   const [state, setState] = React.useState({
     categories,

@@ -66,10 +66,14 @@ final class LocationQueryArgsBuilder
      */
     private function normalizeList(array|string $value): array
     {
-        $items = is_array($value) ? $value : explode(',', (string) $value);
+        $items = $this->normalizeRawItems($value);
         $normalized = [];
 
         foreach ($items as $item) {
+            if (is_array($item)) {
+                $item = $item['slug'] ?? $item['value'] ?? $item['id'] ?? '';
+            }
+
             $slug = trim((string) $item);
 
             if ('' === $slug) {
@@ -92,10 +96,14 @@ final class LocationQueryArgsBuilder
      */
     private function normalizeIds(array|string $value): array
     {
-        $items = is_array($value) ? $value : explode(',', (string) $value);
+        $items = $this->normalizeRawItems($value);
         $normalized = [];
 
         foreach ($items as $item) {
+            if (is_array($item)) {
+                $item = $item['id'] ?? $item['value'] ?? '';
+            }
+
             $id = (int) trim((string) $item);
 
             if ($id <= 0 || in_array($id, $normalized, true)) {
@@ -106,5 +114,34 @@ final class LocationQueryArgsBuilder
         }
 
         return $normalized;
+    }
+
+    /**
+     * Normalize legacy comma-separated strings and structured JSON arrays into a flat item list.
+     *
+     * @param array<int, mixed>|string $value
+     * @return array<int, mixed>
+     */
+    private function normalizeRawItems(array|string $value): array
+    {
+        if (is_array($value)) {
+            return $value;
+        }
+
+        $value = trim($value);
+
+        if ('' === $value) {
+            return [];
+        }
+
+        if (str_starts_with($value, '[')) {
+            $decoded = json_decode($value, true);
+
+            if (JSON_ERROR_NONE === json_last_error() && is_array($decoded)) {
+                return $decoded;
+            }
+        }
+
+        return explode(',', $value);
     }
 }
