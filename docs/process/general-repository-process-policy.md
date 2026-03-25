@@ -177,6 +177,7 @@ When applicable, also verify:
 - Tags and releases should stay in sync.
 - Release notes should summarize features, fixes, documentation, packaging, and notable internal changes.
 - Release assets should include the actual distributables and checksum artifacts when available.
+- Version metadata in product headers/constants, changelog entries, README/readme files, and dedicated release-note docs must be updated together as one release slice.
 - If signature or verification policy applies, tags should point at the intended verified commit.
 
 ## Tagging Best Practice
@@ -206,6 +207,7 @@ Release notes should not:
 ## Repository Hygiene
 
 - Keep README, CHANGELOG, release notes, and product metadata aligned.
+- Keep release artifacts aligned with that metadata: if the project ships installable zips or checksums, the published release should attach them.
 - Do not let docs drift from actual behavior.
 - Do not commit local-only infrastructure notes unless they belong in the project.
 - Do not store secrets in the repo.
@@ -245,10 +247,12 @@ Apply all standard rules above, plus:
 - use that prefix consistently for post type keys, taxonomy keys, option names, action/filter names, nonce actions, cache keys, and other machine-facing identifiers
 - release assets must include the installable plugin zip when releases are distributed as zips
 - plugin version headers, changelog, and release metadata must align
+- `README.md`, `readme.txt`, dedicated release-note docs, and any maintained versioned builder/package metadata must align with that same release version
 - plugin entries on the WordPress Plugins screen should include an action link to the primary settings or onboarding page when the plugin exposes one
 - plugins distributed outside WordPress.org should declare a real `Update URI` and support native Plugins-screen auto-update controls when a valid update source exists
 - required built assets must be included in release packaging
 - development-only files and machine junk must not ship in the release zip
+- published releases should attach the installable plugin zip and checksum artifact when available
 - upgrade and uninstall behavior should be considered part of release verification
 - `readme.txt` must reflect actual plugin behavior and supported environments
 

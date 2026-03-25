@@ -81,10 +81,12 @@ Do not move builder-generation-specific behavior back into core loader code unle
 Every release candidate must verify:
 
 - plugin header version matches the intended release version
-- `README.md`, `readme.txt`, and `CHANGELOG.md` agree on the intended release state
+- `README.md`, `readme.txt`, `CHANGELOG.md`, and `docs/releases/X.Y.Z.md` agree on the intended release state
+- `src/Support/Plugin.php` and any maintained versioned builder/package metadata agree on the intended release version
 - the Divi 5 compiled bundle is present when required for runtime
 - release packaging excludes local/editor junk such as `.DS_Store`, `__MACOSX`, and machine-local files
 - the installable plugin zip contains the assets required for runtime
+- the Forgejo release has the installable zip and checksum attached when those artifacts are produced
 
 ## Release Naming for Rubicon Maps
 

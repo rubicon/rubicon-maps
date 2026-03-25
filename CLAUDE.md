@@ -45,3 +45,6 @@ Rubicon Maps is a Divi-first WordPress mapping plugin with:
 - Include Composer autoload output in the release zip.
 - Exclude local/editor junk, tests, docs-only files, and development-only dependencies from the release artifact.
 - Use `scripts/package-release.sh <version>` to create the distributable zip once the repo is release-ready.
+- Treat release metadata as one atomic slice: plugin version header, support/version constants, `README.md`, `readme.txt`, `CHANGELOG.md`, and `docs/releases/X.Y.Z.md` should all move together.
+- If versioned builder/package metadata exists in the maintained source tree, keep it aligned with the release version as part of the same release pass.
+- Publish the Forgejo release with the installable zip and checksum attached, not just the source archive links.

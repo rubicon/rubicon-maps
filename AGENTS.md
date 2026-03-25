@@ -35,3 +35,6 @@ Defines repository-specific collaboration rules for Rubicon Maps.
 - Release titles use `X.Y.Z`.
 - Release notes begin with `Rubicon Maps vX.Y.Z (YYYY-MM-DD)`.
 - Ship installable zip artifacts, not just source snapshots.
+- When cutting a release, update `rubicon-maps.php`, `src/Support/Plugin.php`, `README.md`, `readme.txt`, `CHANGELOG.md`, and `docs/releases/X.Y.Z.md` together.
+- Keep any versioned builder/package metadata aligned with the release version when those files are part of the maintained source tree.
+- Attach the installable zip and checksum artifact to the Forgejo release, not just the default source archives.
