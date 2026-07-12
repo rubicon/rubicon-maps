@@ -12,16 +12,16 @@ Rubicon Maps is a Divi-first mapping plugin that helps you manage real locations
 
 == Description ==
 
-Rubicon Maps allows you to create interactive, category-based maps with linked location lists, admin-friendly location management, and frontend filtering. It ships with shortcode, REST, CSV, and Divi Builder integration, including dedicated runtime layers for both Divi 4 and Divi 5.
+Rubicon Maps allows you to create interactive, category-based maps with linked location lists, admin-friendly location management, and frontend filtering. It ships with shortcode, REST, CSV, and Divi Builder integration with a dedicated Divi 5 Visual Builder runtime.
 
 Compatibility for v1.0.1:
 * Requires WordPress 5.8 or newer
 * Tested through WordPress 6.9.4
-* Supports Divi 4.x and Divi 5.x
+* Supports Divi 5.x
 * Verified in the current release cycle with Divi 5.1.0
 
 == Features ==
-* Dedicated Divi 4 and Divi 5 module runtimes plus shortcodes
+* Dedicated Divi 5 module runtime plus shortcodes
 * WordPress-native location entry using title, excerpt, content, featured image, and structured metadata
 * Leaflet maps with OpenStreetMap tiles
 * Structured location metadata
@@ -58,7 +58,7 @@ Example:
 Leaflet/OpenStreetMap is the supported provider path for the 1.0.x release line. Additional provider work is future scope and not part of the current 1.0.x support promise.
 
 = Which WordPress and Divi versions are supported? =
-Rubicon Maps requires WordPress 5.8 or newer and has been tested through WordPress 6.9.4. It supports Divi 4.x and Divi 5.x, and the current v1 release cycle was verified with Divi 5.1.0.
+Rubicon Maps requires WordPress 5.8 or newer and has been tested through WordPress 6.9.4. It supports Divi 5.x, and the current release cycle was verified with Divi 5.1.0.
 
 = Can I use map and list separately? =  
 Yes — use separate shortcodes or Divi modules and link them via a shared `id`.

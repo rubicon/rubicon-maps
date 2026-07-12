@@ -35,7 +35,6 @@ if (!defined('RTV_RM_VERSION')) {
 }
 
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/divi-4/divi-4.php';
 require_once __DIR__ . '/divi-5/divi-5.php';
 
 register_activation_hook(__FILE__, [RubiconMaps\Support\PluginLifecycle::class, 'activate']);

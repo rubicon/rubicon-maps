@@ -1,13 +1,13 @@
 # Rubicon Maps
 
-Rubicon Maps is a Divi-first WordPress location mapping plugin built for people who want real location management without turning every map into a shortcode scavenger hunt. It ships with native location management, linked map/list output, CSV import/export, and dual Divi support: a dedicated `divi-4` compatibility layer for legacy builder modules and a dedicated `divi-5` Visual Builder runtime for Divi 5.
+Rubicon Maps is a Divi-first WordPress location mapping plugin built for people who want real location management without turning every map into a shortcode scavenger hunt. It ships with native location management, linked map/list output, CSV import/export, and a dedicated `divi-5` Visual Builder runtime for Divi 5.
 
 > Version: `1.0.1`  
 > License: `GPLv2 or later`  
 > Requires WordPress: `5.8+`  
 > Requires PHP: `8.1+`  
 > Tested up to: `WordPress 6.9.4`  
-> Lowest supported Divi: `4.0+`  
+> Requires Divi: `5.0+`  
 > Tested with Divi: `5.1.0`
 
 ## What ships in v1.0.1
@@ -15,7 +15,6 @@ Rubicon Maps is a Divi-first WordPress location mapping plugin built for people 
 - Custom post type: `rubicon_location`
 - Taxonomies: `rubicon_maps_category`, `rubicon_maps_region`
 - Linked frontend map and location list rendering
-- Divi 4 modules: `Rubicon Map`, `Rubicon Location List`
 - Divi 5 modules: `Rubicon Map`, `Rubicon Location List`
 - Shortcodes: `[rubicon_maps]`, `[rubicon_maps_list]`
 - REST API: `/wp-json/rubicon-maps/v1/locations`
@@ -28,19 +27,18 @@ Rubicon Maps is a Divi-first WordPress location mapping plugin built for people 
 
 ## Divi support
 
-Rubicon Maps now uses two distinct integration paths:
+Rubicon Maps uses a dedicated Divi 5 integration path:
 
-- `divi-4/` contains the Divi 4 compatibility bootstrap and legacy builder modules.
 - `divi-5/` contains the dedicated Divi 5 server registration and Visual Builder assets.
-- `src/` contains the generation-agnostic WordPress core: CPTs, taxonomies, REST, settings, shortcodes, and shared render/query logic.
+- `src/` contains the builder-agnostic WordPress core: CPTs, taxonomies, REST, settings, shortcodes, and shared render/query logic.
 
-This keeps the shared mapping/query logic in the plugin core while letting each Divi generation use the architecture Elegant Themes is currently documenting.
+This keeps the shared mapping/query logic in the plugin core while the Divi 5 layer uses the architecture Elegant Themes documents.
 
 Compatibility position for v1:
 
 - Requires WordPress `5.8+`
 - Tested through WordPress `6.9.4`
-- Supports Divi `4.x` and `5.x`
+- Supports Divi `5.x`
 - Verified in the current release cycle with Divi `5.1.0`
 
 ## Shortcodes

@@ -13,7 +13,7 @@ Defines repository-specific collaboration rules for Rubicon Maps.
 
 ## Engineering Expectations
 
-- Keep Divi 4 and Divi 5 runtimes separate.
+- Keep Divi 5 module code separate from shared plugin logic.
 - Keep shared plugin logic in `src/`.
 - Preserve WordPress-native content fields for locations: title, excerpt, content, thumbnail, ordering.
 - Add or update tests whenever behavior changes in a testable pure-PHP path.
@@ -21,12 +21,11 @@ Defines repository-specific collaboration rules for Rubicon Maps.
 ## Verification
 
 - `composer dump-autoload`
-- `php tests/php/DiviBootstrapDeciderTest.php`
 - `php tests/php/LocationQueryArgsBuilderTest.php`
 - `php tests/php/LocationAddressFormatterTest.php`
 - `php tests/php/LocationCsvTransformerTest.php`
 - `php tests/php/MapInstanceConfigBuilderTest.php`
-- `find src divi-4 divi-5 tests -name '*.php' -print0 | xargs -0 -n1 php -l`
+- `find src divi-5 tests -name '*.php' -print0 | xargs -0 -n1 php -l`
 - `cd divi-5/visual-builder && npm ci && npm run build`
 
 ## Release Discipline
