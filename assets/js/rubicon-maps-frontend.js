@@ -1,4 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
+  const prefersReducedMotion = Boolean(
+    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+
   const maps = document.querySelectorAll("[data-rubicon-map='1']");
   const lists = document.querySelectorAll("[data-rubicon-location-list='1']");
 
@@ -61,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
         scrollWheelZoom,
         zoomControl,
         doubleClickZoom,
-      }).setView([lat, lng], zoom);
+      }).setView([lat, lng], zoom, { animate: !prefersReducedMotion });
       L.tileLayer(tileUrl, {
         attribution: "&copy; OpenStreetMap contributors",
       }).addTo(map);
@@ -77,16 +81,39 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    fetchLocations(config)
-      .then((locations) => {
-        markerBundle = renderMarkers(provider, map, locations, config);
-        if (viewportMode === "auto_fit") {
-          fitMapToMarkers(provider, map, markerBundle.markerIndex, config);
-        }
-        syncLocationLists(syncKey, locations, config.height);
-        bindListInteractions(syncKey, provider, map, markerBundle);
-      })
-      .catch((error) => console.error("Rubicon Maps location load error", error));
+    function loadAndRenderLocations() {
+      const strings = getStrings();
+
+      setState(mapRoot, "loading", strings.loading);
+      syncLocationListsLoading(syncKey);
+
+      return fetchLocations(config)
+        .then((locations) => {
+          markerBundle = renderMarkers(provider, map, locations, config);
+
+          if (viewportMode === "auto_fit") {
+            fitMapToMarkers(provider, map, markerBundle.markerIndex, config);
+          }
+
+          setState(mapRoot, locations.length ? "ready" : "empty", locations.length ? "" : strings.emptyStandalone);
+          syncLocationLists(syncKey, locations, config.height);
+          bindListInteractions(syncKey, provider, map, markerBundle, mapRoot);
+        })
+        .catch((error) => {
+          console.error("Rubicon Maps location load error", error);
+          showMapError();
+        });
+    }
+
+    function showMapError() {
+      const strings = getStrings();
+
+      setState(mapRoot, "error", strings.error);
+      appendRetryButton(mapRoot.querySelector(".rubicon-maps__status"), loadAndRenderLocations);
+      syncLocationListsError(syncKey, loadAndRenderLocations);
+    }
+
+    loadAndRenderLocations();
   }
 
   function fetchLocations(config) {
@@ -116,6 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const clusterGroup = enableClustering
       ? L.markerClusterGroup({
           maxClusterRadius: Number.parseInt(config.clusterRadius || 100, 10),
+          iconCreateFunction: buildClusterIcon,
         })
       : null;
 
@@ -145,10 +173,11 @@ document.addEventListener("DOMContentLoaded", function () {
         markerIndex.set(String(location.id), { marker, infoWindow, location });
       } else {
         const markerOptions = {};
+        const iconUrl = location.marker_icon_url || defaultMarkerUrl();
 
-        if (location.marker_icon_url) {
+        if (iconUrl) {
           markerOptions.icon = L.icon({
-            iconUrl: location.marker_icon_url,
+            iconUrl,
             iconSize: [36, 36],
             iconAnchor: [18, 36],
             popupAnchor: [0, -32],
@@ -184,6 +213,26 @@ document.addEventListener("DOMContentLoaded", function () {
     return { markerIndex, clusterGroup };
   }
 
+  function buildClusterIcon(cluster) {
+    const count = cluster.getChildCount();
+    let sizeClass = "rtv-rm-cluster--sm";
+
+    if (count >= 50) {
+      sizeClass = "rtv-rm-cluster--lg";
+    } else if (count >= 10) {
+      sizeClass = "rtv-rm-cluster--md";
+    }
+
+    return L.divIcon({
+      html: "<div>" + count + "</div>",
+      className: "rtv-rm-cluster " + sizeClass,
+    });
+  }
+
+  function defaultMarkerUrl() {
+    return typeof rubiconMapsConfig !== "undefined" ? rubiconMapsConfig.defaultMarkerUrl : undefined;
+  }
+
   function fitMapToMarkers(provider, map, markerIndex, config) {
     const entries = Array.from(markerIndex.values());
     const padding = Number.parseInt(config.autoFitPadding || 24, 10);
@@ -203,7 +252,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      map.setView([lat, lng], Number.parseInt(config.zoom || map.getZoom(), 10));
+      map.setView([lat, lng], Number.parseInt(config.zoom || map.getZoom(), 10), { animate: !prefersReducedMotion });
       return;
     }
 
@@ -223,10 +272,10 @@ document.addEventListener("DOMContentLoaded", function () {
       Number.parseFloat(location.latitude),
       Number.parseFloat(location.longitude),
     ]);
-    map.fitBounds(bounds, { padding: [padding, padding] });
+    map.fitBounds(bounds, { padding: [padding, padding], animate: !prefersReducedMotion });
   }
 
-  function bindListInteractions(syncKey, provider, map, markerBundle) {
+  function bindListInteractions(syncKey, provider, map, markerBundle, mapRoot) {
     const markerIndex = markerBundle.markerIndex;
     const clusterGroup = markerBundle.clusterGroup;
     const listRoots = document.querySelectorAll(
@@ -263,6 +312,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           highlightListItem(listRoot, item);
           dispatchLocationClick(location);
+          announceFocusedLocation(mapRoot, location);
         };
 
         item.addEventListener("click", activate);
@@ -276,16 +326,37 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  function syncLocationLists(syncKey, locations, mapHeight) {
-    if (!syncKey) {
+  function announceFocusedLocation(mapRoot, location) {
+    if (!mapRoot) {
       return;
     }
 
-    const listRoots = document.querySelectorAll(
-      `[data-rubicon-location-list='1'][data-sync-id='${escapeSelector(syncKey)}'][data-sync-mode='follow-map']`
-    );
+    const strings = getStrings();
 
-    listRoots.forEach((listRoot) => {
+    setState(mapRoot, "ready", formatString(strings.focusOnLocation, location.title));
+  }
+
+  function syncLocationListsLoading(syncKey) {
+    const strings = getStrings();
+
+    findSyncedListRoots(syncKey).forEach((listRoot) => {
+      setState(listRoot, "loading", strings.loading);
+    });
+  }
+
+  function syncLocationListsError(syncKey, retryHandler) {
+    const strings = getStrings();
+
+    findSyncedListRoots(syncKey).forEach((listRoot) => {
+      setState(listRoot, "error", strings.error);
+      appendRetryButton(listRoot.querySelector(".rubicon-location-list__status"), retryHandler);
+    });
+  }
+
+  function syncLocationLists(syncKey, locations, mapHeight) {
+    const strings = getStrings();
+
+    findSyncedListRoots(syncKey).forEach((listRoot) => {
       const itemsContainer = ensureListItemsContainer(listRoot);
       const emptyState = listRoot.querySelector(".rubicon-location-list__empty");
 
@@ -297,16 +368,30 @@ document.addEventListener("DOMContentLoaded", function () {
         itemsContainer.innerHTML = "";
         const empty = document.createElement("p");
         empty.className = "rubicon-location-list__empty";
-        empty.textContent = "No locations matched this synced map.";
+        empty.textContent = strings.emptySynced;
         listRoot.appendChild(empty);
+        setState(listRoot, "empty", strings.emptySynced);
       } else {
         itemsContainer.innerHTML = locations.map(buildListItemHtml).join("");
+        setState(listRoot, "ready", "");
       }
 
       if (listRoot.getAttribute("data-use-fixed-height") === "1" && !listRoot.getAttribute("data-height")) {
         applyListHeight(listRoot, mapHeight || listRoot.getAttribute("data-default-height") || "480px");
       }
     });
+  }
+
+  function findSyncedListRoots(syncKey) {
+    if (!syncKey) {
+      return [];
+    }
+
+    return Array.from(
+      document.querySelectorAll(
+        `[data-rubicon-location-list='1'][data-sync-id='${escapeSelector(syncKey)}'][data-sync-mode='follow-map']`
+      )
+    );
   }
 
   function highlightListItem(listRoot, activeItem) {
@@ -374,7 +459,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function focusLeafletMarker(map, marker, clusterGroup) {
     const openMarker = () => {
-      map.panTo(marker.getLatLng());
+      map.panTo(marker.getLatLng(), { animate: !prefersReducedMotion });
       marker.openPopup();
     };
 
@@ -383,7 +468,7 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    map.setView(marker.getLatLng(), Math.max(map.getZoom(), 12));
+    map.setView(marker.getLatLng(), Math.max(map.getZoom(), 12), { animate: !prefersReducedMotion });
     openMarker();
   }
 
@@ -419,6 +504,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function buildListItemHtml(location) {
+    const strings = getStrings();
     const address = location.formatted_address
       ? `<div class="rubicon-location-list__meta">${escapeHtml(location.formatted_address)}</div>`
       : "";
@@ -434,13 +520,68 @@ document.addEventListener("DOMContentLoaded", function () {
         data-lng="${escapeHtml(location.longitude || "")}"
         tabindex="0"
         role="button"
-        aria-label="Focus map on ${escapeHtml(location.title)}"
+        aria-label="${escapeHtml(formatString(strings.focusOnLocation, location.title))}"
       >
         <strong class="rubicon-location-list__title">${escapeHtml(location.title)}</strong>
         ${address}
         ${excerpt}
       </li>
     `;
+  }
+
+  function getStrings() {
+    return window.rubiconMapsStrings || {};
+  }
+
+  function formatString(template, value) {
+    return String(template || "").replace("%s", value);
+  }
+
+  function defaultStateMessage(state) {
+    const strings = getStrings();
+
+    switch (state) {
+      case "loading":
+        return strings.loading || "";
+      case "error":
+        return strings.error || "";
+      case "empty":
+        return strings.emptyStandalone || "";
+      default:
+        return "";
+    }
+  }
+
+  function setState(root, state, message) {
+    if (!root) {
+      return;
+    }
+
+    root.setAttribute("data-state", state);
+
+    const statusNode = root.querySelector(".rubicon-maps__status, .rubicon-location-list__status");
+
+    if (!statusNode) {
+      return;
+    }
+
+    statusNode.textContent = typeof message === "string" ? message : defaultStateMessage(state);
+  }
+
+  function appendRetryButton(statusNode, onRetry) {
+    if (!statusNode) {
+      return;
+    }
+
+    const strings = getStrings();
+    const retryButton = document.createElement("button");
+
+    retryButton.type = "button";
+    retryButton.className = "rtv-rm-retry-button";
+    retryButton.textContent = strings.retry || "";
+    retryButton.addEventListener("click", onRetry);
+
+    statusNode.appendChild(retryButton);
   }
 
   function escapeSelector(value) {

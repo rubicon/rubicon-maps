@@ -93,6 +93,7 @@ final class FrontendAssetManager
                 'restBase' => rest_url(Plugin::REST_NAMESPACE . '/locations'),
                 'defaultProvider' => SettingsHelper::get_option('default_provider', 'leaflet'),
                 'leafletMarkerShadow' => plugins_url('/assets/leaflet/marker-shadow.png', RTV_RM_PLUGIN_FILE),
+                'defaultMarkerUrl' => plugins_url('/assets/img/rtv-rm-marker.svg', RTV_RM_PLUGIN_FILE),
             ]
         );
 
