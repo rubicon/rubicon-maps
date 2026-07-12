@@ -31,7 +31,7 @@ final class LocationListFilters
      */
     public static function prependInlineIdAction(array $actions, int $postId): array
     {
-        return ['rubicon_location_id' => 'ID: ' . $postId] + $actions;
+        return ['rtv_rm_location_id' => 'ID: ' . $postId] + $actions;
     }
 
     /**

@@ -43,8 +43,8 @@ final class AdminAssets
         }
 
         wp_enqueue_style(
-            'rubicon-maps-admin',
-            plugins_url('/assets/css/rubicon-maps-admin.css', RUBICON_MAPS_PLUGIN_FILE),
+            'rtv-rm-admin',
+            plugins_url('/assets/css/rubicon-maps-admin.css', RTV_RM_PLUGIN_FILE),
             [],
             Plugin::version()
         );
@@ -52,15 +52,15 @@ final class AdminAssets
         wp_enqueue_media();
 
         wp_enqueue_script(
-            'rubicon-maps-admin-meta',
-            plugins_url('/assets/js/admin-meta.js', RUBICON_MAPS_PLUGIN_FILE),
+            'rtv-rm-admin-meta',
+            plugins_url('/assets/js/admin-meta.js', RTV_RM_PLUGIN_FILE),
             ['jquery'],
             Plugin::version(),
             true
         );
 
         wp_localize_script(
-            'rubicon-maps-admin-meta',
+            'rtv-rm-admin-meta',
             'rubiconMapsAdmin',
             [
                 'ajaxUrl' => admin_url('admin-ajax.php'),

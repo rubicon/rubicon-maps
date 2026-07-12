@@ -19,7 +19,7 @@ final class PluginActionLinks
     public static function init(): void
     {
         add_filter(
-            'plugin_action_links_' . plugin_basename(RUBICON_MAPS_PLUGIN_FILE),
+            'plugin_action_links_' . plugin_basename(RTV_RM_PLUGIN_FILE),
             [self::class, 'addSettingsLink']
         );
     }

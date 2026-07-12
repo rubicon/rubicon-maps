@@ -42,32 +42,32 @@ final class FrontendAssetManager
         }
 
         wp_register_style(
-            'rubicon-maps-frontend',
-            plugins_url('/assets/css/rubicon-maps-frontend.css', RUBICON_MAPS_PLUGIN_FILE),
+            'rtv-rm-frontend',
+            plugins_url('/assets/css/rubicon-maps-frontend.css', RTV_RM_PLUGIN_FILE),
             [],
             Plugin::version()
         );
 
         wp_register_script(
-            'rubicon-maps-frontend',
-            plugins_url('/assets/js/rubicon-maps-frontend.js', RUBICON_MAPS_PLUGIN_FILE),
+            'rtv-rm-frontend',
+            plugins_url('/assets/js/rubicon-maps-frontend.js', RTV_RM_PLUGIN_FILE),
             [],
             Plugin::version(),
             true
         );
 
         wp_localize_script(
-            'rubicon-maps-frontend',
+            'rtv-rm-frontend',
             'rubiconMapsConfig',
             [
                 'restBase' => rest_url(Plugin::REST_NAMESPACE . '/locations'),
                 'defaultProvider' => SettingsHelper::get_option('default_provider', 'leaflet'),
-                'leafletMarkerShadow' => plugins_url('/assets/leaflet/marker-shadow.png', RUBICON_MAPS_PLUGIN_FILE),
+                'leafletMarkerShadow' => plugins_url('/assets/leaflet/marker-shadow.png', RTV_RM_PLUGIN_FILE),
             ]
         );
 
-        wp_enqueue_style('rubicon-maps-frontend');
-        wp_enqueue_script('rubicon-maps-frontend');
+        wp_enqueue_style('rtv-rm-frontend');
+        wp_enqueue_script('rtv-rm-frontend');
 
         self::$frontendAssetsEnqueued = true;
     }
@@ -79,7 +79,7 @@ final class FrontendAssetManager
 
             if ('' !== $apiKey) {
                 wp_enqueue_script(
-                    'rubicon-maps-google-maps',
+                    'rtv-rm-google-maps',
                     'https://maps.googleapis.com/maps/api/js?key=' . rawurlencode($apiKey),
                     [],
                     null,

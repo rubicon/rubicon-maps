@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 define('ABSPATH', __DIR__ . '/../../');
-define('RUBICON_MAPS_PLUGIN_FILE', __DIR__ . '/../../rubicon-maps.php');
+define('RTV_RM_PLUGIN_FILE', __DIR__ . '/../../rubicon-maps.php');
 
 function esc_attr(string $value): string
 {
@@ -49,7 +49,7 @@ final class WP_Query
 function get_option(string $option, mixed $default = false): mixed
 {
     return [
-        'rubicon_maps_options' => [
+        'rtv_rm_options' => [
             'default_map_height' => '480px',
         ],
     ][$option] ?? $default;
