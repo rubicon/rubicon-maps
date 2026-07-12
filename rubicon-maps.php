@@ -18,20 +18,20 @@
 
 defined('ABSPATH') || exit;
 
-if (!defined('RUBICON_MAPS_PLUGIN_FILE')) {
-    define('RUBICON_MAPS_PLUGIN_FILE', __FILE__);
+if (!defined('RTV_RM_PLUGIN_FILE')) {
+    define('RTV_RM_PLUGIN_FILE', __FILE__);
 }
 
-if (!defined('RUBICON_MAPS_PLUGIN_PATH')) {
-    define('RUBICON_MAPS_PLUGIN_PATH', plugin_dir_path(__FILE__));
+if (!defined('RTV_RM_PLUGIN_PATH')) {
+    define('RTV_RM_PLUGIN_PATH', plugin_dir_path(__FILE__));
 }
 
-if (!defined('RUBICON_MAPS_PLUGIN_URL')) {
-    define('RUBICON_MAPS_PLUGIN_URL', plugin_dir_url(__FILE__));
+if (!defined('RTV_RM_PLUGIN_URL')) {
+    define('RTV_RM_PLUGIN_URL', plugin_dir_url(__FILE__));
 }
 
-if (!defined('RUBICON_MAPS_VERSION')) {
-    define('RUBICON_MAPS_VERSION', '1.0.1');
+if (!defined('RTV_RM_VERSION')) {
+    define('RTV_RM_VERSION', '1.0.1');
 }
 
 require_once __DIR__ . '/vendor/autoload.php';

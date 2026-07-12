@@ -17,7 +17,7 @@ class CategoryMeta {
 
     public static function add_category_fields() {
         ?>
-        <?php wp_nonce_field('rubicon_maps_save_category_meta', 'rubicon_maps_category_meta_nonce'); ?>
+        <?php wp_nonce_field('rtv_rm_save_category_meta', 'rtv_rm_category_meta_nonce'); ?>
         <div class="form-field">
             <label for="cat_marker_icon"><?php _e('Marker Icon', 'rubicon-maps'); ?></label>
             <input type="text" name="cat_marker_icon" id="cat_marker_icon" value="" />
@@ -38,7 +38,7 @@ class CategoryMeta {
         $popup_name = get_term_meta($term->term_id, 'cat_popup_name', true);
         $popup_desc = get_term_meta($term->term_id, 'cat_popup_desc', true);
         ?>
-        <?php wp_nonce_field('rubicon_maps_save_category_meta', 'rubicon_maps_category_meta_nonce'); ?>
+        <?php wp_nonce_field('rtv_rm_save_category_meta', 'rtv_rm_category_meta_nonce'); ?>
         <tr class="form-field">
             <th scope="row" valign="top"><label for="cat_marker_icon"><?php _e('Marker Icon', 'rubicon-maps'); ?></label></th>
             <td><input type="text" name="cat_marker_icon" id="cat_marker_icon" value="<?php echo esc_attr($marker_icon); ?>" /></td>
@@ -55,7 +55,7 @@ class CategoryMeta {
     }
 
     public static function save_category_meta($term_id) {
-        if (!isset($_POST['rubicon_maps_category_meta_nonce']) || !wp_verify_nonce($_POST['rubicon_maps_category_meta_nonce'], 'rubicon_maps_save_category_meta')) {
+        if (!isset($_POST['rtv_rm_category_meta_nonce']) || !wp_verify_nonce($_POST['rtv_rm_category_meta_nonce'], 'rtv_rm_save_category_meta')) {
             return;
         }
 

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 define('ABSPATH', __DIR__ . '/../../');
-define('RUBICON_MAPS_PLUGIN_FILE', __DIR__ . '/../../rubicon-maps.php');
+define('RTV_RM_PLUGIN_FILE', __DIR__ . '/../../rubicon-maps.php');
 
 $GLOBALS['rubicon_test_enqueued_scripts'] = [];
 $GLOBALS['rubicon_test_enqueued_styles'] = [];
@@ -87,17 +87,17 @@ $GLOBALS['rubicon_test_options'][Plugin::OPTION_NAME] = [
 resetAssetManagerState();
 FrontendAssetManager::enqueueList();
 
-assertTrueAsset(isset($GLOBALS['rubicon_test_enqueued_styles']['rubicon-maps-frontend']), 'List rendering should enqueue shared Rubicon Maps frontend styles.');
-assertTrueAsset(isset($GLOBALS['rubicon_test_enqueued_scripts']['rubicon-maps-frontend']), 'List rendering should enqueue shared Rubicon Maps frontend scripts.');
+assertTrueAsset(isset($GLOBALS['rubicon_test_enqueued_styles']['rtv-rm-frontend']), 'List rendering should enqueue shared Rubicon Maps frontend styles.');
+assertTrueAsset(isset($GLOBALS['rubicon_test_enqueued_scripts']['rtv-rm-frontend']), 'List rendering should enqueue shared Rubicon Maps frontend scripts.');
 assertTrueAsset(!isset($GLOBALS['rubicon_test_enqueued_styles']['leaflet-css']), 'List rendering should not enqueue Leaflet styles.');
 assertTrueAsset(!isset($GLOBALS['rubicon_test_enqueued_scripts']['leaflet-js']), 'List rendering should not enqueue Leaflet scripts.');
-assertTrueAsset(!isset($GLOBALS['rubicon_test_enqueued_scripts']['rubicon-maps-google-maps']), 'List rendering should not enqueue Google Maps scripts.');
+assertTrueAsset(!isset($GLOBALS['rubicon_test_enqueued_scripts']['rtv-rm-google-maps']), 'List rendering should not enqueue Google Maps scripts.');
 
 resetAssetManagerState();
 FrontendAssetManager::enqueueMap('google');
 
 assertTrueAsset(isset($GLOBALS['rubicon_test_enqueued_styles']['leaflet-css']), 'Map rendering should fall back to Leaflet assets when Google is requested without an API key.');
 assertTrueAsset(isset($GLOBALS['rubicon_test_enqueued_scripts']['leaflet-js']), 'Map rendering should enqueue Leaflet scripts when Google is requested without an API key.');
-assertTrueAsset(!isset($GLOBALS['rubicon_test_enqueued_scripts']['rubicon-maps-google-maps']), 'Map rendering should not enqueue Google Maps without an API key.');
+assertTrueAsset(!isset($GLOBALS['rubicon_test_enqueued_scripts']['rtv-rm-google-maps']), 'Map rendering should not enqueue Google Maps without an API key.');
 
 echo 'FrontendAssetManagerTest passed.' . PHP_EOL;

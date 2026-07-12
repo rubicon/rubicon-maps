@@ -26,7 +26,7 @@ $actions = [
 ];
 
 $expected = [
-    'rubicon_location_id' => 'ID: 43',
+    'rtv_rm_location_id' => 'ID: 43',
     'edit' => 'Edit',
     'inline hide-if-no-js' => 'Quick Edit',
     'trash' => 'Trash',

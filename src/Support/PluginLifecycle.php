@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
 
 final class PluginLifecycle
 {
-    private const VERSION_OPTION = 'rtv_maps_plugin_version';
+    private const VERSION_OPTION = 'rtv_rm_plugin_version';
 
     public static function activate(): void
     {

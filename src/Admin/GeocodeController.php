@@ -57,7 +57,7 @@ final class GeocodeController
                 'timeout' => 10,
                 'headers' => [
                     'Accept' => 'application/json',
-                    'User-Agent' => sprintf('%s Rubicon Maps/%s', get_bloginfo('name'), defined('RUBICON_MAPS_VERSION') ? RUBICON_MAPS_VERSION : 'dev'),
+                    'User-Agent' => sprintf('%s Rubicon Maps/%s', get_bloginfo('name'), defined('RTV_RM_VERSION') ? RTV_RM_VERSION : 'dev'),
                 ],
             ]
         );

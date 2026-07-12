@@ -28,7 +28,7 @@ if (!defined('ABSPATH')) {
 
 final class PluginUpdater
 {
-    private const CACHE_KEY = 'rtv_maps_update_release';
+    private const CACHE_KEY = 'rtv_rm_update_release';
     private const CACHE_TTL = 600;
 
     public static function init(): void
@@ -45,7 +45,7 @@ final class PluginUpdater
      */
     public static function filterUpdate($update, array $pluginData, string $pluginFile, array $locales)
     {
-        if (plugin_basename(RUBICON_MAPS_PLUGIN_FILE) !== $pluginFile) {
+        if (plugin_basename(RTV_RM_PLUGIN_FILE) !== $pluginFile) {
             return $update;
         }
 
@@ -136,7 +136,7 @@ final class PluginUpdater
         }
 
         $transient = get_site_transient('update_plugins');
-        $pluginFile = plugin_basename(RUBICON_MAPS_PLUGIN_FILE);
+        $pluginFile = plugin_basename(RTV_RM_PLUGIN_FILE);
 
         if (
             is_object($transient)

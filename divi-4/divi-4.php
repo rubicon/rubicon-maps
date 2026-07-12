@@ -38,15 +38,15 @@ $enqueueDivi4FilterAsset = static function (): void {
     }
 
     wp_enqueue_script(
-        'rubicon-maps-divi4-filter-fields',
-        plugins_url('/assets/js/divi4-builder-filters.js', RUBICON_MAPS_PLUGIN_FILE),
+        'rtv-rm-divi4-filter-fields',
+        plugins_url('/assets/js/divi4-builder-filters.js', RTV_RM_PLUGIN_FILE),
         [],
         Plugin::version(),
         true
     );
 
     wp_localize_script(
-        'rubicon-maps-divi4-filter-fields',
+        'rtv-rm-divi4-filter-fields',
         'rubiconMapsDivi4Filters',
         [
             'restBase' => rest_url(),

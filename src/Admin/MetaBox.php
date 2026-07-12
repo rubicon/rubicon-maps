@@ -25,7 +25,7 @@ class MetaBox {
 
     public static function register_meta_box() {
         add_meta_box(
-            'rubicon_location_meta',
+            'rtv_rm_location_meta',
             __('Location Details', 'rubicon-maps'),
             [__CLASS__, 'render_meta_box'],
             Plugin::POST_TYPE_LOCATION,
@@ -35,7 +35,7 @@ class MetaBox {
     }
 
     public static function render_meta_box($post) {
-        wp_nonce_field('rubicon_maps_save_meta', 'rubicon_maps_meta_nonce');
+        wp_nonce_field('rtv_rm_save_meta', 'rtv_rm_meta_nonce');
         echo '<div class="rubicon-admin-panel">';
         echo '<div class="rubicon-admin-panel__header">';
         echo '<div><p class="rubicon-admin-panel__eyebrow">' . esc_html__('Location data', 'rubicon-maps') . '</p><h2 class="rubicon-admin-panel__title">' . esc_html__('Map-ready details', 'rubicon-maps') . '</h2></div>';
@@ -87,7 +87,7 @@ class MetaBox {
     }
 
     public static function save_meta_box_data($post_id) {
-        if (!isset($_POST['rubicon_maps_meta_nonce']) || !wp_verify_nonce($_POST['rubicon_maps_meta_nonce'], 'rubicon_maps_save_meta')) {
+        if (!isset($_POST['rtv_rm_meta_nonce']) || !wp_verify_nonce($_POST['rtv_rm_meta_nonce'], 'rtv_rm_save_meta')) {
             return;
         }
 
