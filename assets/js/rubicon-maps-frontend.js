@@ -359,6 +359,7 @@ document.addEventListener("DOMContentLoaded", function () {
     findSyncedListRoots(syncKey).forEach((listRoot) => {
       const itemsContainer = ensureListItemsContainer(listRoot);
       const emptyState = listRoot.querySelector(".rubicon-location-list__empty");
+      const showThumbnail = listRoot.getAttribute("data-show-thumbnail") === "1";
 
       if (emptyState) {
         emptyState.remove();
@@ -372,7 +373,9 @@ document.addEventListener("DOMContentLoaded", function () {
         listRoot.appendChild(empty);
         setState(listRoot, "empty", strings.emptySynced);
       } else {
-        itemsContainer.innerHTML = locations.map(buildListItemHtml).join("");
+        itemsContainer.innerHTML = locations
+          .map((location) => buildListItemHtml(location, showThumbnail))
+          .join("");
         setState(listRoot, "ready", "");
       }
 
@@ -503,8 +506,11 @@ document.addEventListener("DOMContentLoaded", function () {
     return itemsContainer;
   }
 
-  function buildListItemHtml(location) {
+  function buildListItemHtml(location, showThumbnail) {
     const strings = getStrings();
+    const thumbnail = showThumbnail && location.image_url
+      ? `<img class="rubicon-location-list__thumb" src="${escapeHtml(location.image_url)}" alt="">`
+      : "";
     const address = location.formatted_address
       ? `<div class="rubicon-location-list__meta">${escapeHtml(location.formatted_address)}</div>`
       : "";
@@ -522,6 +528,7 @@ document.addEventListener("DOMContentLoaded", function () {
         role="button"
         aria-label="${escapeHtml(formatString(strings.focusOnLocation, location.title))}"
       >
+        ${thumbnail}
         <strong class="rubicon-location-list__title">${escapeHtml(location.title)}</strong>
         ${address}
         ${excerpt}

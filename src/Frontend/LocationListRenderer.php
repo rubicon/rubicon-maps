@@ -68,6 +68,7 @@ final class LocationListRenderer
             data-sync-mode="<?php echo esc_attr($isSynced ? 'follow-map' : 'standalone'); ?>"
             data-state="<?php echo esc_attr($state); ?>"
             data-use-fixed-height="<?php echo esc_attr($fixedHeightEnabled ? '1' : '0'); ?>"
+            data-show-thumbnail="<?php echo esc_attr($showThumbnail ? '1' : '0'); ?>"
             data-height="<?php echo esc_attr($savedHeight); ?>"
             data-default-height="<?php echo esc_attr($defaultHeight); ?>"
             <?php if ($fixedHeightEnabled && '' !== $listHeight) : ?>
