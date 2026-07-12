@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="36" height="36" role="img" aria-hidden="true">
+	<!--
+		Rubicon Maps branded marker.
+		36x36 viewBox to match the existing Leaflet icon convention in
+		assets/js/rubicon-maps-frontend.js (iconSize [36, 36], iconAnchor
+		[18, 36], popupAnchor [0, -32]) — the pin's point sits at (18, 36).
+
+		Fill is the literal light-mode rtv-rm-accent token value (#2563eb)
+		baked in, because an img-referenced SVG cannot read CSS custom
+		properties. If rtv-rm-accent (light mode) changes in
+		assets/css/rubicon-maps-tokens.css, update the fill below to match.
+		See design-system/MASTER.md for the sync note.
+	-->
+	<path
+		fill="#2563eb"
+		d="M18 1c-8.284 0-15 6.716-15 15 0 10.5 15 19 15 19s15-8.5 15-19c0-8.284-6.716-15-15-15z"
+	/>
+	<circle cx="18" cy="16" r="6" fill="#ffffff" />
+</svg>
