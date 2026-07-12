@@ -48,12 +48,11 @@ Examples for this repository:
 Before merging changes that affect plugin behavior, run:
 
 - `composer dump-autoload`
-- `php tests/php/DiviBootstrapDeciderTest.php`
 - `php tests/php/LocationQueryArgsBuilderTest.php`
 - `php tests/php/LocationAddressFormatterTest.php`
 - `php tests/php/LocationCsvTransformerTest.php`
 - `php tests/php/MapInstanceConfigBuilderTest.php`
-- `find src divi-4 divi-5 tests -name '*.php' -print0 | xargs -0 -n1 php -l`
+- `find src divi-5 tests -name '*.php' -print0 | xargs -0 -n1 php -l`
 - `cd divi-5/visual-builder && npm ci && npm run build`
 
 When relevant, also verify:
@@ -62,15 +61,13 @@ When relevant, also verify:
 - location editor save flows
 - REST endpoint behavior
 - shortcode output
-- Divi 4 module registration and output
 - Divi 5 module registration, configuration, save, and output
 - release packaging
 
 ## Divi-Specific Rule for Rubicon Maps
 
-Rubicon Maps supports separate Divi runtimes:
+Rubicon Maps uses a dedicated Divi 5 runtime:
 
-- `divi-4/` for Divi 4 compatibility
 - `divi-5/` for Divi 5 runtime and Visual Builder assets
 - `src/` for shared WordPress/plugin logic
 
