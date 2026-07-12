@@ -509,7 +509,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function buildListItemHtml(location, showThumbnail) {
     const strings = getStrings();
     const thumbnail = showThumbnail && location.image_url
-      ? `<img class="rubicon-location-list__thumb" src="${escapeHtml(location.image_url)}" alt="">`
+      ? `<img class="rubicon-location-list__thumb" src="${escapeHtml(escapeUrl(location.image_url))}" alt="">`
       : "";
     const address = location.formatted_address
       ? `<div class="rubicon-location-list__meta">${escapeHtml(location.formatted_address)}</div>`
@@ -597,6 +597,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     return String(value).replace(/"/g, '\\"');
+  }
+
+  function escapeUrl(value) {
+    const url = String(value || "");
+
+    if (/^https?:\/\//i.test(url) || url.charAt(0) === "/") {
+      return url;
+    }
+
+    return "";
   }
 
   function escapeHtml(value) {
