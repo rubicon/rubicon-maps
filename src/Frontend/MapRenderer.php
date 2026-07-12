@@ -65,10 +65,12 @@ final class MapRenderer
             id="<?php echo esc_attr($instanceId); ?>"
             class="rubicon-maps"
             data-rubicon-map="1"
+            data-state="loading"
             data-sync-id="<?php echo esc_attr('' !== $syncId ? $syncId : $instanceId); ?>"
             data-rubicon-config="<?php echo esc_attr((string) wp_json_encode($payload)); ?>"
         >
             <div class="rubicon-maps__canvas" style="height:<?php echo esc_attr($payload['height']); ?>"></div>
+            <div class="rubicon-maps__status" aria-live="polite"></div>
         </div>
         <?php
 
