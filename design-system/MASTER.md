@@ -59,6 +59,7 @@ Method: standard WCAG relative-luminance contrast ratio, `(L1 + 0.05) / (L2 + 0.
 | `--rtv-rm-border` (#64748B) on `--rtv-rm-surface` (#FFFFFF) | 4.76:1 | 3:1 | PASS |
 | `--rtv-rm-border` (#64748B) on `--rtv-rm-surface-active` (#E2E8F0) | 3.86:1 | 3:1 | PASS |
 | `--rtv-rm-border` (#64748B) on `--rtv-rm-surface-hover` (#F1F5F9) | 4.34:1 | 3:1 | PASS |
+| `--rtv-rm-accent` (#2563EB) on `--rtv-rm-surface-active` (#E2E8F0) — active list-item indicator | 4.18:1 | 3:1 | PASS |
 | `--rtv-rm-focus-ring` (#2563EB) on `--rtv-rm-surface` (#FFFFFF) | 5.17:1 | 3:1 | PASS |
 | cluster text (#FFFFFF) on `--rtv-rm-cluster-sm` (#3670D6) | 4.72:1 | 4.5:1 | PASS |
 | cluster text (#FFFFFF) on `--rtv-rm-cluster-md` (#2563EB) | 5.17:1 | 4.5:1 | PASS |
@@ -75,6 +76,7 @@ Method: standard WCAG relative-luminance contrast ratio, `(L1 + 0.05) / (L2 + 0.
 | `--rtv-rm-border` (#8FA0B8) on `--rtv-rm-surface` (#1E293B) | 5.50:1 | 3:1 | PASS |
 | `--rtv-rm-border` (#8FA0B8) on `--rtv-rm-surface-active` (#3E4756) | 3.52:1 | 3:1 | PASS |
 | `--rtv-rm-border` (#8FA0B8) on `--rtv-rm-surface-hover` (#303A4B) | 4.30:1 | 3:1 | PASS |
+| `--rtv-rm-accent` (#60A5FA) on `--rtv-rm-surface-active` (#3E4756) — active list-item indicator | 3.69:1 | 3:1 | PASS |
 | `--rtv-rm-focus-ring` (#60A5FA) on `--rtv-rm-surface` (#1E293B) | 5.75:1 | 3:1 | PASS |
 | cluster text (#0F172A) on `--rtv-rm-cluster-sm` (#93C5FD) | 9.90:1 | 4.5:1 | PASS |
 | cluster text (#0F172A) on `--rtv-rm-cluster-md` (#60A5FA) | 7.02:1 | 4.5:1 | PASS |
