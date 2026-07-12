@@ -34,6 +34,9 @@ if (!defined('RTV_RM_VERSION')) {
     define('RTV_RM_VERSION', '1.0.1');
 }
 
+// No manual load_plugin_textdomain() call: WordPress auto-loads translations for a
+// matching text domain (WP 4.6+). Add one only if targeting WordPress.org's domain matching.
+
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/divi-5/divi-5.php';
 

@@ -5,6 +5,7 @@ namespace RubiconMaps\Frontend;
 use RubiconMaps\Helpers\SettingsHelper;
 use RubiconMaps\Support\Plugin;
 
+use function __;
 use function plugins_url;
 use function rest_url;
 use function wp_enqueue_script;
@@ -35,16 +36,45 @@ final class FrontendAssetManager
         self::enqueueSharedFrontendAssets();
     }
 
+    /**
+     * User-facing strings localized to the frontend JS state controller.
+     *
+     * @return array<string, string>
+     */
+    public static function frontendStrings(): array
+    {
+        return [
+            'emptyStandalone' => __('No locations to display.', 'rubicon-maps'),
+            'emptySynced' => __('No locations match the current map view.', 'rubicon-maps'),
+            'loading' => __('Loading locations…', 'rubicon-maps'),
+            'error' => __('Something went wrong loading locations.', 'rubicon-maps'),
+            'retry' => __('Retry', 'rubicon-maps'),
+            'focusOnLocation' => __('Focus map on %s', 'rubicon-maps'),
+        ];
+    }
+
+    public static function registerTokensStyle(): void
+    {
+        wp_register_style(
+            'rtv-rm-tokens',
+            plugins_url('/assets/css/rubicon-maps-tokens.css', RTV_RM_PLUGIN_FILE),
+            [],
+            Plugin::version()
+        );
+    }
+
     private static function enqueueSharedFrontendAssets(): void
     {
         if (self::$frontendAssetsEnqueued) {
             return;
         }
 
+        self::registerTokensStyle();
+
         wp_register_style(
             'rtv-rm-frontend',
             plugins_url('/assets/css/rubicon-maps-frontend.css', RTV_RM_PLUGIN_FILE),
-            [],
+            ['rtv-rm-tokens'],
             Plugin::version()
         );
 
@@ -66,6 +96,13 @@ final class FrontendAssetManager
             ]
         );
 
+        wp_localize_script(
+            'rtv-rm-frontend',
+            'rubiconMapsStrings',
+            self::frontendStrings()
+        );
+
+        wp_enqueue_style('rtv-rm-tokens');
         wp_enqueue_style('rtv-rm-frontend');
         wp_enqueue_script('rtv-rm-frontend');
 

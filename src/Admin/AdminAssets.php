@@ -2,6 +2,7 @@
 
 namespace RubiconMaps\Admin;
 
+use RubiconMaps\Frontend\FrontendAssetManager;
 use RubiconMaps\Support\Plugin;
 
 use function admin_url;
@@ -42,10 +43,12 @@ final class AdminAssets
             return;
         }
 
+        FrontendAssetManager::registerTokensStyle();
+
         wp_enqueue_style(
             'rtv-rm-admin',
             plugins_url('/assets/css/rubicon-maps-admin.css', RTV_RM_PLUGIN_FILE),
-            [],
+            ['rtv-rm-tokens'],
             Plugin::version()
         );
 
