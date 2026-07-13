@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/composer,wordpress,macos,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=composer,wordpress,macos,visualstudiocode
 
+### Git worktrees ###
+/worktrees/
+
 ### Composer ###
 composer.phar
 /vendor/

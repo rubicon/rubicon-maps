@@ -1,0 +1,33 @@
+name: PR Policy
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+    branches: [main]
+
+jobs:
+  branch-naming:
+    name: Branch naming
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce dev/<issue>-<slug> branch naming
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          if ! printf '%s' "$HEAD_REF" | grep -qE '^dev/[0-9]+-[a-z0-9.-]+$'; then
+            echo "Branch '$HEAD_REF' does not match required pattern: dev/<issue-number>-<kebab-slug>" >&2
+            exit 1
+          fi
+
+  pr-title:
+    name: PR title (Conventional Commits)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce Conventional Commits type prefix on PR title
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          if ! printf '%s' "$PR_TITLE" | grep -qE '^(feat|fix|chore|docs|test|ci|refactor|build|perf|revert|style)(\([a-z0-9_.-]+\))?!?: .+'; then
+            echo "PR title must start with a Conventional Commits type (feat, fix, chore, docs, test, ci, refactor, build, perf, revert, style), e.g. 'feat: add thing'." >&2
+            exit 1
+          fi
