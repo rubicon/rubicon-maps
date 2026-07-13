@@ -1,0 +1,57 @@
+name: Build & Test
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  php:
+    name: PHP lint & test scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Regenerate autoload map
+        run: composer dump-autoload
+
+      - name: Lint all PHP files
+        run: find src divi-5 tests -name '*.php' -print0 | xargs -0 -n1 php -l
+
+      - name: Run pure-PHP verification scripts
+        run: |
+          set -e
+          for file in tests/php/*.php; do
+            echo "== $file =="
+            php "$file"
+          done
+
+  divi5-visual-builder:
+    name: Divi 5 Visual Builder build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: divi-5/visual-builder
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: divi-5/visual-builder/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
