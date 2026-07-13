@@ -216,16 +216,21 @@ document.addEventListener("DOMContentLoaded", function () {
   function buildClusterIcon(cluster) {
     const count = cluster.getChildCount();
     let sizeClass = "rtv-rm-cluster--sm";
+    let size = 32;
 
     if (count >= 50) {
       sizeClass = "rtv-rm-cluster--lg";
+      size = 48;
     } else if (count >= 10) {
       sizeClass = "rtv-rm-cluster--md";
+      size = 40;
     }
 
     return L.divIcon({
       html: "<div>" + count + "</div>",
       className: "rtv-rm-cluster " + sizeClass,
+      iconSize: [size, size],
+      iconAnchor: [size / 2, size / 2],
     });
   }
 
