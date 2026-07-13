@@ -434,14 +434,44 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function bindLeafletPopupEvents(marker, location, config) {
     if (config.popupTrigger === "hover") {
+      let closeTimer = null;
+      let popupElBound = null;
+
+      const cancelClose = function () {
+        if (closeTimer) {
+          window.clearTimeout(closeTimer);
+          closeTimer = null;
+        }
+      };
+
+      const scheduleClose = function () {
+        cancelClose();
+        closeTimer = window.setTimeout(function () {
+          if (!config.openAllPopups) {
+            marker.closePopup();
+          }
+        }, 250);
+      };
+
       marker.on("mouseover", function () {
+        cancelClose();
         marker.openPopup();
         dispatchLocationClick(location);
       });
       marker.on("mouseout", function () {
-        if (!config.openAllPopups) {
-          marker.closePopup();
+        // Bind hover-keepalive listeners to the popup's own DOM so moving the
+        // pointer from the marker onto the popup content cancels the close
+        // (WCAG 1.4.13 "hoverable" requirement).
+        const popup = marker.getPopup();
+        const popupEl = popup && typeof popup.getElement === "function" ? popup.getElement() : null;
+
+        if (popupEl && popupEl !== popupElBound) {
+          popupElBound = popupEl;
+          popupEl.addEventListener("mouseover", cancelClose);
+          popupEl.addEventListener("mouseout", scheduleClose);
         }
+
+        scheduleClose();
       });
       return;
     }
@@ -472,12 +502,41 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     if (clusterGroup && typeof clusterGroup.zoomToShowLayer === "function") {
-      clusterGroup.zoomToShowLayer(marker, openMarker);
+      zoomToShowLayerRespectingMotion(clusterGroup, marker, openMarker);
       return;
     }
 
     map.setView(marker.getLatLng(), Math.max(map.getZoom(), 12), { animate: !prefersReducedMotion });
     openMarker();
+  }
+
+  // Leaflet.markercluster's zoomToShowLayer() has no animate option and always
+  // performs its own pan/zoom transition. To honour prefers-reduced-motion we
+  // temporarily disable the underlying map's zoom/pan animation flags for the
+  // duration of the call, then restore whatever the map was configured with.
+  function zoomToShowLayerRespectingMotion(clusterGroup, marker, callback) {
+    if (!prefersReducedMotion) {
+      clusterGroup.zoomToShowLayer(marker, callback);
+      return;
+    }
+
+    const map = clusterGroup._map || null;
+    const previousZoomAnimation = map ? map.options.zoomAnimation : undefined;
+    const previousMarkerZoomAnimation = map ? map.options.markerZoomAnimation : undefined;
+
+    if (map) {
+      map.options.zoomAnimation = false;
+      map.options.markerZoomAnimation = false;
+    }
+
+    clusterGroup.zoomToShowLayer(marker, function () {
+      if (map) {
+        map.options.zoomAnimation = previousZoomAnimation;
+        map.options.markerZoomAnimation = previousMarkerZoomAnimation;
+      }
+
+      callback();
+    });
   }
 
   function openAllMarkerPopups(provider, markerIndex, clusterGroup) {
