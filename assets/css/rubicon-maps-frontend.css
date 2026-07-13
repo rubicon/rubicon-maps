@@ -60,6 +60,16 @@
   border-left: 3px solid var(--rtv-rm-accent);
 }
 
+.rubicon-location-list__thumb {
+  display: block;
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border: 1px solid var(--rtv-rm-border);
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
 .rubicon-location-list__title {
   display: block;
   margin-bottom: 4px;
