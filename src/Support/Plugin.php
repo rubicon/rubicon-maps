@@ -15,9 +15,9 @@ final class Plugin
     public const POST_TYPE_LOCATION = 'rtv_rm_location';
     public const TAXONOMY_CATEGORY = 'rtv_rm_category';
     public const TAXONOMY_REGION = 'rtv_rm_region';
-    public const UPDATE_URI = 'https://git.daxdavis.com/rubicon/rubicon-maps';
-    public const UPDATE_HOSTNAME = 'git.daxdavis.com';
-    public const UPDATE_API_RELEASE_LATEST = 'https://git.daxdavis.com/api/v1/repos/rubicon/rubicon-maps/releases/latest';
+    public const UPDATE_URI = 'https://github.com/rubicon/rubicon-maps';
+    public const UPDATE_HOSTNAME = 'github.com';
+    public const UPDATE_API_RELEASE_LATEST = 'https://api.github.com/repos/rubicon/rubicon-maps/releases/latest';
     public const REST_NAMESPACE = 'rubicon-maps/v1';
     public const SHORTCODE_MAP = 'rubicon_maps';
     public const SHORTCODE_LIST = 'rubicon_maps_list';

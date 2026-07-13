@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Rubicon Maps
  * Plugin URI: https://rubicontv.com/rubicon-maps
- * Update URI: https://git.daxdavis.com/rubicon/rubicon-maps
+ * Update URI: https://github.com/rubicon/rubicon-maps
  * Description: Divi-first maps for WordPress that let you manage real locations, not wrestle shortcode spaghetti, with linked maps, lists, imports, and builder-ready controls.
  * Version: 1.0.1
  * Requires at least: 5.8

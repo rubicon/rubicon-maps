@@ -37,23 +37,44 @@ assertSameUpdaterValue(
 $packageUrl = $reflection->getMethod('packageUrl');
 
 assertSameUpdaterValue(
-    'https://git.example.com/rubicon-maps-1.0.0.zip',
+    'https://github.com/rubicon/rubicon-maps/releases/download/v1.0.0/rubicon-maps-1.0.0.zip',
     $packageUrl->invoke(
         null,
         [
             'assets' => [
                 [
                     'name' => 'rubicon-maps-1.0.0.sha256',
-                    'browser_download_url' => 'https://git.example.com/rubicon-maps-1.0.0.sha256',
+                    'browser_download_url' => 'https://github.com/rubicon/rubicon-maps/releases/download/v1.0.0/rubicon-maps-1.0.0.sha256',
                 ],
                 [
                     'name' => 'rubicon-maps-1.0.0.zip',
-                    'browser_download_url' => 'https://git.example.com/rubicon-maps-1.0.0.zip',
+                    'browser_download_url' => 'https://github.com/rubicon/rubicon-maps/releases/download/v1.0.0/rubicon-maps-1.0.0.zip',
                 ],
             ],
         ]
     ),
     'Updater should prefer the canonical Rubicon Maps zip asset when multiple release assets exist.'
+);
+
+// Realistic GitHub Releases API payload: full response shape (tag_name,
+// html_url, and assets[] alongside fields the updater doesn't read) should
+// resolve to the same asset the minimal fixture above does.
+assertSameUpdaterValue(
+    'https://github.com/rubicon/rubicon-maps/releases/download/v1.0.1/rubicon-maps-1.0.1.zip',
+    $packageUrl->invoke(
+        null,
+        [
+            'tag_name' => 'v1.0.1',
+            'html_url' => 'https://github.com/rubicon/rubicon-maps/releases/tag/v1.0.1',
+            'assets' => [
+                [
+                    'name' => 'rubicon-maps-1.0.1.zip',
+                    'browser_download_url' => 'https://github.com/rubicon/rubicon-maps/releases/download/v1.0.1/rubicon-maps-1.0.1.zip',
+                ],
+            ],
+        ]
+    ),
+    'Updater should resolve the package URL from a full GitHub Releases API payload shape.'
 );
 
 echo 'PluginUpdaterTest passed.' . PHP_EOL;
