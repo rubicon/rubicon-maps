@@ -547,7 +547,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       if (clusterGroup && typeof clusterGroup.zoomToShowLayer === "function") {
-        clusterGroup.zoomToShowLayer(entry.marker, () => {
+        zoomToShowLayerRespectingMotion(clusterGroup, entry.marker, () => {
           entry.marker.openPopup();
         });
         return;
