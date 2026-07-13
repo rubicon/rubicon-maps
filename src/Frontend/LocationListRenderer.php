@@ -6,6 +6,7 @@ use RubiconMaps\Helpers\SettingsHelper;
 
 use function esc_attr;
 use function esc_html;
+use function esc_url;
 use function wp_kses_post;
 
 if (!defined('ABSPATH')) {
@@ -34,6 +35,7 @@ final class LocationListRenderer
         $savedHeight = trim((string) ($atts['height'] ?? ''));
         $defaultHeight = trim((string) ($atts['default_height'] ?? SettingsHelper::get_option('default_map_height', '480px')));
         $listHeight = $savedHeight;
+        $showThumbnail = $this->isEnabled($atts['show_thumbnail'] ?? '');
 
         if ('' === $instanceId) {
             $instanceId = 'rubicon-map-' . wp_unique_id();
@@ -52,6 +54,10 @@ final class LocationListRenderer
                 'posts_per_page' => $atts['posts_per_page'] ?? -1,
             ]);
 
+        $isEmpty = !$isSynced && [] === $locations;
+        $state = $isSynced ? 'loading' : ($isEmpty ? 'empty' : 'ready');
+        $strings = FrontendAssetManager::frontendStrings();
+
         ob_start();
         ?>
         <div
@@ -60,19 +66,22 @@ final class LocationListRenderer
             data-instance-id="<?php echo esc_attr($instanceId); ?>"
             data-sync-id="<?php echo esc_attr($syncId); ?>"
             data-sync-mode="<?php echo esc_attr($isSynced ? 'follow-map' : 'standalone'); ?>"
+            data-state="<?php echo esc_attr($state); ?>"
             data-use-fixed-height="<?php echo esc_attr($fixedHeightEnabled ? '1' : '0'); ?>"
+            data-show-thumbnail="<?php echo esc_attr($showThumbnail ? '1' : '0'); ?>"
             data-height="<?php echo esc_attr($savedHeight); ?>"
             data-default-height="<?php echo esc_attr($defaultHeight); ?>"
             <?php if ($fixedHeightEnabled && '' !== $listHeight) : ?>
                 style="height:<?php echo esc_attr($listHeight); ?>"
             <?php endif; ?>
         >
-            <?php if (!$isSynced && [] === $locations) : ?>
-                <p class="rubicon-location-list__empty"><?php echo esc_html__('No locations matched this map instance.', 'rubicon-maps'); ?></p>
+            <div class="rubicon-location-list__status" aria-live="polite"></div>
+            <?php if ($isEmpty) : ?>
+                <p class="rubicon-location-list__empty"><?php echo esc_html($strings['emptyStandalone']); ?></p>
             <?php else : ?>
                 <ul class="rubicon-location-list__items" role="list">
                     <?php foreach ($locations as $location) : ?>
-                        <?php echo $this->renderListItem($location); ?>
+                        <?php echo $this->renderListItem($location, $showThumbnail); ?>
                     <?php endforeach; ?>
                 </ul>
             <?php endif; ?>
@@ -85,7 +94,7 @@ final class LocationListRenderer
     /**
      * @param array<string, mixed> $location
      */
-    private function renderListItem(array $location): string
+    private function renderListItem(array $location, bool $showThumbnail = false): string
     {
         ob_start();
         ?>
@@ -98,6 +107,9 @@ final class LocationListRenderer
             role="button"
             aria-label="<?php echo esc_attr(sprintf(__('Focus map on %s', 'rubicon-maps'), $location['title'])); ?>"
         >
+            <?php if ($showThumbnail && !empty($location['image_url'])) : ?>
+                <img class="rubicon-location-list__thumb" src="<?php echo esc_url((string) $location['image_url']); ?>" alt="">
+            <?php endif; ?>
             <strong class="rubicon-location-list__title"><?php echo esc_html((string) $location['title']); ?></strong>
             <?php if (!empty($location['formatted_address'])) : ?>
                 <div class="rubicon-location-list__meta"><?php echo esc_html((string) $location['formatted_address']); ?></div>

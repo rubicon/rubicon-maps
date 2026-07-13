@@ -1,0 +1,99 @@
+/**
+ * Rubicon Maps — design-system tokens.
+ *
+ * Semantic CSS custom properties consumed by all frontend map + location-list
+ * CSS. Theme-deferential: the plugin owns only its own chrome (accent,
+ * surfaces, borders, states, marker/cluster, popup, focus, skeleton) — it
+ * never sets `--rtv-rm-text`, which defaults to `currentColor` so visible
+ * text always inherits the host theme's/Divi's own color.
+ *
+ * Palette source, rationale, and WCAG 2.2 AA contrast validation for every
+ * pair below are documented in design-system/MASTER.md.
+ *
+ * Dark mode is supported two ways, per the design system:
+ *   1. `@media (prefers-color-scheme: dark)` — OS-level preference.
+ *   2. `:root[data-rubicon-theme="dark"|"light"]` — explicit manual override
+ *      (e.g. a host page or user toggle) that wins over OS preference.
+ */
+
+.rubicon-maps,
+.rubicon-location-list,
+.rubicon-admin,
+.rubicon-admin-panel {
+	--rtv-rm-accent: #2563eb;
+	--rtv-rm-accent-contrast: #ffffff;
+	--rtv-rm-surface: #ffffff;
+	--rtv-rm-surface-hover: #f1f5f9;
+	--rtv-rm-surface-active: #e2e8f0;
+	--rtv-rm-border: #64748b;
+	--rtv-rm-text: currentColor;
+	--rtv-rm-text-muted: #475569;
+	--rtv-rm-focus-ring: #2563eb;
+	--rtv-rm-cluster-sm: #3670d6;
+	--rtv-rm-cluster-md: #2563eb;
+	--rtv-rm-cluster-lg: #1e3a8a;
+	--rtv-rm-popup-surface: #f8fafc;
+	--rtv-rm-skeleton: #e2e8f0;
+}
+
+@media (prefers-color-scheme: dark) {
+	.rubicon-maps,
+	.rubicon-location-list,
+	.rubicon-admin,
+	.rubicon-admin-panel {
+		--rtv-rm-accent: #60a5fa;
+		--rtv-rm-accent-contrast: #0f172a;
+		--rtv-rm-surface: #1e293b;
+		--rtv-rm-surface-hover: #303a4b;
+		--rtv-rm-surface-active: #3e4756;
+		--rtv-rm-border: #8fa0b8;
+		--rtv-rm-text: currentColor;
+		--rtv-rm-text-muted: #a8b8cb;
+		--rtv-rm-focus-ring: #60a5fa;
+		--rtv-rm-cluster-sm: #93c5fd;
+		--rtv-rm-cluster-md: #60a5fa;
+		--rtv-rm-cluster-lg: #4e93f0;
+		--rtv-rm-popup-surface: #1c2636;
+		--rtv-rm-skeleton: #334155;
+	}
+}
+
+:root[data-rubicon-theme="dark"] .rubicon-maps,
+:root[data-rubicon-theme="dark"] .rubicon-location-list,
+:root[data-rubicon-theme="dark"] .rubicon-admin,
+:root[data-rubicon-theme="dark"] .rubicon-admin-panel {
+	--rtv-rm-accent: #60a5fa;
+	--rtv-rm-accent-contrast: #0f172a;
+	--rtv-rm-surface: #1e293b;
+	--rtv-rm-surface-hover: #303a4b;
+	--rtv-rm-surface-active: #3e4756;
+	--rtv-rm-border: #8fa0b8;
+	--rtv-rm-text: currentColor;
+	--rtv-rm-text-muted: #a8b8cb;
+	--rtv-rm-focus-ring: #60a5fa;
+	--rtv-rm-cluster-sm: #93c5fd;
+	--rtv-rm-cluster-md: #60a5fa;
+	--rtv-rm-cluster-lg: #4e93f0;
+	--rtv-rm-popup-surface: #1c2636;
+	--rtv-rm-skeleton: #334155;
+}
+
+:root[data-rubicon-theme="light"] .rubicon-maps,
+:root[data-rubicon-theme="light"] .rubicon-location-list,
+:root[data-rubicon-theme="light"] .rubicon-admin,
+:root[data-rubicon-theme="light"] .rubicon-admin-panel {
+	--rtv-rm-accent: #2563eb;
+	--rtv-rm-accent-contrast: #ffffff;
+	--rtv-rm-surface: #ffffff;
+	--rtv-rm-surface-hover: #f1f5f9;
+	--rtv-rm-surface-active: #e2e8f0;
+	--rtv-rm-border: #64748b;
+	--rtv-rm-text: currentColor;
+	--rtv-rm-text-muted: #475569;
+	--rtv-rm-focus-ring: #2563eb;
+	--rtv-rm-cluster-sm: #3670d6;
+	--rtv-rm-cluster-md: #2563eb;
+	--rtv-rm-cluster-lg: #1e3a8a;
+	--rtv-rm-popup-surface: #f8fafc;
+	--rtv-rm-skeleton: #e2e8f0;
+}
