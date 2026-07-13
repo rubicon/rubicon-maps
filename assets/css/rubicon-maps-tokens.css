@@ -17,7 +17,9 @@
  */
 
 .rubicon-maps,
-.rubicon-location-list {
+.rubicon-location-list,
+.rubicon-admin,
+.rubicon-admin-panel {
 	--rtv-rm-accent: #2563eb;
 	--rtv-rm-accent-contrast: #ffffff;
 	--rtv-rm-surface: #ffffff;
@@ -36,7 +38,9 @@
 
 @media (prefers-color-scheme: dark) {
 	.rubicon-maps,
-	.rubicon-location-list {
+	.rubicon-location-list,
+	.rubicon-admin,
+	.rubicon-admin-panel {
 		--rtv-rm-accent: #60a5fa;
 		--rtv-rm-accent-contrast: #0f172a;
 		--rtv-rm-surface: #1e293b;
@@ -55,7 +59,9 @@
 }
 
 :root[data-rubicon-theme="dark"] .rubicon-maps,
-:root[data-rubicon-theme="dark"] .rubicon-location-list {
+:root[data-rubicon-theme="dark"] .rubicon-location-list,
+:root[data-rubicon-theme="dark"] .rubicon-admin,
+:root[data-rubicon-theme="dark"] .rubicon-admin-panel {
 	--rtv-rm-accent: #60a5fa;
 	--rtv-rm-accent-contrast: #0f172a;
 	--rtv-rm-surface: #1e293b;
@@ -73,7 +79,9 @@
 }
 
 :root[data-rubicon-theme="light"] .rubicon-maps,
-:root[data-rubicon-theme="light"] .rubicon-location-list {
+:root[data-rubicon-theme="light"] .rubicon-location-list,
+:root[data-rubicon-theme="light"] .rubicon-admin,
+:root[data-rubicon-theme="light"] .rubicon-admin-panel {
 	--rtv-rm-accent: #2563eb;
 	--rtv-rm-accent-contrast: #ffffff;
 	--rtv-rm-surface: #ffffff;

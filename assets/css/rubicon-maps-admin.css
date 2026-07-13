@@ -1,10 +1,14 @@
 .rubicon-admin {
-  --rubicon-ink: #0f1728;
-  --rubicon-muted: #5a6577;
-  --rubicon-border: #d8e0ea;
-  --rubicon-panel: #ffffff;
-  --rubicon-accent: #0b6e4f;
-  --rubicon-accent-soft: #e9f6f0;
+  /* currentColor: wp-admin already sets its own base text color per screen;
+     inheriting keeps admin chrome theme-deferential like the frontend tokens. */
+  --rubicon-ink: var(--rtv-rm-text);
+  --rubicon-muted: var(--rtv-rm-text-muted);
+  --rubicon-border: var(--rtv-rm-border);
+  --rubicon-panel: var(--rtv-rm-surface);
+  --rubicon-accent: var(--rtv-rm-accent);
+  /* No direct --rtv-rm-* equivalent for a tinted accent background; the
+     neutral hover surface is the closest validated "soft" tone available. */
+  --rubicon-accent-soft: var(--rtv-rm-surface-hover);
 }
 
 .rubicon-admin .card,
@@ -88,7 +92,7 @@
   margin-top: 10px;
   border: 1px solid var(--rubicon-border);
   border-radius: 12px;
-  background: #ffffff;
+  background: var(--rubicon-panel);
   overflow: hidden;
 }
 
@@ -101,7 +105,7 @@
   width: 100%;
   border: 0;
   border-top: 1px solid var(--rubicon-border);
-  background: #ffffff;
+  background: var(--rubicon-panel);
   color: var(--rubicon-ink);
   cursor: pointer;
   padding: 12px 14px;
@@ -114,7 +118,7 @@
 
 .rubicon-geocode-result:hover,
 .rubicon-geocode-result:focus {
-  background: #f8fafc;
+  background: var(--rubicon-accent-soft);
 }
 
 .rubicon-image-preview {
@@ -125,7 +129,7 @@
   object-fit: cover;
   border-radius: 14px;
   border: 1px solid var(--rubicon-border);
-  background: #f8fafc;
+  background: var(--rubicon-accent-soft);
 }
 
 .rubicon-image-preview.is-hidden {
