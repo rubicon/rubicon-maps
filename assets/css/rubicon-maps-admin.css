@@ -1,4 +1,4 @@
-.rubicon-admin {
+.rubicon-admin, .rubicon-admin-panel {
   /* currentColor: wp-admin already sets its own base text color per screen;
      inheriting keeps admin chrome theme-deferential like the frontend tokens. */
   --rubicon-ink: var(--rtv-rm-text);
