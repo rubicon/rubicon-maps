@@ -8,16 +8,17 @@ Where this overlay is more specific, this overlay governs Rubicon Maps. Where it
 
 ## Canonical Host
 
-This overlay does not override the general Forgejo-first default. It confirms that Rubicon Maps follows it.
+This overlay intentionally overrides the general Forgejo-first default (see the general policy's "Repo overlays are the approved mechanism for declaring a different canonical host when an exception is intentional").
 
-- Forgejo is the canonical host for Rubicon Maps.
-- `origin` should point to Forgejo.
-- GitHub remains archive-only unless explicitly re-enabled.
+- GitHub is the canonical host for Rubicon Maps.
+- `origin` points to GitHub.
+- The repository is public.
+- CI (GitHub Actions), branch protection, issues, and pull requests all live on GitHub.
+- Forgejo is not currently the active host for this repo; reconcile or remove the `forgejo` remote if it still exists locally.
 
 Current intended remote shape:
 
-- `origin` → Forgejo
-- `github` → GitHub with push disabled
+- `origin` → GitHub
 - `remote.pushDefault` → `origin`
 
 ## Mainline Rule
@@ -27,7 +28,7 @@ From this point forward:
 - no direct pushes to `main`
 - all meaningful work starts with an issue
 - all issue work happens on a `dev/...` branch
-- all merges to `main` happen through Forgejo pull requests
+- all merges to `main` happen through GitHub pull requests
 
 Historical bootstrap commits that were pushed directly to `main` before adoption of this policy are treated as pre-policy exceptions and do not need to be rewritten.
 
@@ -48,12 +49,11 @@ Examples for this repository:
 Before merging changes that affect plugin behavior, run:
 
 - `composer dump-autoload`
-- `php tests/php/LocationQueryArgsBuilderTest.php`
-- `php tests/php/LocationAddressFormatterTest.php`
-- `php tests/php/LocationCsvTransformerTest.php`
-- `php tests/php/MapInstanceConfigBuilderTest.php`
 - `find src divi-5 tests -name '*.php' -print0 | xargs -0 -n1 php -l`
+- `for f in tests/php/*.php; do php "$f"; done` — the full suite, not a subset
 - `cd divi-5/visual-builder && npm ci && npm run build`
+
+GitHub Actions CI (`.github/workflows/`) runs the same checks automatically on every PR and is required by branch protection on `main`.
 
 When relevant, also verify:
 
@@ -83,7 +83,7 @@ Every release candidate must verify:
 - the Divi 5 compiled bundle is present when required for runtime
 - release packaging excludes local/editor junk such as `.DS_Store`, `__MACOSX`, and machine-local files
 - the installable plugin zip contains the assets required for runtime
-- the Forgejo release has the installable zip and checksum attached when those artifacts are produced
+- the GitHub release has the installable zip and checksum attached when those artifacts are produced
 
 ## Release Naming for Rubicon Maps
 
@@ -109,6 +109,6 @@ The next meaningful changes in this repository should follow the new process:
 1. open or confirm the issue
 2. branch from `main` with `dev/...`
 3. implement and verify
-4. push branch to Forgejo
+4. push branch to GitHub
 5. open PR
 6. merge through PR only
