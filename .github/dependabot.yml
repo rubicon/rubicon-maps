@@ -23,6 +23,11 @@ updates:
         update-types:
           - "minor"
           - "patch"
+    ignore:
+      # Babel 8 is a breaking major that fails the Visual Builder build;
+      # treat it as a deliberate migration, not an automated bump.
+      - dependency-name: "@babel/*"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "github-actions"
     directory: "/"
