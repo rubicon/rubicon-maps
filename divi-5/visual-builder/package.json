@@ -12,7 +12,7 @@
   "devDependencies": {
     "@babel/core": "^7.26.0",
     "@babel/preset-env": "^7.26.0",
-    "@babel/preset-react": "^7.25.9",
+    "@babel/preset-react": "^8.0.1",
     "babel-loader": "^9.2.1",
     "thread-loader": "^4.0.4",
     "webpack": "^5.98.0",
