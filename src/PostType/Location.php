@@ -1,4 +1,5 @@
 <?php
+// SPDX-License-Identifier: GPL-2.0-or-later
 namespace RubiconMaps\PostType;
 
 use RubiconMaps\Support\Plugin;
