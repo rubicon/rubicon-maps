@@ -15,7 +15,7 @@
     "@babel/preset-react": "^7.25.9",
     "babel-loader": "^9.2.1",
     "thread-loader": "^4.0.4",
-    "webpack": "^5.98.0",
+    "webpack": "^5.109.2",
     "webpack-cli": "^6.0.1"
   }
 }
