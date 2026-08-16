@@ -13,7 +13,22 @@ jobs:
       - name: Enforce dev/<issue>-<slug> branch naming
         env:
           HEAD_REF: ${{ github.head_ref }}
+          ACTOR: ${{ github.actor }}
         run: |
+          # Trusted-automation exemption: Dependabot and release automation
+          # cannot use dev/<issue>-<slug> branches. Their Conventional Commit
+          # title and build/test checks stay enforced; only branch naming is
+          # skipped for these actors.
+          if [ "$ACTOR" = "dependabot[bot]" ]; then
+            echo "Trusted automation ($ACTOR); branch-naming exempt."
+            exit 0
+          fi
+          case "$HEAD_REF" in
+            dependabot/*|release-please--*)
+              echo "Trusted automation branch ($HEAD_REF); branch-naming exempt."
+              exit 0
+              ;;
+          esac
           if ! printf '%s' "$HEAD_REF" | grep -qE '^dev/[0-9]+-[a-z0-9.-]+$'; then
             echo "Branch '$HEAD_REF' does not match required pattern: dev/<issue-number>-<kebab-slug>" >&2
             exit 1

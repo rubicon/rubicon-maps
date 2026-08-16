@@ -1,0 +1,47 @@
+name: Release
+
+# Build the installable plugin zip and attach it (plus its checksum) to the
+# GitHub Release. Runs when a release is published, so release notes stay
+# curated by a human / release automation and the assets are built here.
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    name: Build and attach release assets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          coverage: none
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: divi-5/visual-builder/package-lock.json
+
+      - name: Build release package
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: bash scripts/package-release.sh "${TAG#v}"
+
+      - name: Attach zip and checksum to the release
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${TAG#v}"
+          gh release upload "$TAG" \
+            "dist/rubicon-maps-${VERSION}.zip" \
+            "dist/rubicon-maps-${VERSION}.sha256" \
+            --clobber

@@ -4,7 +4,7 @@ Tags: maps, leaflet, locations, directory, Divi, shortcodes
 Requires at least: 5.8
 Tested up to: 6.9.4
 Requires PHP: 8.1
-Stable tag: 1.0.1
+Stable tag: 2.0.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,7 +14,7 @@ Rubicon Maps is a Divi-first mapping plugin that helps you manage real locations
 
 Rubicon Maps allows you to create interactive, category-based maps with linked location lists, admin-friendly location management, and frontend filtering. It ships with shortcode, REST, CSV, and Divi Builder integration with a dedicated Divi 5 Visual Builder runtime.
 
-Compatibility for v1.0.1:
+Compatibility for v2.0.0:
 * Requires WordPress 5.8 or newer
 * Tested through WordPress 6.9.4
 * Supports Divi 5.x
@@ -77,6 +77,14 @@ It uses native WordPress title, excerpt, content, thumbnail, and custom metadata
 4. Divi module example with Rubicon Maps
 
 == Changelog ==
+
+= 2.0.0 - 2026-08-16 =
+* Breaking: removed Divi 4 support; the plugin is now Divi 5 only
+* Breaking: standardized internal identifiers on the rtv_rm_ prefix (post type, taxonomies, options)
+* Added GPL-2.0-or-later license and a public open-source release on GitHub
+* Added the frontend UI foundation: unified design tokens (light/dark), loading/error/empty states, branded markers and clusters, WCAG 2.2 AA, and full JS i18n
+* Added GitHub Actions CI, a release workflow, Dependabot, and public-repo docs
+* Changed the auto-updater to GitHub Releases
 
 = 1.0.1 - 2026-03-25 =
 * Added searchable multi-select filter pickers with pill tokens for Divi map and listing filters
@@ -165,6 +173,9 @@ It uses native WordPress title, excerpt, content, thumbnail, and custom metadata
 * Location CPT + Category taxonomy + Settings page
 
 == Upgrade Notice ==
+
+= 2.0.0 =
+Breaking release: Divi 4 support is removed (Divi 5 only) and internal identifiers were renamed. Back up before upgrading from any pre-2.0 build; existing locations are not automatically migrated to the new post type key.
 
 = 1.0.1 =
 Adds searchable multi-select filter pickers, better Divi 5 filter UX, and aligns the release metadata with the shipped post-v1 changes.
