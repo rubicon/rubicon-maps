@@ -2,7 +2,7 @@
 
 Rubicon Maps is a Divi-first WordPress location mapping plugin built for people who want real location management without turning every map into a shortcode scavenger hunt. It ships with native location management, linked map/list output, CSV import/export, and a dedicated `divi-5` Visual Builder runtime for Divi 5.
 
-> Version: `1.0.1`  
+> Version: `2.0.0`  
 > License: `GPLv2 or later`  
 > Requires WordPress: `5.8+`  
 > Requires PHP: `8.1+`  
@@ -10,10 +10,10 @@ Rubicon Maps is a Divi-first WordPress location mapping plugin built for people 
 > Requires Divi: `5.0+`  
 > Tested with Divi: `5.1.0`
 
-## What ships in v1.0.1
+## What ships in v2.0.0
 
-- Custom post type: `rubicon_location`
-- Taxonomies: `rubicon_maps_category`, `rubicon_maps_region`
+- Custom post type: `rtv_rm_location`
+- Taxonomies: `rtv_rm_category`, `rtv_rm_region`
 - Linked frontend map and location list rendering
 - Divi 5 modules: `Rubicon Map`, `Rubicon Location List`
 - Shortcodes: `[rubicon_maps]`, `[rubicon_maps_list]`
@@ -83,14 +83,14 @@ npm run build
 Create a distributable plugin zip:
 
 ```bash
-./scripts/package-release.sh 1.0.1
+./scripts/package-release.sh 2.0.0
 ```
 
 ## Provider stance
 
-- Leaflet/OpenStreetMap is the supported provider path for the `1.0.x` line.
-- Additional provider work is future scope, not part of the current `1.0.x` support promise.
+- Leaflet/OpenStreetMap is the supported provider path for the `2.0.x` line.
+- Additional provider work is future scope, not part of the current `2.0.x` support promise.
 
 ## Release notes
 
-See [CHANGELOG.md](CHANGELOG.md) for version history and [docs/releases/1.0.1.md](docs/releases/1.0.1.md) for the current release notes body.
+See [CHANGELOG.md](CHANGELOG.md) for version history and [docs/releases/2.0.0.md](docs/releases/2.0.0.md) for the current release notes body.
