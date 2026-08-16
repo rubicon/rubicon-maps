@@ -4,7 +4,7 @@
  * Plugin URI: https://rubicontv.com/rubicon-maps
  * Update URI: https://github.com/rubicon/rubicon-maps
  * Description: Divi-first maps for WordPress that let you manage real locations, not wrestle shortcode spaghetti, with linked maps, lists, imports, and builder-ready controls.
- * Version: 1.0.1
+ * Version: 2.0.0
  * Requires at least: 5.8
  * Tested up to: 6.9.4
  * Requires PHP: 8.1
@@ -31,7 +31,7 @@ if (!defined('RTV_RM_PLUGIN_URL')) {
 }
 
 if (!defined('RTV_RM_VERSION')) {
-    define('RTV_RM_VERSION', '1.0.1');
+    define('RTV_RM_VERSION', '2.0.0');
 }
 
 // No manual load_plugin_textdomain() call: WordPress auto-loads translations for a

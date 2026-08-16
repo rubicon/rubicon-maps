@@ -29,7 +29,7 @@ final class Plugin
      */
     public static function version(): string
     {
-        return defined('RTV_RM_VERSION') ? RTV_RM_VERSION : '1.0.1';
+        return defined('RTV_RM_VERSION') ? RTV_RM_VERSION : '2.0.0';
     }
 
     public static function path(string $relativePath = ''): string

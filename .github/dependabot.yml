@@ -1,0 +1,42 @@
+version: 2
+updates:
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "build"
+    groups:
+      composer:
+        update-types:
+          - "minor"
+          - "patch"
+
+  - package-ecosystem: "npm"
+    directory: "/divi-5/visual-builder"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "build"
+    groups:
+      visual-builder:
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      # Babel 8 is a breaking major that fails the Visual Builder build;
+      # treat it as a deliberate migration, not an automated bump.
+      - dependency-name: "@babel/*"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ci"
+    groups:
+      actions:
+        update-types:
+          - "minor"
+          - "patch"
