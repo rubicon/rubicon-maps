@@ -1,0 +1,13 @@
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+    - phpstan-baseline.neon
+
+parameters:
+    level: 6
+    paths:
+        - src
+    parallel:
+        maximumNumberOfProcesses: 1
+    # divi-5/server depends on the ET\Builder (Divi 5) API, which has no stubs yet.
+    # The builder-agnostic core in src/ is analyzed first; divi-5/server is added
+    # once Divi stubs or targeted ignores exist (see the roadmap, #9).

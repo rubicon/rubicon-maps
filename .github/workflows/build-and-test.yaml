@@ -35,6 +35,23 @@ jobs:
             php "$file"
           done
 
+  phpstan:
+    name: PHPStan (static analysis)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: PHPStan
+        run: composer stan
+
   divi5-visual-builder:
     name: Divi 5 Visual Builder build
     runs-on: ubuntu-latest
