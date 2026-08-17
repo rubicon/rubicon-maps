@@ -1,0 +1,289 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Constant RTV_RM_PLUGIN_FILE not found\.$#'
+			identifier: constant.notFound
+			count: 2
+			path: src/Admin/AdminAssets.php
+
+		-
+			message: '#^Method RubiconMaps\\Admin\\CategoryMeta\:\:add_category_fields\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Admin/CategoryMeta.php
+
+		-
+			message: '#^Method RubiconMaps\\Admin\\CategoryMeta\:\:edit_category_fields\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Admin/CategoryMeta.php
+
+		-
+			message: '#^Method RubiconMaps\\Admin\\CategoryMeta\:\:edit_category_fields\(\) has parameter \$term with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Admin/CategoryMeta.php
+
+		-
+			message: '#^Method RubiconMaps\\Admin\\CategoryMeta\:\:init\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Admin/CategoryMeta.php
+
+		-
+			message: '#^Method RubiconMaps\\Admin\\CategoryMeta\:\:save_category_meta\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Admin/CategoryMeta.php
+
+		-
+			message: '#^Method RubiconMaps\\Admin\\CategoryMeta\:\:save_category_meta\(\) has parameter \$term_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Admin/CategoryMeta.php
+
+		-
+			message: '#^Call to function is_object\(\) with object will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 2
+			path: src/Admin/LocationListFilters.php
+
+		-
+			message: '#^Method RubiconMaps\\Admin\\MetaBox\:\:init\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Admin/MetaBox.php
+
+		-
+			message: '#^Method RubiconMaps\\Admin\\MetaBox\:\:register_meta_box\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Admin/MetaBox.php
+
+		-
+			message: '#^Method RubiconMaps\\Admin\\MetaBox\:\:render_meta_box\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Admin/MetaBox.php
+
+		-
+			message: '#^Method RubiconMaps\\Admin\\MetaBox\:\:render_meta_box\(\) has parameter \$post with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Admin/MetaBox.php
+
+		-
+			message: '#^Method RubiconMaps\\Admin\\MetaBox\:\:save_meta_box_data\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Admin/MetaBox.php
+
+		-
+			message: '#^Method RubiconMaps\\Admin\\MetaBox\:\:save_meta_box_data\(\) has parameter \$post_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Admin/MetaBox.php
+
+		-
+			message: '#^Constant RTV_RM_PLUGIN_FILE not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: src/Admin/PluginActionLinks.php
+
+		-
+			message: '#^Method RubiconMaps\\Admin\\SettingsPage\:\:add_settings_page\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Admin/SettingsPage.php
+
+		-
+			message: '#^Method RubiconMaps\\Admin\\SettingsPage\:\:init\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Admin/SettingsPage.php
+
+		-
+			message: '#^Method RubiconMaps\\Admin\\SettingsPage\:\:register_settings\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Admin/SettingsPage.php
+
+		-
+			message: '#^Method RubiconMaps\\Admin\\SettingsPage\:\:remove_default_submenu\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Admin/SettingsPage.php
+
+		-
+			message: '#^Method RubiconMaps\\Admin\\SettingsPage\:\:render_field\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Admin/SettingsPage.php
+
+		-
+			message: '#^Method RubiconMaps\\Admin\\SettingsPage\:\:render_field\(\) has parameter \$args with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Admin/SettingsPage.php
+
+		-
+			message: '#^Method RubiconMaps\\Admin\\SettingsPage\:\:render_settings_page\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Admin/SettingsPage.php
+
+		-
+			message: '#^Parameter \#3 \$callback of function add_settings_section expects callable\(\)\: mixed, null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Admin/SettingsPage.php
+
+		-
+			message: '#^Method RubiconMaps\\Admin\\UninstallHelper\:\:uninstall\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Admin/UninstallHelper.php
+
+		-
+			message: '#^Constant RTV_RM_PLUGIN_FILE not found\.$#'
+			identifier: constant.notFound
+			count: 5
+			path: src/Frontend/FrontendAssetManager.php
+
+		-
+			message: '#^Method RubiconMaps\\Frontend\\MapInstanceConfigBuilder\:\:normalizedViewportMode\(\) has parameter \$atts with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Frontend/MapInstanceConfigBuilder.php
+
+		-
+			message: '#^Method RubiconMaps\\Helpers\\SettingsHelper\:\:get_option\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Helpers/SettingsHelper.php
+
+		-
+			message: '#^Method RubiconMaps\\Helpers\\SettingsHelper\:\:get_option\(\) has parameter \$default with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Helpers/SettingsHelper.php
+
+		-
+			message: '#^Method RubiconMaps\\Helpers\\SettingsHelper\:\:get_option\(\) has parameter \$key with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Helpers/SettingsHelper.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between array\{\} and non\-empty\-list\<string\|null\> will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: src/ImportExport/LocationCsvImporter.php
+
+		-
+			message: '#^Ternary operator condition is always true\.$#'
+			identifier: ternary.alwaysTrue
+			count: 1
+			path: src/ImportExport/LocationCsvImporter.php
+
+		-
+			message: '#^Method RubiconMaps\\Loader\:\:instance\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Loader.php
+
+		-
+			message: '#^Method RubiconMaps\\Loader\:\:setup_hooks\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Loader.php
+
+		-
+			message: '#^Property RubiconMaps\\Loader\:\:\$instance has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Loader.php
+
+		-
+			message: '#^Method RubiconMaps\\PostType\\Location\:\:register\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/PostType/Location.php
+
+		-
+			message: '#^Method RubiconMaps\\Rest\\LocationsEndpoint\:\:get_locations\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Rest/LocationsEndpoint.php
+
+		-
+			message: '#^Method RubiconMaps\\Rest\\LocationsEndpoint\:\:get_locations\(\) has parameter \$request with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Rest/LocationsEndpoint.php
+
+		-
+			message: '#^Method RubiconMaps\\Rest\\LocationsEndpoint\:\:register_routes\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Rest/LocationsEndpoint.php
+
+		-
+			message: '#^Method RubiconMaps\\Shortcodes\\ListShortcode\:\:render\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Shortcodes/ListShortcode.php
+
+		-
+			message: '#^Method RubiconMaps\\Shortcodes\\ListShortcode\:\:render\(\) has parameter \$atts with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Shortcodes/ListShortcode.php
+
+		-
+			message: '#^Method RubiconMaps\\Shortcodes\\MapShortcode\:\:render\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Shortcodes/MapShortcode.php
+
+		-
+			message: '#^Method RubiconMaps\\Shortcodes\\MapShortcode\:\:render\(\) has parameter \$atts with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Shortcodes/MapShortcode.php
+
+		-
+			message: '#^Constant RTV_RM_PLUGIN_FILE not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: src/Support/Plugin.php
+
+		-
+			message: '#^Call to function is_object\(\) with WP_Error will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Support/PluginUpdater.php
+
+		-
+			message: '#^Call to function method_exists\(\) with WP_Error and ''get_error_code'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 2
+			path: src/Support/PluginUpdater.php
+
+		-
+			message: '#^Constant RTV_RM_PLUGIN_FILE not found\.$#'
+			identifier: constant.notFound
+			count: 2
+			path: src/Support/PluginUpdater.php
+
+		-
+			message: '#^Method RubiconMaps\\Taxonomy\\LocationCategory\:\:register\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Taxonomy/LocationCategory.php
+
+		-
+			message: '#^Method RubiconMaps\\Taxonomy\\Region\:\:register\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Taxonomy/Region.php

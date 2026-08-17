@@ -8,5 +8,11 @@
       "RubiconMaps\\Divi5\\": "divi-5/server/"
     }
   },
-  "require": {}
+  "require-dev": {
+    "phpstan/phpstan": "^2.2",
+    "szepeviktor/phpstan-wordpress": "^2.0"
+  },
+  "scripts": {
+    "stan": "phpstan analyse --memory-limit=1G"
+  }
 }
